@@ -1,0 +1,22 @@
+roles:
+  # IronicBadgers Roles
+  - src: ironicbadger.docker_compose_generator
+  - src: ironicbadger.figurine
+  - src: ironicbadger.snapraid
+  - src: ironicbadger.proxmox_nag_removal
+
+  # Jeff Geerling's Roles
+  - src: geerlingguy.docker
+  - src: geerlingguy.docker_arm
+  - src: geerlingguy.ntp
+  - src: geerlingguy.nfs
+  - src: geerlingguy.security
+
+  # Grog Roles
+  - src: grog.package
+
+  # Install Oh-my-zsh
+  - src: gantsign.oh-my-zsh
+
+collections:
+  - prometheus.prometheus
