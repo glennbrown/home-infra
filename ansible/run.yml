@@ -1,0 +1,11 @@
+---
+  - hosts: pvetest
+    var_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: grog.package
+      - role: ironicbadger.proxmox_nag_removal
+      - role: ironicbadger.figurine
+      - role: geerlingguy.docker
+      - role: 
+
