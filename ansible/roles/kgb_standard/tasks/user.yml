@@ -1,0 +1,18 @@
+---
+- name: Ensure group exists
+  ansible.builtin.group:
+    name: "{{ user.groupname | default(user.username)}"
+    gid: "{{ user.gid | default(omit) }}"
+    state: present
+  
+- name: Add users
+  ansible.builtin.user:
+    name: "{{ user.username }}"
+    uid: "{{ user.uid | default(omit) }}"
+    group: "{{ user.groupname | default(user.username) }}"
+    shell: "{{ user.shell | default('/bin/bash') }}"
+    move_home: "{{ user.home | default(omit) }}"
+    password: "{{ user.password | password_hash('sha512') | default(omit) }}"
+    groups: "{{ user.groups | default(omit) }}"
+    comment: "{{ user.fullname | default(omit) }}"
+    append: true

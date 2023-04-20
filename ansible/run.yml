@@ -1,11 +1,30 @@
 ---
-  - hosts: pvetest
+  # Basic setup for all servers
+  - name: Server Inital Setup
+    hosts: all
+    vars_files:
+      - 'vars/vault.yml'
+    become: "{{ do_become }}"
+
+    pre_tasks:
+      - name: Provision users
+        include_role:
+          name: kgb_standard
+        with_items: "{{ users }}"
+        loop_control:
+          loop_var: user
+    
+    roles:
+      - role: grog.package
+      - role: gantsign.oh-my-zsh
+      
+  # Configure Proxmox main test
+  - name: Configure odin 
+    hosts: pvetest
     var_files:
       - 'vars/vault.yml'
     roles:
       - role: grog.package
       - role: ironicbadger.proxmox_nag_removal
-      - role: ironicbadger.figurine
-      - role: geerlingguy.docker
-      - role: 
+      
 

@@ -18,5 +18,8 @@ roles:
   # Install Oh-my-zsh
   - src: gantsign.oh-my-zsh
 
+  # MergerFS
+  - src: tigattack.mergerfs
+
 collections:
   - prometheus.prometheus

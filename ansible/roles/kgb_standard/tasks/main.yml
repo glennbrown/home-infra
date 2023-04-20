@@ -1,0 +1,4 @@
+---
+- name: Provision users
+  ansible.builtin.include_tasks: user.yml
+
