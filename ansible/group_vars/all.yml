@@ -32,26 +32,26 @@ do_become: True
 
 # grog.package
 package_list:
-  - zsh
-  - curl
-  - git
-  - bash-completion
-  - gnupg2
-  - htop
-  - jq
-  - ncdu
-  - neofetch
-  - net-tools
-  - python3
-  - python3-apt
-  - python3-pip
-  - tmux
-  - wget
-  - mc
-  - sudo
-  - tree
-  - iotop
-  - iftop
+  - name: zsh
+  - name: curl
+  - name: git
+  - name: bash-completion
+  - name: gnupg2
+  - name: htop
+  - name: jq
+  - name: ncdu
+  - name: neofetch
+  - name: net-tools
+  - name: python3
+  - name: python3-apt
+  - name: python3-pip
+  - name: tmux
+  - name: wget
+  - name: mc
+  - name: sudo
+  - name: tree
+  - name: iotop
+  - name: iftop
 
 # grog user and group creation
 group_list_group:
