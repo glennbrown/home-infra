@@ -5,30 +5,30 @@ ntp_timezone: America/New_York
 do_become: True
 
 # kgb_standard user setup internal role and oh-my-zsh
-users:
-  - username: gbrown
-    groupname: gbrown
-    home: yes
-    uid: 1000
-    gid: 1000
-    password: "{{ secret_gbrown_pass }}"
-    shell: /bin/zsh
-    groups: adm,users,cdrom,sudo,dip,plugdev
-    oh-my-zsh:
-      theme: gentoo
-      plugins:
-        - git
-        - command-not-found
-        - aliases
-        - tmux
-      update_mode: auto
-      update_frequency: 14
-  - username: dockeruser
-    groupname: users
-    home: yes
-    uid: 99
-    password: "!"
-    shell: /bin/bash
+# users:
+#   - username: gbrown
+#     groupname: gbrown
+#     home: yes
+#     uid: 1000
+#     gid: 1000
+#     password: "{{ secret_gbrown_pass }}"
+#     shell: /bin/zsh
+#     groups: adm,users,cdrom,sudo,dip,plugdev
+#     oh-my-zsh:
+#       theme: gentoo
+#       plugins:
+#         - git
+#         - command-not-found
+#         - aliases
+#         - tmux
+#       update_mode: auto
+#       update_frequency: 14
+#   - username: dockeruser
+#     groupname: users
+#     home: yes
+#     uid: 99
+#     password: "!"
+#     shell: /bin/bash
 
 # grog.package
 package_list:
@@ -52,3 +52,57 @@ package_list:
   - tree
   - iotop
   - iftop
+
+# grog user and group creation
+group_list_group:
+  - name: gbrown
+    gid: 1000
+    state: present
+  - name: kbrown
+    gid: 1001
+    state: present
+
+user_list_group:
+  - name: gbrown
+    uid: 1000
+    group: gbrown
+    groups:
+      - adm
+      - sudo
+      - users
+      - cdrom
+      - dip
+      - plugdev
+    append: yes
+    password: "{{ secret_gbrown_pass }}"
+    move_home: yes
+    shell: /bin/zsh
+    comment: "Glenn Brown"
+    state: present
+  - name: kbrown
+    uid: 1001
+    group: kbrown
+    groups:
+      - users
+    append: yes
+    shell: /bin/false
+    comment: "Kristen Brown"
+    state: present
+  - name: dockeruser
+    uid: 99
+    group: users
+    shell: /bin/bash
+
+# oh-my-zsh
+users:
+  - username: gbrown
+    oh_my_zsh:
+      theme: gentoo
+      plugins:
+        - git
+        - command-not-found
+        - aliases
+        - tmux
+      update_mode: auto
+      update_frequency: 13
+      
