@@ -1,21 +1,16 @@
 ---
-  # Basic setup for all servers
-  - name: Server Inital Setup
-    hosts: all
+      
+  # Configure Media Server
+  - name: Configure server odin
+    hosts: pvetest
     vars_files:
       - 'vars/vault.yml'
     become: "{{ do_become }}"
     roles:
-      - role: grog.package
       - role: grog.group
       - role: grog.user
       - role: gantsign.oh-my-zsh
-      
-  # Configure Proxmox main test
-  - name: Configure odin 
-    hosts: pvetest
-    vars_files:
-      - 'vars/vault.yml'
-    roles:
-      - { role: ironicbadger.proxmox_nag_removal, become: yes }
-      
+      - role: ironicbadger.proxmox_nag_removal
+      - role: grog.package
+      - role: geerlingguy.docker
+      - role: geerlingguy.ntp

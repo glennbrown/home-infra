@@ -1,6 +1,8 @@
 ansible_become_password: "{{ secret_sudo }}"
 
+# geerlingguy.ntp
 ntp_timezone: America/New_York
+
 
 do_become: True
 
@@ -55,12 +57,7 @@ package_list:
 
 # grog user and group creation
 group_list_group:
-  - name: gbrown
-    gid: 1000
-    state: present
-  - name: kbrown
-    gid: 1001
-    state: present
+  - { name: gbrown, gid: 1000, state: present }
 
 user_list_group:
   - name: gbrown
@@ -79,19 +76,6 @@ user_list_group:
     shell: /bin/zsh
     comment: "Glenn Brown"
     state: present
-  - name: kbrown
-    uid: 1001
-    group: kbrown
-    groups:
-      - users
-    append: yes
-    shell: /bin/false
-    comment: "Kristen Brown"
-    state: present
-  - name: dockeruser
-    uid: 99
-    group: users
-    shell: /bin/bash
 
 # oh-my-zsh
 users:

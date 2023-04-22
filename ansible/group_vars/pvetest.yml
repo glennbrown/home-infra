@@ -1,0 +1,72 @@
+---
+
+target_os: debian #proxmox
+hostname_pvetest: pvetest
+main_username: gbrown
+
+# geerlingguy.ntp
+ntp_daemon: chrony
+ntp_package: chrony
+
+# grog.package
+package_list:
+  - name: bash-completion
+  - name: curl
+  - name: dnsutils
+  - name: fio
+  - name: git
+  - name: hddtemp
+  - name: htop
+  - name: ffmpeg
+  - name: iftop
+  - name: intel-gpu-tools
+  - name: iotop
+  - name: ipmitool
+  - name: lm-sensors
+  - name: mc
+  - name: mutt
+  - name: ncdu
+  - name: net-tools
+  - name: nut
+  - name: nut-client
+  - name: nut-server
+  - name: nfs-kernel-server
+  - name: nmap
+  - name: nvme-cli
+  - name: openssh-server
+  - name: python3
+  - name: python3-apt
+  - name: python-setuptools
+  - name: screen
+  - name: smartmontools
+  - name: sudo
+  - name: tmux
+  - name: tree
+  - name: wget
+  - name: xfsprogs
+  - name: zfsutils-linux
+
+# grog.group
+group_list_group:
+  - { name: kbrown, gid: 1001, state: present }
+
+# grog.user
+user_list_group:
+  - name: kbrown
+    uid: 1001
+    group: kbrown
+    groups:
+      - users
+    append: yes
+    shell: /bin/false
+    comment: "Kristen Brown"
+    state: present
+  - name: dockeruser
+    uid: 99
+    group: users
+    shell: /bin/bash
+
+# geerlingguy.docker
+docker_install_compose: false
+docker_install_compose_plugin: true 
+docker_users: gbrown
