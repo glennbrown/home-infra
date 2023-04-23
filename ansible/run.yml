@@ -5,12 +5,12 @@
     hosts: pvetest
     vars_files:
       - 'vars/vault.yml'
-    become: "{{ do_become }}"
+    #become: "{{ do_become }}"
     roles:
       - role: grog.group
       - role: grog.user
-      - role: gantsign.oh-my-zsh
       - role: ironicbadger.proxmox_nag_removal
       - role: grog.package
+      - role: gantsign.oh-my-zsh
       - role: geerlingguy.docker
       - role: geerlingguy.ntp
