@@ -56,10 +56,10 @@ package_list:
   - name: iftop
 
 # grog user and group creation
-group_list_group:
+group_list:
   - { name: gbrown, gid: 1000, state: present }
 
-user_list_group:
+user_list:
   - name: gbrown
     uid: 1000
     group: gbrown

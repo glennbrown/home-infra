@@ -1,5 +1,15 @@
 ---
-      
+  # Server Baseline
+  #- name: Configure baseline
+  #  hosts: all
+  #  vars_files:
+  #    - 'vars/vault.yml'
+  #  #become: "{{ do_become }}"
+  #  roles:
+  #    - role: grog.group
+  #    - role: grog.user
+  #    - role: grog.package
+
   # Configure Media Server
   - name: Configure server odin
     hosts: pvetest
