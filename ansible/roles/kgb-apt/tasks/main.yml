@@ -1,0 +1,6 @@
+---
+
+- name: Configure apt mirrors
+  include_tasks: apt_mirror.yml
+  tags:
+    - apt-mirror

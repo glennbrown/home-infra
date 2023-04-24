@@ -3,7 +3,6 @@ ansible_become_password: "{{ secret_sudo }}"
 # geerlingguy.ntp
 ntp_timezone: America/New_York
 
-
 do_become: True
 
 # kgb_standard user setup internal role and oh-my-zsh

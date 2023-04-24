@@ -24,3 +24,7 @@
       - role: gantsign.oh-my-zsh
       - role: geerlingguy.docker
       - role: geerlingguy.ntp
+      - role: kgb-apt 
+      - role: kgb-odin
+      - role: tigattack.mergerfs
+      - role: ironicbadger.snapraid

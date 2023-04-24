@@ -1,0 +1,10 @@
+---
+# defaults for apt mirrors
+
+# Ubuntu 
+
+ubuntu_apt_mirror: 'https://mirrors.iu13.net'
+
+# Debian
+
+debian_apt_mirror: 'http://debian.cc.lehigh.edu'

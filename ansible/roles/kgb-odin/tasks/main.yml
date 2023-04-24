@@ -1,0 +1,12 @@
+---
+
+- name: Ensure hostname is set correctly
+  hostname:
+    name: "{{ hostname_odin }}"
+  
+- name: Disks
+  include_tasks: disks.yml
+  tags:
+    - disks
+  
+  

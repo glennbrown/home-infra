@@ -1,0 +1,14 @@
+# Ansible Managed
+# Role: kgb-apt
+
+deb {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }} main contrib non-free
+deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }} main contrib non-free
+
+deb {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-updates main contrib non-free
+deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-updates main contrib non-free
+
+#deb {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-backports main contrib non-free
+#deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-backports main contrib non-free
+
+deb http://security.debian.org {{ ansible_distribution_release }}-security main contrib non-free
+deb-src http://security.debian.org {{ ansible_distribution_release }}-security main contrib non-free

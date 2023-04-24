@@ -1,0 +1,27 @@
+---
+
+- name: create /mnt points
+  file:
+    dest: "{{ item.path }}"
+    state: directory
+    owner: dockeruser
+    group: users
+    mode: 0777
+  with_items: 
+    - "{{ snapraid_parity_disks }}"
+    - "{{ snapraid_data_disks }}"
+    - "{{ extra_mountpoints }}"
+
+- name: mount disks
+  mount:
+    name: "{{ item.path }}"
+    src: "{{ item.diskbyid }}"
+    fstype: "{{ item.fs }}"
+    opts: "{{ item.opts }}"
+    # change to 'mounted' to auto mount
+    state: mounted
+  with_items:
+    - "{{ snapraid_parity_disks }}"
+    - "{{ snapraid_data_disks }}"
+    - "{{ extra_mountpoints }}"
+  when: item.path != '/mnt/storage'
