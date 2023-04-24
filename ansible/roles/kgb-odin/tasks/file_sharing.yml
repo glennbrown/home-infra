@@ -1,6 +1,6 @@
 ---
 
-- name: Install Samba
+- name: install samba
   apt:
     update_cache: true
     pkg: samba
@@ -8,7 +8,7 @@
   notify: 
     - start samba service
 
-- name: Install Samba config
+- name: install samba config
   copy:
     src: etc/samba/smb.conf
     dest: /etc/samba/smb.conf
@@ -17,3 +17,30 @@
     backup: yes
   notify: 
     - restart samba service
+
+- name: create samba users
+  shell: >
+    set -e -o pipefail
+    && (pdbedit --user={{ item.username }} 2>&1 > /dev/null)
+    || (echo '{{ item.password }}'; echo '{{ item.password }}')
+    | smbpasswd -s -a {{ item.username }}
+  args:
+    executable: /bin/bash
+  register: samba_create_users
+  changed_when: "'Added user' in samba_create_users.stdout"
+  loop: "{{ samba_users }}"
+  no_log: true
+
+- name: set samba passwords correctly
+  shell: >
+    set -e -o pipefail
+    && (smbclient -U {{ item.username }}%{{ item.password }} -L 127.0.0.1 2>&1 > /dev/null)
+    || (echo '{{ item.password }}'; echo '{{ item.password }}')
+    | smbpasswd {{ item.username }}
+  args:
+    executable: /bin/bash
+  register: samba_verify_users
+  changed_when: "'New SMB password' in samba_verify_users.stdout"
+  loop: "{{ samba_users }}"
+  no_log: true
+

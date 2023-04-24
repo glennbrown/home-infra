@@ -72,9 +72,15 @@ docker_install_compose_plugin: true
 docker_users: gbrown
 
 # kgb-odin
+# TODO: change secret to 1password lookup
 odin_main_storage_path: /mnt/storage
 extra_mountpoints:
   - { path: /mnt/nvme1tb, diskbyid: /dev/disk/by-id/ata-QEMU_HARDDISK_QM00011-part1, fs: ext4, opts: "defaults,discard" }
+samba_users:
+  - username: gbrown
+    password: "{{ secret_samba_gbrown }}"
+  - username: kbrown
+    password: "{{ secret_samba_kbrown }}"
 
 # ironicbadger.snapraid + kgb-odin
 snapraid_runner: false
