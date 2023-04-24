@@ -1,4 +1,4 @@
-ansible_become_password: "{{ secret_sudo }}"
+---
 
 # geerlingguy.ntp
 ntp_timezone: America/New_York
