@@ -1,0 +1,19 @@
+---
+
+- name: Install Samba
+  apt:
+    update_cache: true
+    pkg: samba
+    state: present
+  notify: 
+    - start samba service
+
+- name: Install Samba config
+  copy:
+    src: etc/samba/smb.conf
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    backup: yes
+  notify: 
+    - restart samba service

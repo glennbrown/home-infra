@@ -8,5 +8,10 @@
   include_tasks: disks.yml
   tags:
     - disks
+
+- name: File Sharing
+  include_tasks: file_sharing.yml
+  tags: 
+    - file-sharing
   
   
