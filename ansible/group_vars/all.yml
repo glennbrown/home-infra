@@ -3,34 +3,6 @@
 # geerlingguy.ntp
 ntp_timezone: America/New_York
 
-do_become: True
-
-# kgb_standard user setup internal role and oh-my-zsh
-# users:
-#   - username: gbrown
-#     groupname: gbrown
-#     home: yes
-#     uid: 1000
-#     gid: 1000
-#     password: "{{ secret_gbrown_pass }}"
-#     shell: /bin/zsh
-#     groups: adm,users,cdrom,sudo,dip,plugdev
-#     oh-my-zsh:
-#       theme: gentoo
-#       plugins:
-#         - git
-#         - command-not-found
-#         - aliases
-#         - tmux
-#       update_mode: auto
-#       update_frequency: 14
-#   - username: dockeruser
-#     groupname: users
-#     home: yes
-#     uid: 99
-#     password: "!"
-#     shell: /bin/bash
-
 # grog.package
 package_list:
   - name: zsh
@@ -54,10 +26,11 @@ package_list:
   - name: iotop
   - name: iftop
 
-# grog user and group creation
+# grog.group
 group_list:
   - { name: gbrown, gid: 1000, state: present }
 
+# grog.user
 user_list:
   - name: gbrown
     uid: 1000
@@ -75,6 +48,12 @@ user_list:
     shell: /bin/zsh
     comment: "Glenn Brown"
     state: present
+
+# grog.authorized-key
+authorized_key_list:
+  - name: gbrown
+    authorized_keys:
+      - key: "{{ secret_gbrown_key }}"
 
 # oh-my-zsh
 users:

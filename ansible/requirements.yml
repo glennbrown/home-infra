@@ -16,6 +16,7 @@ roles:
   - src: grog.package
   - src: grog.user
   - src: grog.group
+  - src: grog.authorized-key
 
   # Install Oh-my-zsh
   - src: gantsign.oh-my-zsh

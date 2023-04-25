@@ -9,6 +9,7 @@
     roles:
       - role: grog.group
       - role: grog.user
+      - role: grog.authorized-key
       - role: ironicbadger.proxmox_nag_removal
       - role: grog.package
       - role: gantsign.oh-my-zsh
@@ -18,3 +19,4 @@
       - role: kgb-odin
       - role: tigattack.mergerfs
       - role: ironicbadger.snapraid
+      - role: geerlingguy.nfs
