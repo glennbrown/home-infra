@@ -58,7 +58,8 @@
   register: is_installed
   changed_when: "is_installed.rc != 0"
 
-- set_fact:
+- name: build wsdd2 | setting fact
+  set_fact:
     install_wsdd2: "{{ wsdd2_force_install == true or is_installed.failed == true }}"
 
 - name: build wsdd2 | clone git repo
