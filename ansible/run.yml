@@ -10,6 +10,7 @@
       - role: grog.group
       - role: grog.user
       - role: grog.authorized-key
+      - role: kgb-htop
       - role: ironicbadger.proxmox_nag_removal
       - role: grog.package
       - role: gantsign.oh-my-zsh

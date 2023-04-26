@@ -71,6 +71,10 @@ docker_install_compose: false
 docker_install_compose_plugin: true 
 docker_users: gbrown
 
+# kgb-htop
+htop_users:
+  - homedir: "/home/gbrown"
+
 # kgb-odin
 # TODO: change secret to 1password lookup
 odin_main_storage_path: /mnt/storage
