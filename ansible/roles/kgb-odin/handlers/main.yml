@@ -3,8 +3,21 @@
   service:
     name: smbd
     state: started
+    enabled: true
 
 - name: restart samba service
   service:
     name: smbd
     state: restarted
+
+- name: start avahi-daemon service
+  service:
+    name: avahi-daemon
+    state: started
+    enabled: true
+
+- name: start wsdd2 service
+  service:
+    name: wsdd2
+    state: started
+    enabled: true

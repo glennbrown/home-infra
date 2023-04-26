@@ -1,1 +1,4 @@
 ---
+
+wsdd2_apt_package_name: wsdd2
+wsdd2_force_install: false
