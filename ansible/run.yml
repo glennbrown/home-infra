@@ -21,3 +21,6 @@
       - role: tigattack.mergerfs
       - role: ironicbadger.snapraid
       - role: geerlingguy.nfs
+      - role: ironicbadger.docker_compose_generator
+        tags: compose
+        
