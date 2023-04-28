@@ -40,7 +40,7 @@ roles:
     version: 1.1.0
 
 collections:
-  - prometheus.prometheus
+  - name: prometheus.prometheus
     version: 0.3.1
-  - community.general
+  - name: community.general
     version: 6.5.0

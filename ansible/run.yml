@@ -21,7 +21,8 @@
       - role: tigattack.mergerfs
       - role: ironicbadger.snapraid
       - role: geerlingguy.nfs
-      #- role: prometheus.prometheus.node_exporter
+      - role: prometheus.prometheus.node_exporter
+        tags: prom
       - role: ironicbadger.docker_compose_generator
         tags: compose
         
