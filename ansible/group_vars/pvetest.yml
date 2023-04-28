@@ -10,6 +10,7 @@ ntp_package: chrony
 # grog.package
 package_list_group:
   - name: bash-completion
+  - name: apt-file
   - name: curl
   - name: dnsutils
   - name: fio
@@ -44,6 +45,7 @@ package_list_group:
 # grog.group
 group_list_group:
   - { name: kbrown, gid: 1001, state: present }
+  - { name: prometheus, state: present }
 
 # grog.user
 user_list_group:
@@ -60,10 +62,15 @@ user_list_group:
     uid: 99
     group: users
     shell: /bin/bash
+  - name: prometheus
+    group: prometheus
+    shell: /usr/sbin/nologin
+    home: /var/lib/prometheus
+    comment: "Prometheus daemon"
 
 # geerlingguy.docker
-docker_install_compose: false
-docker_install_compose_plugin: true 
+docker_install_compose: true
+docker_install_compose_plugin: false 
 docker_users: gbrown
 
 # kgb-htop
@@ -129,6 +136,12 @@ mergerfs_mounts:
 # geerlingguy.nfs
 nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
 
+# prometheus.prometheus.node_exporter
+node_exporter_textfile_dir: /var/lib/prometheus/node-exporter
+node_exporter_version: 1.5.0
+node_exporter_system_group: prometheus
+node_exporter_system_user: prometheus
+
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nvme1tb/appdata
 storage_path: /mnt/storage
@@ -149,7 +162,7 @@ containers:
       - PLEX_GID=100
     volumes:
       - "{{ appdata_path }}/plexmediaserver:{{ container_config_path }}"
-      - "{{ storage_path }}/TV Shows:/tv"
+      - "{{ storage_path }}/TV Shows:/tv:ro"
       - "{{ storage_path }}/Movies:/movies:ro"
     tmpfs:
       - /transcode:size=32G,mode=0777
@@ -181,8 +194,8 @@ containers:
       - JELLYFIN_PublishedServerUrl=192.168.10.41
     volumes:
       - "{{ appdata_path }}/jellyfin:{{ container_config_path }}"
-      - "{{ storage_path }}/TV Shows:/data/tv"
-      - "{{ storage_path }}/Movies:/data/movies"
+      - "{{ storage_path }}/TV Shows:/data/tv:ro"
+      - "{{ storage_path }}/Movies:/data/movies:ro"
     devices:
       - /dev/dri:/dev/dri
     ports:
@@ -410,5 +423,20 @@ containers:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
     ports:
       - 3000:3000
+    network_mode: bridge
+    restart: unless-stopped
+  ###
+  - service_name: py-kms
+    active: true
+    image: ghcr.io/py-kms-organization/py-kms:latest
+    container_name: py-kms
+    include_global_env_vars: false
+    environment:
+      - "TZ={{ ntp_timezone }}"
+    volumes:
+      - "{{ appdata_path }}/py-kms/db:/home/py-kms/db"
+      - /etc/localtime:/etc/localtime
+    ports:
+      - 1688:1688
     network_mode: bridge
     restart: unless-stopped
