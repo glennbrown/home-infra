@@ -66,8 +66,10 @@ user_list_group:
     group: prometheus
     uid: 180
     shell: /usr/sbin/nologin
-    home: /var/lib/prometheus
+    home: /
     comment: "Prometheus daemon"
+    append: false
+    state: present
 
 # geerlingguy.docker
 docker_install_compose: true
