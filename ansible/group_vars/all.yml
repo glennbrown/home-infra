@@ -30,6 +30,11 @@ package_list:
   - name: tree
   - name: iotop
   - name: iftop
+  - name: zip
+  - name: unzip
+  - name: p7zip-full
+  - name: rar
+  - name: unrar
 
 # grog.group
 group_list:

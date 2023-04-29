@@ -45,7 +45,7 @@ package_list_group:
 # grog.group
 group_list_group:
   - { name: kbrown, gid: 1001, state: present }
-  - { name: prometheus, state: present }
+  - { name: prometheus, gid: 180, state: present }
 
 # grog.user
 user_list_group:
@@ -64,6 +64,7 @@ user_list_group:
     shell: /bin/bash
   - name: prometheus
     group: prometheus
+    uid: 180
     shell: /usr/sbin/nologin
     home: /var/lib/prometheus
     comment: "Prometheus daemon"

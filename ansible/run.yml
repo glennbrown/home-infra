@@ -12,11 +12,11 @@
       - role: grog.authorized-key
       - role: kgb-htop
       - role: ironicbadger.proxmox_nag_removal
+      - role: kgb-apt
       - role: grog.package
       - role: gantsign.oh-my-zsh
       - role: geerlingguy.docker
-      - role: geerlingguy.ntp
-      - role: kgb-apt 
+      - role: geerlingguy.ntp 
       - role: kgb-odin
       - role: tigattack.mergerfs
       - role: ironicbadger.snapraid
