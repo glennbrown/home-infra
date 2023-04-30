@@ -8,6 +8,8 @@ roles:
     version: 1.0.0
   - src: ironicbadger.proxmox_nag_removal
     version: 1.0.2
+  - src: ironicbadger.bash_aliases
+    version: 1.0.3
 
   # Jeff Geerling's Roles
   - src: geerlingguy.docker
