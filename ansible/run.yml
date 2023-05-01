@@ -13,7 +13,6 @@
       - role: ironicbadger.proxmox_nag_removal
       - role: kgb-apt-mirror
       - role: grog.package
-      #- role: gantsign.oh-my-zsh
       - role: geerlingguy.docker
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases
@@ -23,6 +22,8 @@
       - role: ironicbadger.snapraid
       - role: geerlingguy.nfs
       - role: prometheus.prometheus.node_exporter
+        tags: prom
+      - role: kgb-prom
         tags: prom
       - role: ironicbadger.docker_compose_generator
         tags: compose

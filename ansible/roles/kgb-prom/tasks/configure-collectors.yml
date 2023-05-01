@@ -1,0 +1,12 @@
+---
+
+- name: install required packages
+  ansible.builtin.apt:
+    name: 
+      - moreutils
+      - python3-apt
+      - nvme-cli
+      - jq
+    update_cache: yes
+    state: present
+

@@ -1,7 +1,7 @@
 ---
 
 target_os: debian #proxmox
-hostname_odin: pvetest
+hostname_odin: odin
 
 # geerlingguy.ntp
 ntp_daemon: chrony
@@ -88,7 +88,7 @@ htop_users:
 # TODO: change secret to 1password lookup
 odin_main_storage_path: /mnt/storage
 extra_mountpoints:
-  - { path: /mnt/nvme1tb, diskbyid: /dev/disk/by-id/ata-QEMU_HARDDISK_QM00011-part1, fs: ext4, opts: "defaults,discard" }
+  - { path: /mnt/nvme1tb, diskbyid: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1, fs: ext4, opts: "defaults,discard" }
 samba_users:
   - username: gbrown
     password: "{{ secret_samba_gbrown }}"
@@ -99,12 +99,13 @@ samba_users:
 snapraid_runner: true
 snapraid_install: true
 snapraid_parity_disks:
-  - { path: /mnt/parity1, diskbyid: /dev/disk/by-id/ata-QEMU_HARDDISK_QM00017-part1, fs: xfs, opts: defaults, content: false }
+  - { path: /mnt/parity1, diskbyid: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGZA3D-part1, fs: xfs, opts: defaults, content: false }
 
 snapraid_data_disks:
-  - { path: /mnt/disk1, diskbyid: /dev/disk/by-id/ata-QEMU_HARDDISK_QM00021-part1, fs: xfs, opts: defaults, content: true }
-  - { path: /mnt/disk2, diskbyid: /dev/disk/by-id/ata-QEMU_HARDDISK_QM00023-part1, fs: xfs, opts: defaults, content: false }
-  - { path: /mnt/disk3, diskbyid: /dev/disk/by-id/ata-QEMU_HARDDISK_QM00019-part1, fs: xfs, opts: defaults, content: false }
+  - { path: /mnt/disk1, diskbyid: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGRG9D-part1, fs: xfs, opts: defaults, content: true }
+  - { path: /mnt/disk2, diskbyid: /dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEJUB8YZ-part1, fs: xfs, opts: defaults, content: false }
+  - { path: /mnt/disk3, diskbyid: /dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEK67U5N-part1, fs: xfs, opts: defaults, content: false }
+  - { path: /mnt/disk99, diskbyid: /dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1, fs: ext4, opts: defaults, content: false }
 
 snapraid_config_excludes:
   - "*.unrecoverable"

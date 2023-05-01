@@ -1,0 +1,8 @@
+---
+
+- name: download scripts for node-exporter textfile collector
+  include_tasks: download-collectors.yml
+
+- name: configure collectors
+  include_tasks: configure-collectors.yml
+  
