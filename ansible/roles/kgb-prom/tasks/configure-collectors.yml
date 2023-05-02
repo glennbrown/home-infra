@@ -10,3 +10,36 @@
     update_cache: yes
     state: present
 
+- name: copy systemd service files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: 0755
+  with_fileglob: node-exporter-*
+  notify: restart collectors
+
+- name: enable smartmon timer on boot
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    name: node-exporter-smartmon.timer
+    daemon_reload: true
+
+- name: enable nvme metrics timer on boot
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    name: node-exporter-nvme.timer
+    daemon_reload: true
+
+- name: enable apt info timer on boot
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    name: node-exporter-apt.timer
+    daemon_reload: true
+
+  
+

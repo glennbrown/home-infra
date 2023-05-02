@@ -1,0 +1,7 @@
+[Unit]
+Description=Collect NVMe metrics for prometheus-node-exporter
+
+[Service]
+Type=oneshot
+Environment=TMPDIR=/var/lib/node-exporter
+ExecStart=/bin/sh -c "/usr/local/share/node-exporter-collectors/nvme_metrics.sh | sponge /var/lib/node-exporter/nvme.prom"

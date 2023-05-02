@@ -12,7 +12,9 @@
       - role: kgb-htop
       - role: ironicbadger.proxmox_nag_removal
       - role: kgb-apt-mirror
+        tags: packages
       - role: grog.package
+        tags: packages
       - role: geerlingguy.docker
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases

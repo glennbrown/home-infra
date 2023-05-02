@@ -1,0 +1,7 @@
+[Unit]
+Description=Collect apt metrics for prometheus-node-exporter
+
+[Service]
+Type=oneshot
+Environment=TMPDIR=/var/lib/node-exporter
+ExecStart=/bin/bash -c "/usr/local/share/node-exporter-collectors/apt.sh | sponge /var/lib/node-exporter/apt.prom"

@@ -144,7 +144,7 @@ mergerfs_mounts:
 nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
 
 # prometheus.prometheus.node_exporter
-node_exporter_textfile_dir: /var/lib/prometheus/node-exporter
+node_exporter_textfile_dir: /var/lib/node-exporter
 node_exporter_version: 1.5.0
 node_exporter_system_group: prometheus
 node_exporter_system_user: prometheus

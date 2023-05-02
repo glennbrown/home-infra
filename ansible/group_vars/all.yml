@@ -33,6 +33,7 @@ ntp_timezone: America/New_York
 package_update_cache: yes
 package_list:
   - name: curl
+  - name: dialog
   - name: git
   - name: bash-completion
   - name: gnupg2
@@ -45,6 +46,7 @@ package_list:
   - name: python3
   - name: python3-apt
   - name: python3-pip
+  - name: pv
   - name: tmux
   - name: wget
   - name: mc
