@@ -76,8 +76,8 @@ user_list_group:
     state: present
 
 # geerlingguy.docker
-docker_install_compose: true
-docker_install_compose_plugin: false 
+docker_install_compose: false
+docker_install_compose_plugin: true 
 docker_users: gbrown
 
 # kgb-htop
@@ -149,8 +149,6 @@ node_exporter_textfile_dir: /var/lib/node-exporter
 node_exporter_version: 1.5.0
 node_exporter_system_group: prometheus
 node_exporter_system_user: prometheus
-# node_exporter_collector_install_dir: /usr/local/share/node-exporter-collectors
-# node_exporter_collector_interval: '15min'
 
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nvme1tb/appdata
