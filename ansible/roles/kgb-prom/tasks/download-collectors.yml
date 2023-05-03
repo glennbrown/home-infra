@@ -3,7 +3,7 @@
 - name: git clone prometheus-community/node-exporter-textfile-collector-scripts
   ansible.builtin.git:
     repo: https://github.com/prometheus-community/node-exporter-textfile-collector-scripts.git
-    dest: /usr/local/share/node-exporter-collectors
+    dest: "{{ node_exporter_collector_install_dir }}"
     umask: "0022"
     clone: yes
     update: "{{ node_exporter_textfile_update }}"

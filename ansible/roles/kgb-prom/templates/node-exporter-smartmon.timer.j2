@@ -1,5 +1,5 @@
 [Unit]
-Description=Run smart metrics collection every 15 minutes
+Description=Run smart metrics collection every {{ node_exporter_collector_interval }}
 ConditionPathExists=/usr/sbin/smartctl
 ConditionPathExistsGlob=|/dev/sd*
 ConditionPathExistsGlob=|/dev/hd*
@@ -8,7 +8,7 @@ ConditionPathExistsGlob=|/dev/hd*
 
 [Timer]
 OnBootSec=0
-OnUnitActiveSec=15min
+OnUnitActiveSec="{{ node_exporter_collector_interval }}"
 
 [Install]
 WantedBy=timers.target

@@ -1,0 +1,7 @@
+[Unit]
+Description=Collect SMART metrics for node-exporter
+
+[Service]
+Type=oneshot
+Environment="TMPDIR={{ node_exporter_textfile_dir }}"
+ExecStart=/bin/bash -c "{{ node_exporter_collector_install_dir }}/smartmon.sh | sponge {{ node_exporter_textfile_dir }}/smartmon.prom"

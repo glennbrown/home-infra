@@ -11,13 +11,13 @@
     state: present
 
 - name: copy systemd service files
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: "{{ item }}"
-    dest: /etc/systemd/system
+    dest: /etc/systemd/system/{{ item | basename | regex_replace('\.j2$', '') }}
     owner: root
     group: root
     mode: 0755
-  with_fileglob: node-exporter-*
+  with_fileglob: "{{ role_path }}/templates/node-exporter-*.j2"
   notify: restart collectors
 
 - name: enable smartmon timer on boot
