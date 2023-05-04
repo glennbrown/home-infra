@@ -9,8 +9,8 @@
       - role: grog.group
       - role: grog.user
       - role: grog.authorized-key
-      - role: kgb-htop
       - role: ironicbadger.proxmox_nag_removal
+      - role: kgb-htop
       - role: kgb-apt-mirror
         tags: packages
       - role: grog.package
