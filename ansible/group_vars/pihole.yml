@@ -1,0 +1,10 @@
+---
+
+# geerlingguy.ntp
+ntp_package: ntp
+ntp_daemon: ntp
+
+# kgb-dhcp-dns
+dnsmasq_config_dir: /etc/dnsmasq.d
+pihole_config_dir: /etc/pihole
+

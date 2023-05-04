@@ -1,0 +1,69 @@
+---
+###############################################################################
+# Default Pi-Hole Package Dependencies
+###############################################################################
+# Default required packages for Pi-Hole install.
+
+pihole_default_packages_apt:
+  - ca-certificates
+  - cron
+  - curl
+  - dialog
+  - dns-root-data
+  - dnsutils
+  - git
+  - idn2
+  - iputils-ping
+  - iproute2
+  - libcap2
+  - libcap2-bin
+  - lighttpd
+  - lsof
+  - netcat
+  - php-cgi
+  - php-cli
+  - php-curl
+  - php-intl
+  - php-sqlite3
+  - php-xml
+  - psmisc
+  - sqlite3
+  - sudo
+  - unzip
+  - wget
+  - whiptail
+
+###############################################################################
+# Pi-Hole setupVars.conf
+###############################################################################
+# Pihole reads True/False as STRINGS; use strings or install will fail.
+
+dnsmasq_config_dir: /etc/dnsmasq.d
+pihole_config_dir: /etc/pihole
+pihole_admin_email: ''
+pihole_webtheme: default_dark
+pihole_pihole_interface: '{{ ansible_default_ipv4.interface }}'
+pihole_query_logging: true
+pihole_install_web_server: true
+pihole_install_web_interface: true
+pihole_lighttpd_enabled: true
+pihole_cache_size: 10000
+pihole_dns_fqdn_required: true
+pihole_dnsmasq_listening: local
+pihole_webpassword: ''
+pihole_blocking_enabled: true
+pihole_dnssec: true
+pihole_rev_server: true
+#pihole_rev_server_cidr: ''
+#pihole_rev_server_target: ''
+#pihole_rev_server_domain: ''
+pihole_pihole_dns1: '1.1.1.1'
+pihole_pihole_dns2: '1.0.0.1'
+#pihole_dhcp_active: ''
+#pihole_dhcp_start: ''
+#pihole_dhcp_end: ''
+#pihole_dhcp_router: ''
+#pihole_dhcp_leasetime: '24'
+pihole_pihole_domain: 'home'
+#pihole_dhcp_ipv6: false 
+#pihole_dhcp_rapid_commit: false

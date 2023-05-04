@@ -1,7 +1,7 @@
 ---
 
   # Configure Media Server
-  - name: configure server odin
+  - name: configure main server odin
     hosts: pvetest
     vars_files:
       - 'vars/vault.yml'
@@ -29,4 +29,19 @@
         tags: prom
       - role: ironicbadger.docker_compose_generator
         tags: compose
+  
+  # Configure pihole
+  - name: configure pihole dns
+    hosts: pihole
+    vars_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: kgb-htop
+      - role: kgb-apt-mirror
+      - role: geerlingguy.ntp
+        tags: packages
+      - role: kgb-dhcp-dns
         

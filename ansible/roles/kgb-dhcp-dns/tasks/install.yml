@@ -1,0 +1,55 @@
+---
+###############################################################################
+# Pi-Hole Install
+###############################################################################
+# DNS blackhole.
+#
+
+- name: install | install pihole dependencies
+  ansible.builtin.apt:
+    name: "{{ pihole_default_packages_apt }}"
+    state: latest
+    update_cache: true
+  
+- name: install | create "{{ pihole_config_dir }}"
+  ansible.builtin.file:
+    path: "{{ pihole_config_dir }}"
+    mode: 0755
+    state: directory
+
+- name: install | set deployment config
+  ansible.builtin.template:
+    src: pihole-setupVars.conf.j2
+    dest: {{ pihole_config_dir }}/setupVars.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install | set binary location
+  ansible.builtin.stat:
+    path: /usr/local/bin/pihole
+  register: pihole_binary
+
+- name: install | determine if pihole is already installed
+  ansible.builtin.set_fact:
+    pihole_installed: "{{ pihole_binary.stat.exists|default(false) }}"
+
+- name: install | fetching latest installer
+  ansible.builtin.get_url:
+    url: 'https://install.pi-hole.net'
+    dest: '/tmp/pihole-install.sh'
+    mode: 0755
+  when: not pihole_installed
+
+- name: install | run installer
+  ansible.builtin.command: '/tmp/pihole-install.sh --unattended'
+  when: not pihole_installed
+
+- name: install | set random password (no install password set)
+  ansible.builtin.command: "pihole -a -p {{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
+  when: pihole_webpassword|string|length == 0
+
+- name: install | set password
+  ansible.builtin.command: 'pihole -a -p {{ pihole_webpassword }}'
+  when: pihole_webpassword|string|length > 0
+  no_log: true
