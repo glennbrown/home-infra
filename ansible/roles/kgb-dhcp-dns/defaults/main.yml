@@ -6,32 +6,15 @@
 
 pihole_default_packages_apt:
   - ca-certificates
-  - cron
   - curl
   - dialog
-  - dns-root-data
-  - dnsutils
-  - git
-  - idn2
-  - iputils-ping
-  - iproute2
-  - libcap2
-  - libcap2-bin
-  - lighttpd
   - lsof
-  - netcat
-  - php-cgi
-  - php-cli
-  - php-curl
-  - php-intl
-  - php-sqlite3
-  - php-xml
-  - psmisc
-  - sqlite3
+  - python3
+  - python3-apt
   - sudo
+  - sqlite3
   - unzip
   - wget
-  - whiptail
 
 ###############################################################################
 # Pi-Hole setupVars.conf

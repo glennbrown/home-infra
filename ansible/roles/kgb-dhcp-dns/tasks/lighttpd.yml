@@ -1,0 +1,20 @@
+---
+
+- name: postinstall | copy redirect conf file
+  ansible.builtin.template:
+    src: 99-redirect.conf.j2
+    dest: /etc/lighttpd/conf-available/99-redirect.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart lighttpd
+
+- name: postinstall | create symlink to enable conf file
+  ansible.builtin.file:
+    src: /etc/lighttpd/conf-available/99-redirect.conf
+    dest: /etc/lighttpd/conf-enabled/99-redirect.conf
+    owner: root
+    group: root
+    state: link
+  notify: restart lighttpd
+

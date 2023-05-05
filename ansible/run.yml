@@ -39,9 +39,10 @@
       - role: grog.group
       - role: grog.user
       - role: grog.authorized-key
-      - role: kgb-htop
       - role: kgb-apt-mirror
+      - role: kgb-htop
       - role: geerlingguy.ntp
         tags: packages
       - role: kgb-dhcp-dns
+        tags: dns, dhcp, pihole
         

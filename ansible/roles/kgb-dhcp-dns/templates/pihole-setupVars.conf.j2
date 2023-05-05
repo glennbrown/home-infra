@@ -1,4 +1,4 @@
-# Ansible Managed
+# {{ ansible_managed }}
 # DHCP STUFF COMMENTED OUT FOR NOW
 ADMIN_EMAIL={{ pihole_admin_email }}
 WEBTHEME={{ pihole_webtheme }}
@@ -11,7 +11,7 @@ CACHE_SIZE={{ pihole_cache_size }}
 DNS_FQDN_REQUIRED={{ pihole_dns_fqdn_required | bool | lower }}
 DNS_BOGUS_PRIV={{ pihole_dns_fqdn_required | bool | lower }}
 DNSMASQ_LISTENING={{ pihole_dnsmasq_listening }}
-WEBPASSWORD={{ pihole_webpassword }}
+WEBPASSWORD={{ pihole_webpassword | hash("sha256") | hash("sha256") | default("") }}
 BLOCKING_ENABLED={{ pihole_blocking_enabled | bool | lower }}
 #DNSSEC={{ pihole_dnssec | bool | lower }}
 #REV_SERVER={{ pihole_rev_server | bool | lower }}

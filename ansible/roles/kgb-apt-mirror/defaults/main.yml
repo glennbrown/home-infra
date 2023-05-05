@@ -7,4 +7,4 @@ ubuntu_apt_mirror: 'https://mirrors.iu13.net'
 
 # Debian
 
-debian_apt_mirror: 'http://debian.cc.lehigh.edu'
+debian_apt_mirror: 'https://mirrors.rit.edu'

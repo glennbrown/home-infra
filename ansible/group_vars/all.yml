@@ -89,6 +89,10 @@ authorized_key_list:
     authorized_keys:
       - key: "{{ secret_gbrown_key }}"
 
+# kgb-htop
+htop_users:
+  - homedir: "/home/gbrown"
+
 # ironicbadger.docker_compose_generator
 global_env_vars:
   - "TZ={{ ntp_timezone }}"

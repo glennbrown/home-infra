@@ -1,0 +1,15 @@
+---
+
+- name: start pihole-FTL
+  listen: start pihole-FTL
+  ansible.builtin.systemd:
+    name: pihole-FTL.service
+    daemon_reload: true
+    state: restarted
+    
+- name: restart lighttpd
+  listen: restart lighttpd
+  ansible.builtin.systemd:
+    name: lighttpd.service
+    daemon_reload: true
+    state: restarted
