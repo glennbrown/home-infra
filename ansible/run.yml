@@ -2,7 +2,7 @@
 
   # Configure Media Server
   - name: configure main server odin
-    hosts: pvetest
+    hosts: odin
     vars_files:
       - 'vars/vault.yml'
     roles:

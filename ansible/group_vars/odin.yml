@@ -66,6 +66,9 @@ user_list_group:
     uid: 99
     group: users
     shell: /bin/bash
+    append: yes
+    groups: 
+      - video
   - name: prometheus
     group: prometheus
     uid: 180
@@ -327,10 +330,10 @@ containers:
       - 9090:9090
     network_mode: bridge
     command:
-      - "--storage.tsdb.retention.time=1y" 
-      - "--config.file=/etc/prometheus/prometheus.yml" 
-      - "--storage.tsdb.path=/prometheus" 
-      - "--web.enable-admin-api"
+      - "'--storage.tsdb.retention.time=1y'"
+      - "'--config.file=/etc/prometheus/prometheus.yml'"
+      - "'--storage.tsdb.path=/prometheus'"
+      - "'--web.enable-admin-api'"
     restart: unless-stopped
   ###
   - service_name: influxdb
@@ -363,7 +366,7 @@ containers:
       - HOST_VAR=/rootfs/var
       - HOST_RUN=/rootfs/run
     volumes:
-      - "{{ appdata_path }}/telegraf/etc:/etc/telegraf:ro"
+      - "{{ appdata_path }}/telegraf:/etc/telegraf:ro"
       - /:/rootfs:ro
     network_mode: host
     restart: unless-stopped
@@ -381,11 +384,12 @@ containers:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
     ports:
       - 9099:9099
     network_mode: bridge
-    command:
-      - "--port 9099"
+    command: '-port 9099'
     restart: unless-stopped
   ###
   - service_name: moto-exporter
