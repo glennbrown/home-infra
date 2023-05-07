@@ -1,17 +1,24 @@
 ---
+#
+###############################################################################
+# Setup main server odin
+###############################################################################
+#
 
-- name: Ensure hostname is set correctly
+- name: odin - ensure hostname is set correctly
   hostname:
     name: "{{ hostname_odin }}"
   
-- name: Disks
+- name: odin - disk setup
   include_tasks: disks.yml
-  tags:
-    - disks
 
-- name: File Sharing
+- name: odin - file sharing
   include_tasks: file_sharing.yml
-  tags: 
-    - file-sharing
+
+- name: odin - tools install
+  include_tasks: tools.yml
+
+- name: odin - setup lm_sensors
+  include_tasks: sensors.yml
   
   

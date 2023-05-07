@@ -20,6 +20,7 @@
       - role: ironicbadger.bash_aliases
       - role: ironicbadger.figurine
       - role: kgb-odin
+        tags: tools, disks, file-sharing
       - role: tigattack.mergerfs
       - role: ironicbadger.snapraid
       - role: geerlingguy.nfs

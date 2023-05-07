@@ -1,6 +1,6 @@
 ---
 
-- name: install samba
+- name: file_sharing | install samba
   apt:
     update_cache: true
     pkg: samba
@@ -8,7 +8,7 @@
   notify: 
     - start samba service
 
-- name: install samba config
+- name: file_sharing | install samba config
   copy:
     src: etc/samba/smb.conf
     dest: /etc/samba/smb.conf
@@ -18,7 +18,7 @@
   notify: 
     - restart samba service
 
-- name: create samba users
+- name: file_sharing | create samba users
   shell: >
     set -e -o pipefail
     && (pdbedit --user={{ item.username }} 2>&1 > /dev/null)
@@ -31,7 +31,7 @@
   loop: "{{ samba_users }}"
   no_log: true
 
-- name: set samba passwords correctly
+- name: file_sharing | set samba passwords correctly
   shell: >
     set -e -o pipefail
     && (smbclient -U {{ item.username }}%{{ item.password }} -L 127.0.0.1 2>&1 > /dev/null)
@@ -44,7 +44,7 @@
   loop: "{{ samba_users }}"
   no_log: true
 
-- name: install mdns daemon
+- name: file_sharing | install mdns daemon
   apt:
     update_cache: yes
     pkg: avahi-daemon
@@ -52,7 +52,7 @@
   notify:
     - start avahi-daemon service
 
-- name: check weather wsdd2 is installed
+- name: file_sharing | check weather wsdd2 is installed
   shell: "dpkg-query -W {{ wsdd2_apt_package_name }}"
   ignore_errors: true
   register: is_installed
@@ -62,24 +62,24 @@
   set_fact:
     install_wsdd2: "{{ wsdd2_force_install == true or is_installed.failed == true }}"
 
-- name: build wsdd2 | clone git repo
+- name: file_sharing | build wsdd2 | clone git repo
   git:
     repo: https://github.com/glennbrown/docker-wsdd2.git
     dest: /tmp/wsdd2
     force: yes
   when: install_wsdd2
 
-- name: build wsdd2 | make build script executable
+- name: file_sharing | build wsdd2 | make build script executable
   file:
     path: /tmp/wsdd2/build.sh
     mode: 0755
   when: install_wsdd2
 
-- name: build wsdd2 | build .deb package
+- name: file_sharing | build wsdd2 | build .deb package
   shell: cd /tmp/wsdd2 && ./build.sh
   when: install_wsdd2
 
-- name: build wsdd2 | install .deb package
+- name: file_sharing | build wsdd2 | install .deb package
   apt:
     deb: /tmp/wsdd2/build/wsdd2-from-source.deb
     state: present

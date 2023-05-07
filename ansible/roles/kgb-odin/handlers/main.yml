@@ -21,3 +21,7 @@
     name: wsdd2
     state: started
     enabled: true
+
+- name: update grub
+  command: update-grub
+  

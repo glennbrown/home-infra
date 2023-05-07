@@ -1,0 +1,47 @@
+---
+#
+###############################################################################
+# Install Miscellaneous Tools
+###############################################################################
+#
+
+- name: tools | check if arc_summary already exists
+  ansible.builtin.stat:
+    path: /usr/local/bin/arc_summary
+  register: arc_summary_installed
+
+# arc_summary report
+- name: tools | install arc_summary python script from zol github
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/openzfs/zfs/384328e544b1847236a07df231e1b7b10e4cc6ce/cmd/arc_summary/arc_summary.py
+    dest: /usr/local/bin/arc_summary
+    mode: 0755
+    owner: root
+    group: root
+  when: not arc_summary_installed.stat.exists
+  
+- name: tools | fix arc_summary script to reference python3
+  ansible.builtin.lineinfile:
+    path: /usr/local/bin/arc_summary
+    regexp: '^#!/usr/bin/python$'
+    line: '#!/usr/bin/python3'
+
+- name: tools | git clone mergerfs-tools
+  ansible.builtin.git:
+    repo: https://github.com/trapexit/mergerfs-tools.git
+    dest: /tmp/mergerfs-tools
+
+- name: tools | set mergerfs-tools binary location
+  ansible.builtin.stat:
+    path: /usr/local/bin/mergerfs.ctl
+  register: mergerfs_tools_binary
+
+- name: tools | determine if mergerfs-tools are installed
+  ansible.builtin.set_fact:
+    mergerfs_tools_installed: "{{ mergerfs_tools_binary.stat.exists|default(false) }}"
+
+- name: tools | install mergerfs-tools
+  ansible.builtin.command:
+    chdir: /tmp/mergerfs-tools
+    cmd: make install
+  when: not mergerfs_tools_installed
