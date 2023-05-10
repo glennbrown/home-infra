@@ -1,5 +1,4 @@
 # {{ ansible_managed }}
-# DHCP STUFF COMMENTED OUT FOR NOW
 ADMIN_EMAIL={{ pihole_admin_email }}
 WEBTHEME={{ pihole_webtheme }}
 PIHOLE_INTERFACE={{ pihole_pihole_interface }}
@@ -13,18 +12,18 @@ DNS_BOGUS_PRIV={{ pihole_dns_fqdn_required | bool | lower }}
 DNSMASQ_LISTENING={{ pihole_dnsmasq_listening }}
 WEBPASSWORD={{ pihole_webpassword | hash("sha256") | hash("sha256") | default("") }}
 BLOCKING_ENABLED={{ pihole_blocking_enabled | bool | lower }}
-#DNSSEC={{ pihole_dnssec | bool | lower }}
-#REV_SERVER={{ pihole_rev_server | bool | lower }}
-#REV_SERVER_CIDR=
-#REV_SERVER_TARGET=
-#REV_SERVER_DOMAIN=
+DNSSEC={{ pihole_dnssec | bool | lower }}
+REV_SERVER={{ pihole_rev_server | bool | lower }}
+REV_SERVER_CIDR={{ pihole_rev_server_cidr }}
+REV_SERVER_TARGET={{ pihole_rev_server_target }}
+REV_SERVER_DOMAIN={{ pihole_rev_server_domain }}
 PIHOLE_DNS_1={{ pihole_pihole_dns1 }}
 PIHOLE_DNS_2={{ pihole_pihole_dns2 }}
-#DHCP_ACTIVE=
-#DHCP_START=
-#DHCP_END=
-#DHCP_ROUTER=
-#DHCP_LEASETIME=24
-PIHOLE_DOMAIN="{{ pihole_pihole_domain }}"
-#DHCP_IPv6=false
-#DHCP_rapid_commit=false
+DHCP_ACTIVE= {{ pihole_dhcp_active | bool | lower }}
+DHCP_START={{ pihole_dhcp_start }}
+DHCP_END={{ pihole_dhcp_end }}
+DHCP_ROUTER={{ pihole_dhcp_router }}
+DHCP_LEASETIME=24
+PIHOLE_DOMAIN={{ pihole_pihole_domain }}
+DHCP_IPv6={{ pihole_dhcp_ipv6 | bool | lower }}
+DHCP_rapid_commit={{ pihole_dhcp_rapid_commit | bool | lower }}

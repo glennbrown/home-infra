@@ -7,4 +7,10 @@ ntp_daemon: ntp
 # kgb-dhcp-dns
 dnsmasq_config_dir: /etc/dnsmasq.d
 pihole_config_dir: /etc/pihole
-
+pihole_dhcp_active: true
+pihole_dhcp_start: 192.168.23.50
+pihole_dhcp_end: 192.168.23.253
+pihole_dhcp_router: 192.168.16.1
+pihole_pihole_domain: pa.ikgb.me
+pihole_rev_server_cidr: 192.168.16.0/21
+pihole_rev_server_target: "{{ pihole_dhcp_router }}"
