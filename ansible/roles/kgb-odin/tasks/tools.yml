@@ -26,11 +26,6 @@
     regexp: '^#!/usr/bin/python$'
     line: '#!/usr/bin/python3'
 
-- name: tools | git clone mergerfs-tools
-  ansible.builtin.git:
-    repo: https://github.com/trapexit/mergerfs-tools.git
-    dest: /tmp/mergerfs-tools
-
 - name: tools | set mergerfs-tools binary location
   ansible.builtin.stat:
     path: /usr/local/bin/mergerfs.ctl
@@ -39,6 +34,12 @@
 - name: tools | determine if mergerfs-tools are installed
   ansible.builtin.set_fact:
     mergerfs_tools_installed: "{{ mergerfs_tools_binary.stat.exists|default(false) }}"
+
+- name: tools | git clone mergerfs-tools
+  ansible.builtin.git:
+    repo: https://github.com/trapexit/mergerfs-tools.git
+    dest: /tmp/mergerfs-tools
+  when: not mergerfs_tools_installed
 
 - name: tools | install mergerfs-tools
   ansible.builtin.command:
