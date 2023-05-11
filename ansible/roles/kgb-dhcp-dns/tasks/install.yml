@@ -5,6 +5,22 @@
 # DNS blackhole.
 #
 
+- name: install | create pihole group
+  ansible.builtin.group:
+    name: pihole
+    gid: 998
+    state: present
+
+- name: install | create pihole user
+  ansible.builtin.user:
+    name: pihole
+    uid: 998
+    group: pihole
+    create_home: false
+    home: /home/pihole
+    shell: /usr/sbin/nologin
+    state: present
+
 - name: install | install pihole dependencies
   ansible.builtin.apt:
     name: "{{ pihole_default_packages_apt }}"
@@ -14,7 +30,9 @@
 - name: install | create "{{ pihole_config_dir }}"
   ansible.builtin.file:
     path: "{{ pihole_config_dir }}"
-    mode: 0755
+    mode: 0775
+    owner: pihole
+    group: pihole
     state: directory
 
 - name: install | set deployment config
