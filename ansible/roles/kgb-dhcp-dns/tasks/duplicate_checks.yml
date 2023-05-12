@@ -8,9 +8,9 @@
         dupe_check: |
           {
             'reservation_count_total': {{ pihole_dhcp_reservations | length }},
-            'reservation_mac_unique': {{ pihole_dhcp_reservations | selectattr('mac', 'defined') | map(attribute='mac') | list) | unique | length }},
-            'reservation_ip_unique': {{ pihole_dhcp_reservations | selectattr('ip', 'defined') | map(attribute='ip') | list) | unique | length }},
-            'reservation_hostname_unique': {{ pihole_dhcp_reservations | selectattr('hostname', 'defined') | map(attribute='hostname') | list) | unique | length }}
+            'reservation_mac_unique': {{ (pihole_dhcp_reservations | selectattr('mac', 'defined') | map(attribute='mac') | list) | unique | length }},
+            'reservation_ip_unique': {{ (pihole_dhcp_reservations | selectattr('ip', 'defined') | map(attribute='ip') | list) | unique | length }},
+            'reservation_hostname_unique': {{ (pihole_dhcp_reservations | selectattr('hostname', 'defined') | map(attribute='hostname') | list) | unique | length }}
           }
 
     - name: print counts for basic duplicate checks
