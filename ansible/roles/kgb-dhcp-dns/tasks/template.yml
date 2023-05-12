@@ -1,0 +1,38 @@
+---
+
+- name: write dns file
+  ansible.builtin.template:
+    src: dns-overrides.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/03-dns-overrides.conf"
+    owner: root
+    group: root
+  notify: restart pihole dns
+
+# This file should be created by install playbook but just in-case lets write it again!
+- name: write pihole dhcp configuration file
+  ansible.builtin.template:
+    src: pihole-dhcp.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/02-pihole-dhcp.conf"
+    owner: root
+    group: root
+  notify: restart pihole dns
+
+- name: write static dhcp file
+  ansible.builtin.template:
+    src: static-dhcp.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/03-static-dhcp.conf"
+    owner: root
+    group: root
+  register: dhcp_changed
+
+- name: revoke existing leases if dhcpd file changed
+  ansible.builtin.file:
+    path: "{{ pihole_config_dir }}/dhcp.leases"
+    state: absent
+  when: dhcp_changed.changed
+
+- name: revoke existing leases if dhcpd file changed
+  ansible.builtin.file:
+    path: "{{ pihole_config_dir }}/dhcp.leases"
+    state: touch
+  when: dhcp_changed.changed

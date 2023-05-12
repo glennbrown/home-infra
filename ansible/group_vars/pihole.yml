@@ -14,3 +14,21 @@ pihole_dhcp_router: 192.168.16.1
 pihole_pihole_domain: pa.ikgb.me
 pihole_rev_server_cidr: 192.168.16.0/21
 pihole_rev_server_target: "{{ pihole_dhcp_router }}"
+
+pihole_dns_overrides:
+  - {ip: 192.168.16.1, custom_dns: "pa.ikgb.me"}
+
+pihole_dhcp_reservations:
+  # Core Instructure
+  ## Firewall
+  - {mac: 42:9a:75:59:8e:70, ip: 192.168.16.1, hostname: opnsense}
+  ## heimdall (Topton)
+  #
+  #
+  #
+  #
+  ## heimdall services
+  - {mac: C2:09:93:5C:7A:06, ip: 192.168.16.5, hostname: pihole}
+  #
+  ## Testing
+  - {mac: AA:32:6E:E0:40:C7, ip: 192.168.16.10, hostname: popos-test, custom_dns: ["p"]}
