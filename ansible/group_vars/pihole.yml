@@ -8,7 +8,7 @@ ntp_daemon: ntp
 dnsmasq_config_dir: /etc/dnsmasq.d
 pihole_config_dir: /etc/pihole
 pihole_dhcp_active: true
-pihole_dhcp_start: 192.168.23.50
+pihole_dhcp_start: 192.168.23.100
 pihole_dhcp_end: 192.168.23.253
 pihole_dhcp_router: 192.168.16.1
 pihole_pihole_domain: pa.ikgb.me
@@ -23,12 +23,62 @@ pihole_dhcp_reservations:
   ## Firewall
   - {mac: 42:9a:75:59:8e:70, ip: 192.168.16.1, hostname: opnsense}
   ## heimdall (Topton)
-  #
+  # 
   #
   #
   #
   ## heimdall services
   - {mac: C2:09:93:5C:7A:06, ip: 192.168.16.5, hostname: pihole}
+  #- {mac:  ,ip: 192.168.16.6, hostname: caddy}
+  #
   #
   ## Testing
   - {mac: AA:32:6E:E0:40:C7, ip: 192.168.16.10, hostname: popos-test, custom_dns: ["p"]}
+
+  ## odin - Primary Server
+  - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.17.10, hostname: odin, custom_dns: ["o"]}
+  ## odin - Services/VM's
+  - {mac: 52:54:00:92:8f:15, ip: 192.168.17.11, hostname: thor}
+  - {mac: 6A:CC:5C:74:4F:C1, ip: 192.168.17.12, hostname: homeassistant, custom_dns: ["ha"]}
+  - {mac: 52:54:00:44:9a:92, ip: 192.168.17.13, hostname: njord}
+  - {mac: 0A:11:D7:46:C3:EB, ip: 192.168.17.14, hostname: balder}
+  #-{mac:  , ip: 192.168.17.15, hostname: loki}
+
+##
+## Networking Equipment
+- {mac: 60:5f:8d:1e:db:a0, ip: 192.168.16.100, hostname: eero-pro-bedroom}
+#- {mac:  ,ip: 192.168.16.101, hostname: eero-beacon-diningroom}
+
+##
+## miscellanous
+- {mac: b8:27:eb:09:66:1f, ip: 192.168.17.21, hostname: pi3b}
+- {mac: 80:e8:2c:61:95:dc, ip: 192.168.17.30, hostname: hp-officejet-pro}
+
+##
+## Media Players and TV's
+- {mac: c0:d2:f3:e3:5f:7a, ip: 192.168.17.100, hostname: livingroom-roku}
+- {mac: 9c:95:61:53:56:6b, ip: 192.168.17.101, hostname: master-bedroom-roku}
+- {mac: ac:bc:32:6a:84:f4, ip: 192.168.17.102, hostname: bedroom-appletv}
+- {mac: a8:8c:3e:80:c1:88, ip: 192.168.17.103, hostname: xbox}
+
+##
+## IOT Devices
+- {mac: 90:23:5b:49:4f:bb, ip: 192.168.21.10, hostname: amazon-echo-livingroom}
+- {mac: 44:00:49:26:8b:44, ip: 192.168.21.11, hostname: amazon-echo-masterbedroom}
+- {mac: 00:04:20:f9:70:8b, ip: 192.168.21.12, hostname: harmony-hub-livingroom}
+- {mac: 00:17:88:a2:25:17, ip: 192.168.21.13, hostname: hue-hub-bedroom}
+- {mac: 7c:27:bc:95:5f:ce, ip: 192.168.21.14, hostname: smartrent-hub}
+
+##
+## Clients
+- {mac: 0c:e4:41:e4:97:b8, ip: 192.168.23.10, hostname: glenn-laptop}
+- {mac: f4:be:ec:c3:9c:cc, ip: 192.168.23.11, hostname: glenn-iphone}
+- {mac: 4c:56:9d:68:ea:0e, ip: 192.168.23.12, hostname: glenn-ipad}
+- {mac: 20:e8:74:7b:a0:e2, ip: 192.168.23.13, hostname: glenn-iphone-work}
+- {mac: f0:18:98:5e:f3:51, ip: 192.168.23.14, hostname: wchmlqvc00665, custom_dns: ["glenn-laptop-work"]}
+
+- {mac: 5c:3e:1b:d8:3e:51, ip: 192.168.23.20, hostname: kristen-iphone}
+- {mac: a4:83:e7:80:09:35, ip: 192.168.23.21, hostname: kristen-laptop}
+- {mac: 10:ce:e9:e4:7f:97, ip: 192.168.23.22, hostname: kristen-watch}
+
+- {mac: 64:4b:f0:1a:73:e7, ip: 192.168.23.30, hostname: caldigit-ts3}

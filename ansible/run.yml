@@ -1,7 +1,7 @@
 ---
 
   # Configure Media Server
-  - name: configure main server odin
+  - name: configure odin
     hosts: odin
     vars_files:
       - 'vars/vault.yml'
@@ -31,6 +31,21 @@
       - role: ironicbadger.docker_compose_generator
         tags: compose
   
+  # Configure heimdall (Topton unit)
+  - name: configure heimdall
+    hosts: heimdall
+    vars_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: ironicbadger.proxmox_nag_removal
+      - role: kgb-apt-mirror
+      - role: grog.package
+      - role: geerlingguy.ntp
+
+
   # Configure pihole
   - name: configure pihole dns
     hosts: pihole
