@@ -459,7 +459,7 @@ containers:
       - WATCHTOWER_SCHEDULE=0 0 2 * * SAT
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_NOTIFICATIONS=shoutrrr
-      - WATCHTOWER_NOTIFICATION_URL=discord://ARkl69hNXV26V4cEnf9C8pcFnW4CMcSdMFHZaSnIBVpcrTu2tM5feJOTFRVPhN8ufinO@1083902074099613807
+      - WATCHTOWER_NOTIFICATION_URL={{ watchtower_discord_url }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     network_mode: bridge
