@@ -448,3 +448,19 @@ containers:
       - 1688:1688
     network_mode: bridge
     restart: unless-stopped
+  ###
+  - service_name: watchtower
+    active: true
+    image: containrrr/watchtower
+    container_name: watchtower
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - WATCHTOWER_SCHEDULE=0 0 2 * * SAT
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      - WATCHTOWER_NOTIFICATION_URL=discord://ARkl69hNXV26V4cEnf9C8pcFnW4CMcSdMFHZaSnIBVpcrTu2tM5feJOTFRVPhN8ufinO@1083902074099613807
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: bridge
+    restart: unless-stopped
