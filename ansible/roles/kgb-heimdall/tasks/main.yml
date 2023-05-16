@@ -1,0 +1,10 @@
+---
+# Setup work for heimdall
+
+# Ensure intel_iommu is enabled in grub
+- name: heimdall | enable intel_iommu
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX=""$'
+    line: 'GRUB_CMDLINE_LINUX="intel_iommu=on"'
+  notify: update grub

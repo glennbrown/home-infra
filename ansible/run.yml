@@ -45,6 +45,7 @@
       - role: grog.package
       - role: kgb-htop
       - role: geerlingguy.ntp
+      - role: kgb-heimdall
       - role: ironicbadger.figurine
 
   # Configure pihole
