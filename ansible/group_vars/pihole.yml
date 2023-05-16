@@ -21,27 +21,27 @@ pihole_dns_overrides:
 pihole_dhcp_reservations:
   # Core Instructure
   ## Firewall
-  - {mac: 42:9a:75:59:8e:70, ip: 192.168.16.1, hostname: opnsense}
+  - {mac: 7c:2b:e1:13:bd:b1, ip: 192.168.16.1, hostname: opnsense}
   ## heimdall (Topton)
-  - {mac: 7c:2b:e1:13:bd:b3, ip: 192.168.16.20, hostname: heimdall} # eth4 port Proxmox Mgmt
+  - {mac: 7c:2b:e1:13:bd:b3, ip: 192.168.16.20, hostname: heimdall} # eth3 port proxmox plus VM/LXC services
   #- {mac: 7c:2b:e1:13:bd:b0, ip: WAN, hostname: opnsense-WAN} # eth0 WAN port passed through to opnsense
   #- {mac: 7c:2b:e1:13:bd:b1, ip: LAN, hostname: opnsense-LAN1} # eth1 LAN port passed through to opnsense
-  #- {mac: 7c:2b:e1:13:bd:b2, ip: LAN, hostname: opnsense-LAN2} # eth2 LAN port passed through to opnsense
+  #- {mac: 7c:2b:e1:13:bd:b2, ip: , hostname: } # eth2 NOT USED!
   ## heimdall services
-  - {mac: C2:09:93:5C:7A:06, ip: 192.168.16.5, hostname: pihole}
+  - {mac: 5e:76:09:bf:f3:e3, ip: 192.168.16.5, hostname: pihole}
   #- {mac:  ,ip: 192.168.16.6, hostname: caddy}
   #
   #
   ## Testing
-  - {mac: AA:32:6E:E0:40:C7, ip: 192.168.16.10, hostname: popos-test, custom_dns: ["p"]}
+  #- {mac: AA:32:6E:E0:40:C7, ip: 192.168.16.10, hostname: popos-test, custom_dns: ["p"]}
 
   ## odin - Primary Server
   - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.17.10, hostname: odin, custom_dns: ["o"]}
   ## odin - Services/VM's
   - {mac: 52:54:00:92:8f:15, ip: 192.168.17.11, hostname: thor}
-  - {mac: 6A:CC:5C:74:4F:C1, ip: 192.168.17.12, hostname: homeassistant, custom_dns: ["ha"]}
+  - {mac: 6a:cc:5c:74:4f:c1, ip: 192.168.17.12, hostname: homeassistant, custom_dns: ["ha"]}
   - {mac: 52:54:00:44:9a:92, ip: 192.168.17.13, hostname: njord}
-  - {mac: 0A:11:D7:46:C3:EB, ip: 192.168.17.14, hostname: balder}
+  - {mac: 0a:11:d7:46:c3:eb, ip: 192.168.17.14, hostname: balder}
   #-{mac:  , ip: 192.168.17.15, hostname: loki}
 
 ##
