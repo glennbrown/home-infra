@@ -23,10 +23,10 @@ pihole_dhcp_reservations:
   ## Firewall
   - {mac: 42:9a:75:59:8e:70, ip: 192.168.16.1, hostname: opnsense}
   ## heimdall (Topton)
-  # 
-  #
-  #
-  #
+  - {mac: 7c:2b:e1:13:bd:b3, ip: 192.168.16.20, hostname: heimdall} # eth4 port Proxmox Mgmt
+  #- {mac: 7c:2b:e1:13:bd:b0, ip: WAN, hostname: opnsense-WAN} # eth0 WAN port passed through to opnsense
+  #- {mac: 7c:2b:e1:13:bd:b1, ip: LAN, hostname: opnsense-LAN1} # eth1 LAN port passed through to opnsense
+  #- {mac: 7c:2b:e1:13:bd:b2, ip: LAN, hostname: opnsense-LAN2} # eth2 LAN port passed through to opnsense
   ## heimdall services
   - {mac: C2:09:93:5C:7A:06, ip: 192.168.16.5, hostname: pihole}
   #- {mac:  ,ip: 192.168.16.6, hostname: caddy}

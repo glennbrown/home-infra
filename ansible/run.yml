@@ -43,8 +43,9 @@
       - role: ironicbadger.proxmox_nag_removal
       - role: kgb-apt-mirror
       - role: grog.package
+      - role: kgb-htop
       - role: geerlingguy.ntp
-
+      - role: ironicbadger.figurine
 
   # Configure pihole
   - name: configure pihole dns
