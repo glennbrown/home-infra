@@ -17,3 +17,5 @@ package_list_group:
 - name: nvme-cli
 - name: wget
 - name: smartmontools
+- name: lshw
+- name: dmidecode
