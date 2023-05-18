@@ -74,15 +74,15 @@ pihole_dhcp_reservations:
 
   ##
   ## Clients
-  - {mac: 0c:e4:41:e4:97:b8, ip: 192.168.23.10, hostname: glenn-laptop}
-  - {mac: f4:be:ec:c3:9c:cc, ip: 192.168.23.11, hostname: glenn-iphone}
-  - {mac: 4c:56:9d:68:ea:0e, ip: 192.168.23.12, hostname: glenn-ipad}
-  - {mac: 20:e8:74:7b:a0:e2, ip: 192.168.23.13, hostname: glenn-iphone-work}
-  - {mac: f0:18:98:5e:f3:51, ip: 192.168.23.14, hostname: wchmlqvc00665, custom_dns: ["glenn-laptop-work"]}
+  - {mac: 0c:e4:41:e4:97:b8, ip: 192.168.23.10, hostname: glenns-laptop}
+  - {mac: f4:be:ec:c3:9c:cc, ip: 192.168.23.11, hostname: glenns-iphone}
+  - {mac: 4c:56:9d:68:ea:0e, ip: 192.168.23.12, hostname: glenns-ipad}
+  - {mac: 20:e8:74:7b:a0:e2, ip: 192.168.23.13, hostname: glenns-iphone-work}
+  - {mac: f0:18:98:5e:f3:51, ip: 192.168.23.14, hostname: wchmlqvc00665, custom_dns: ["glenns-laptop-work"]}
 
-  - {mac: 5c:3e:1b:d8:3e:51, ip: 192.168.23.20, hostname: kristen-iphone}
-  - {mac: a4:83:e7:80:09:35, ip: 192.168.23.21, hostname: kristen-laptop}
-  - {mac: 10:ce:e9:e4:7f:97, ip: 192.168.23.22, hostname: kristen-watch}
+  - {mac: 5c:3e:1b:d8:3e:51, ip: 192.168.23.20, hostname: kristens-iphone}
+  - {mac: a4:83:e7:80:09:35, ip: 192.168.23.21, hostname: kristens-laptop}
+  - {mac: 10:ce:e9:e4:7f:97, ip: 192.168.23.22, hostname: kristens-watch}
 
   - {mac: 64:4b:f0:1a:73:e7, ip: 192.168.23.30, hostname: caldigit-ts3}
   - {mac: 20:7b:d2:4f:3e:9e, ip: 192.168.23.31, hostname: ugreen-usb-nic}
