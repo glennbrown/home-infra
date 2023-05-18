@@ -8,6 +8,14 @@
     group: root
   notify: restart pihole dns
 
+- name: write reverse dns file
+  ansible.builtin.template:
+    src: reverse-lookup.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/07-reverse-lookup.conf"
+    owner: root
+    group: root
+  notify: restart pihole dns
+
 # This file should be created by install playbook but just in-case lets write it again!
 - name: write pihole dhcp configuration file
   ansible.builtin.template:
