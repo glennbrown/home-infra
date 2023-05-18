@@ -8,3 +8,7 @@
 
 - name: copy template config files into place
   ansible.builtin.include_tasks: template.yml
+
+- name: install pihole-updatelists
+  ansible.builtin.include_tasks: updatelists.yml
+  
