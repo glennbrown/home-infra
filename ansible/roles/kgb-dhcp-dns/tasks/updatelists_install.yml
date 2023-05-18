@@ -1,0 +1,10 @@
+---
+
+- name: pihole_updatelists | check if already installed
+  ansible.builtin.stat:
+    path: /usr/local/sbin/pihole-updatelists
+  register: updatelists_binary
+
+- name: pihole_updatelists | fetch latest installer
+  ansible.builtin.get_url:
+    
