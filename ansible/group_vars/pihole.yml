@@ -17,6 +17,9 @@ pihole_rev_server_target: "{{ pihole_dhcp_router }}"
 
 pihole_dns_overrides:
   - {ip: 192.168.16.6, custom_dns: "pa.ikgb.me"}
+  #- {ip: 192.168.17.10, custom_dns: "o.pa.ikgb.me"}
+  #- {ip: 192.168.17.12, custom_dns: "ha.pa.ikgb.me"}
+
 
 pihole_dhcp_reservations:
   # Core Instructure
@@ -82,3 +85,4 @@ pihole_dhcp_reservations:
   - {mac: 10:ce:e9:e4:7f:97, ip: 192.168.23.22, hostname: kristen-watch}
 
   - {mac: 64:4b:f0:1a:73:e7, ip: 192.168.23.30, hostname: caldigit-ts3}
+  - {mac: 20:7b:d2:4f:3e:9e, ip: 192.168.23.31, hostname: ugreen-usb-nic}
