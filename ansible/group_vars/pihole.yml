@@ -49,7 +49,7 @@ pihole_dhcp_reservations:
 
   ##
   ## Networking Equipment
-  - {mac: 60:5f:8d:1e:db:a0, ip: 192.168.16.100, hostname: eero-pro-bedroom}
+  - {mac: 60:5f:8d:1e:db:b2, ip: 192.168.16.100, hostname: eero-pro-bedroom}
   - {mac: f8:bb:bf:c0:6e:2b, ip: 192.168.16.101, hostname: eero-beacon-diningroom}
 
   ##

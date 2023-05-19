@@ -198,7 +198,7 @@ containers:
     container_name: jellyfin
     include_global_env_vars: true
     environment:
-      - JELLYFIN_PublishedServerUrl=192.168.10.41
+      - JELLYFIN_PublishedServerUrl=192.168.17.10
     volumes:
       - "{{ appdata_path }}/jellyfin:{{ container_config_path }}"
       - "{{ storage_path }}/TV Shows:/data/tv:ro"
@@ -426,7 +426,7 @@ containers:
       - "TZ={{ ntp_timezone }}"
       - "GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-singlestat-panel,grafana-worldmap-panel,marcusolsson-json-datasource,dalvany-image-panel,grafana-clock-panel,grafana-simple-json-datasource"
       - "GF_SECURITY_ADMIN_PASSWORD={{ grafana_secret }}"
-      - "GF_SERVER_ROOT_URL=http://192.168.10.41:3000"
+      - "GF_SERVER_ROOT_URL=http://192.168.17.10:3000"
     volumes:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
     ports:
