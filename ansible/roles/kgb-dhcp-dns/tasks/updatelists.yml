@@ -3,19 +3,7 @@
 - name: pihole-updatelists | check if already installed
   ansible.builtin.stat:
     path: /usr/local/sbin/pihole-updatelists
-  register: updatelists_binary
-
-- name: pihole-updatelists | fetch latest installer
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/jacklul/pihole-updatelists/master/install.sh
-    dest: /tmp/pihole-updatelist-install.sh
-    mode: 0755
-  when: not updatelists_binary.stat.exists
-
-- name: pihole-updatelists | run installer
-  ansible.builtin.command: '/tmp/pihole-updatelist-install.sh'
-  when: not updatelists_binary.stat.exists
-  register: pihole_updatelists_install
+  register: pihole_updatelists_binary
 
 - name: pihole-updatelists | copy updatelist conf file
   ansible.builtin.copy:
@@ -26,17 +14,21 @@
     group: root
   register: pihole_updatelists_conf
 
-- name: pihole-updatelists | activate 
-  ansible.builtin.command: '/usr/local/sbin/pihole-updatelists'
-  register: pihole_updatelist_activate
-  changed_when: pihole_updatelist_activate.rc != 0
-  when: updatelists_binary.stat.exists
+- block:
 
-- name: pihole-updatelists | update pihole-updatelist
-  ansible.builtin.command:
-    argv:
-      - /usr/local/sbin/pihole-updatelists
-      - --update
-  register: pihole_updatelist_update
-  changed_when: pihole_updatelist_update.rc != 0
-  when: updatelists_binary.stat.exists and pihole_updatelists_conf.changed
+    - name: pihole-updatelists | fetch latest installer
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/jacklul/pihole-updatelists/master/install.sh
+        dest: /tmp/pihole-updatelist-install.sh
+        mode: 0755    
+    
+    - name: pihole-updatelists | run installer
+      ansible.builtin.command: '/tmp/pihole-updatelist-install.sh'
+      register: pihole_updatelists_install
+      changed_when: "'Reloading systemd manager' in pihole_updatelists_install.stdout"
+  
+  when: not pihole_updatelists_binary.stat.exists
+
+- name: pihole-updatelists | activate
+  ansible.builtin.command: '/usr/local/sbin/pihole-updatelists'
+  when: pihole_updatelists_install.changed or pihole_updatelists_conf.changed
