@@ -13,6 +13,25 @@
     owner: root
     group: root
   register: pihole_updatelists_conf
+  notify: reload pihole-updatelists
+
+- name: pihole-updatelists | create directory for custom whitelists
+  ansible.builtin.file:
+    path: "{{ whitelists_config_dir }}"
+    mode: 0755
+    owner: root
+    group: root
+    state: directory
+
+- name: pihole-updatelists | copy whitelists
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ whitelists_config_dir }}/{{ item | basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob: "{{ role_path }}/files/pihole*whitelist.txt"
+  notify: reload pihole-updatelists
 
 - block:
 
@@ -26,9 +45,6 @@
       ansible.builtin.command: '/tmp/pihole-updatelist-install.sh'
       register: pihole_updatelists_install
       changed_when: "'Reloading systemd manager' in pihole_updatelists_install.stdout"
-  
+      notify: reload pihole-updatelists
+      
   when: not pihole_updatelists_binary.stat.exists
-
-- name: pihole-updatelists | activate
-  ansible.builtin.command: '/usr/local/sbin/pihole-updatelists'
-  when: pihole_updatelists_install.changed or pihole_updatelists_conf.changed

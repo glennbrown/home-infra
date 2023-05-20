@@ -1,0 +1,3 @@
+(\.|^)googleadservices\.com$
+(\.|^)dartsearch\.net$
+(\.|^)wegmans\.com$

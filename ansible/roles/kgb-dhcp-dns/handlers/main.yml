@@ -18,3 +18,7 @@
   listen: "restart pihole dns"
   ansible.builtin.shell: /usr/local/bin/pihole restartdns
 
+- name: reload pihole-updatelists
+  listen: reload pihole-updatelists
+  ansible.builtin.command: '/usr/local/sbin/pihole-updatelists'
+
