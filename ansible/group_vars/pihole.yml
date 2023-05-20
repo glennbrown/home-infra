@@ -32,7 +32,7 @@ pihole_dhcp_reservations:
   #- {mac: 7c:2b:e1:13:bd:b2, ip: , hostname: } # eth2 NOT USED!
   ## heimdall services
   - {mac: 5e:76:09:bf:f3:e3, ip: 192.168.16.5, hostname: pihole}
-  #- {mac:  ,ip: 192.168.16.6, hostname: caddy}
+  - {mac: 82:3f:c3:7a:ac:7b, ip: 192.168.16.6, hostname: caddy}
   #
   #
   ## Testing
