@@ -1,6 +1,7 @@
 ---
 
-  # Configure Media Server
+  # Configure primary server
+  # Proxmox
   - name: configure odin
     hosts: odin
     vars_files:
@@ -32,6 +33,7 @@
         tags: compose
   
   # Configure heimdall (Topton unit)
+  # Proxmox
   - name: configure heimdall
     hosts: heimdall
     vars_files:
@@ -42,13 +44,17 @@
       - role: grog.authorized-key
       - role: ironicbadger.proxmox_nag_removal
       - role: kgb-apt-mirror
+        tags: packages
       - role: grog.package
+        tags: packages
       - role: kgb-htop
       - role: geerlingguy.ntp
       - role: kgb-heimdall
       - role: ironicbadger.figurine
+      - role: ironicbadger.bash_aliases
 
   # Configure pihole
+  # Debian
   - name: configure pihole dns
     hosts: pihole
     vars_files:
@@ -58,8 +64,12 @@
       - role: grog.user
       - role: grog.authorized-key
       - role: kgb-apt-mirror
+        tags: packages
+      - role: grog.package
+        tags: packages
       - role: kgb-htop
       - role: geerlingguy.ntp
+      - role: ironicbadger.bash_aliases
       - role: kgb-dhcp-dns
         tags: dns, dhcp, pihole
         

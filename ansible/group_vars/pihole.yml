@@ -1,5 +1,11 @@
 ---
 
+# grog.package
+package_list_group:
+  - name: apt-file
+  - name: command-not-found
+  - name: dnsutils
+  
 # geerlingguy.ntp
 ntp_package: ntp
 ntp_daemon: ntp
