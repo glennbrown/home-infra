@@ -1,0 +1,36 @@
+---
+
+- name: traefik | ensure config directory exists
+  ansible.builtin.file:
+    dest: "{{ appdata_path }}/traefik"
+    state: directory
+    owner: root
+    group: users
+    mode: 0775
+
+- name: traefik | ensure acme file exists
+  ansible.builtin.file:
+    dest: "{{ appdata_path }}/traefik/acme.json"
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+
+- name: traefik | copy traefik config file from template
+  ansible.builtin.template:
+    src: traefik.yml.j2
+    dest: "{{ appdata_path }}/traefik/traefik.yml"
+    owner: root
+    group: users
+    mode: 0664
+  tags: traefik
+
+- name: traefik | copy traefik file provider rules
+  ansible.builtin.template:
+    src: rules.yml.j2
+    dest: "{{ appdata_path }}/traefik/rules.yml"
+    owner: root
+    group: users
+    mode: 0664
+  tags: traefik
+  when: traefik_file_provider == "true"

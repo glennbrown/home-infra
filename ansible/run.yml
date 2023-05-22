@@ -29,6 +29,8 @@
         tags: prom
       - role: kgb-prom
         tags: prom
+      - role: kgb-traefik
+        tags: compose
       - role: ironicbadger.docker_compose_generator
         tags: compose
   
