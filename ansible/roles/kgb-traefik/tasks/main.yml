@@ -33,4 +33,4 @@
     group: users
     mode: 0664
   tags: traefik
-  when: traefik_file_provider == "true"
+  when: traefik_file_provider

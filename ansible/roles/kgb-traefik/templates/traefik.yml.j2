@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 entryPoints:
   web:
     address: :80
@@ -27,7 +28,7 @@ providers:
 
 {% if traefik_file_provider %}
   file:
-    filename: /etc/traefik/rules.yaml
+    filename: /etc/traefik/rules.yml
 {% endif %}
 
 {% if traefik_enable_dashboard %}

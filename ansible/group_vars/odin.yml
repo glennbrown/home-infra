@@ -164,6 +164,8 @@ node_exporter_system_user: prometheus
 traefik_enable_dashboard: true
 traefik_insecure_transport: true
 traefik_exposed_by_default: true
+traefik_file_provider: true
+traefik_enable_proxmox: true
 
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nvme1tb/appdata
@@ -474,10 +476,10 @@ containers:
       - "GF_SERVER_ROOT_URL=http://192.168.17.10:3000"
     volumes:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
-    ports:
-      - 3000:3000
     network_mode: bridge
     restart: unless-stopped
+    labels:
+      - '"traefik.http.routers.grafana.rule=Host(`grafana.o.{{ local_domain }}`)"'
   ###
   - service_name: py-kms
     active: true
