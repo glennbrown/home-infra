@@ -8,6 +8,11 @@
     group: users
     mode: 0775
 
+- name: traefik | check if acme file exists already
+  ansible.builtin.stat:
+    path: "{{ appdata_path }}/traefik/acme.json"
+  register: acme_json_file
+
 - name: traefik | ensure acme file exists
   ansible.builtin.file:
     dest: "{{ appdata_path }}/traefik/acme.json"
@@ -15,6 +20,7 @@
     owner: root
     group: root
     mode: 0600
+  when: not acme_json_file.stat.exists
 
 - name: traefik | copy traefik config file from template
   ansible.builtin.template:
