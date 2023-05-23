@@ -227,6 +227,25 @@ containers:
     labels:
       - '"traefik.http.routers.tautulli.rule=Host(`tautulli.o.{{ local_domain }}`)"'
   ###
+  - service_name: overseerr
+    active: true
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - LOG_LEVEL=debug
+    volumes:
+      - "{{ appdata_path }}/overseerr:/app/config"
+    network_mode: bridge
+    restart: unless-stopped
+    depends_on:
+      - plex
+      - sonarr
+      - radarr
+    labels:
+      - '"traefik.http.routers.overseerr.rule=Host(`overseerr.o.{{ local_domain }}`)"'
+  ###
   - service_name: jellyfin
     active: true
     image: lscr.io/linuxserver/jellyfin:latest
