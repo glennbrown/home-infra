@@ -89,11 +89,6 @@ user_list_group:
     append: false
     state: present
 
-# geerlingguy.docker
-docker_install_compose: false
-docker_install_compose_plugin: true 
-docker_users: gbrown
-
 # kgb-odin
 # TODO: change secret to 1password lookup
 odin_main_storage_path: /mnt/storage
@@ -153,12 +148,6 @@ mergerfs_mounts:
 
 # geerlingguy.nfs
 nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
-
-# prometheus.prometheus.node_exporter
-node_exporter_textfile_dir: /var/lib/node-exporter
-node_exporter_version: 1.5.0
-node_exporter_system_group: prometheus
-node_exporter_system_user: prometheus
 
 # kgb-traefik
 traefik_enable_dashboard: true

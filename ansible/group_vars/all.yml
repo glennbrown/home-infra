@@ -85,9 +85,20 @@ authorized_key_list:
     authorized_keys:
       - key: "{{ secret_gbrown_key }}"
 
+# geerlingguy.docker
+docker_install_compose: false
+docker_install_compose_plugin: true 
+docker_users: gbrown
+
 # kgb-htop
 htop_users:
   - homedir: "/home/gbrown"
+
+# prometheus.prometheus.node_exporter
+node_exporter_textfile_dir: /var/lib/node-exporter
+node_exporter_version: 1.5.0
+node_exporter_system_group: prometheus
+node_exporter_system_user: prometheus
 
 # ironicbadger.docker_compose_generator
 global_env_vars:

@@ -14,11 +14,10 @@ entryPoints:
       tls:
         certresolver: cloudflare
         domains:
-          - main: {{ traefik_internal_domain }}
+          - main: "{{ traefik_internal_domain }}"
             sans: "*.{{ traefik_internal_domain }}"
-          - main: o.{{ traefik_internal_domain }}
-            sans: "*.o.{{ traefik_internal_domain }}"
-    
+          - main: "{{ ansible_hostname[0] }}.{{ traefik_internal_domain }}"
+            sans: "*.{{ ansible_hostname[0] }}.{{ traefik_internal_domain }}"
 ping: {}
 
 providers:
