@@ -2,27 +2,23 @@
 ---
 http:
   routers:
-  {% if traefik_enable_proxmox %}
-  router-proxmox:
-    entryPoints:
-      - websecure
-    rule: "Host(`proxmox.{{ ansible_hostname[0] }}.{{ local_domain }}`)"
-    middlewares:
-      - default-headers
-      - https-redirectscheme
-    tls:
-      certResolver: cloudflare
-    service: service-proxmox
-  {% endif %}
+    router-proxmox:
+      entryPoints:
+        - websecure
+      rule: "Host(`proxmox.{{ ansible_hostname[0] }}.{{ local_domain }}`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: cloudflare
+      service: service-proxmox
     
   services:
-  {% if traefik_enable_proxmox %}
-  service-proxmox:
-    loadBalancer:
-      passHostHeader: true
-      servers:
-        - url: "https://{{ ansible_default_ipv4.address }}:8006"
-  {% endif %}
+    service-proxmox:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "https://{{ ansible_default_ipv4.address }}:8006"
 
   middlewares: 
     https-redirectscheme:

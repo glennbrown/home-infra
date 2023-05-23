@@ -165,7 +165,8 @@ traefik_enable_dashboard: true
 traefik_insecure_transport: true
 traefik_exposed_by_default: true
 traefik_file_provider: true
-traefik_enable_proxmox: true
+traefik_file_rules:
+  - proxmox
 
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nvme1tb/appdata

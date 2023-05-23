@@ -31,12 +31,23 @@
     mode: 0664
   tags: traefik
 
+- name: traefik | ensure rules directory exists
+  ansible.builtin.file:
+    dest: "{{ appdata_path }}/traefik/rules.d"
+    state: directory
+    owner: root
+    group: users
+    mode: 0775
+  tags: traefik
+  when: traefik_file_provider
+
 - name: traefik | copy traefik file provider rules
   ansible.builtin.template:
-    src: rules.yml.j2
-    dest: "{{ appdata_path }}/traefik/rules.yml"
+    src: "{{ item }}.yml.j2"
+    dest: "{{ appdata_path }}/traefik/rules.d/{{ item }}yml"
     owner: root
     group: users
     mode: 0664
+  with_items: "{{ traefik_file_rules }}"
   tags: traefik
   when: traefik_file_provider

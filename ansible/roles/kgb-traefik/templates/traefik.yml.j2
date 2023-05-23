@@ -29,7 +29,7 @@ providers:
 
 {% if traefik_file_provider %}
   file:
-    filename: /etc/traefik/rules.yml
+    filename: /etc/traefik/rules.d/*.yml
 {% endif %}
 
 {% if traefik_enable_dashboard %}
