@@ -15,17 +15,11 @@
 
 - name: caddy | add caddy apt repository
   ansible.builtin.apt_repository:
-    repo: "{{ caddy_apt_repository }}"
+    repo: "{{ item }}"
     state: present
-    filename: caddy.list
+    filename: caddy
     update_cache: true
-
-- name: caddy | add caddy apt source repository
-  ansible.builtin.apt_repository:
-    repo: "{{ caddy_apt_source_repository }}"
-    state: present
-    filename: caddy.list
-    update_cache: true
+  with_items: "{{ caddy_apt_repository }}"
 
 - name: caddy | install caddy
   ansible.builtin.apt:
