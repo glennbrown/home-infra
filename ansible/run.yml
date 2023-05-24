@@ -83,4 +83,24 @@
       - role: ironicbadger.bash_aliases
       - role: kgb-dhcp-dns
         tags: dns, dhcp, pihole
+
+  # Configure caddy
+  # Debian
+  - name: configure caddy server
+    hosts: caddy
+    vars_files:
+      - 'vars/vault.yml' 
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: kgb-apt-mirror
+        tags: packages
+      - role: grog.package
+        tags: packages
+      - role: geerlingguy.ntp
+      - role: ironicbadger.bash_aliases
+      - role: ironicbadger.figurine
+      - role: kgb-caddy
+        tags: caddy
         

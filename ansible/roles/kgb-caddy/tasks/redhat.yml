@@ -1,0 +1,15 @@
+---
+
+- name: caddy | install copr plugin (dnf)
+  ansible.builtin.dnf:
+    name: dnf-command(copr)
+    state: present
+
+- name: caddy | enable caddy repo
+  ansible.builtin.command: 'dnf copr enable -y @caddy/caddy'
+
+- name: caddy | install caddy package
+  ansible.builtin.dnf:
+    name: "{{ caddy_package }}"
+    state: "{{ caddy_package_state }}"
+  notify: restart caddy

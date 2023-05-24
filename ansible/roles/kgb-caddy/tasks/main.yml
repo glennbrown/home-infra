@@ -1,0 +1,9 @@
+---
+
+- name: caddy | configure apt repository
+  ansible.builtin.include_tasks: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: caddy | configure rpm repository
+  ansible.builtin.include_tasks: redhat.yml
+  when: ansible_os_family == 'RedHat'

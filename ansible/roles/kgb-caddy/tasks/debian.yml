@@ -1,0 +1,34 @@
+---
+- name: caddy | ensure dependencies are installed
+  ansible.builtin.apt:
+    name:
+      - debian-keyring
+      - debian-archive-keyring
+      - apt-transport-https
+      - gnupg2
+      - curl
+
+- name: caddy | add caddy apt key
+  ansible.builtin.apt_key:
+    url: "{{ caddy_apt_gpg_key }}"
+    state: present
+
+- name: caddy | add caddy apt repository
+  ansible.builtin.apt_repository:
+    repo: "{{ caddy_apt_repository }}"
+    state: present
+    filename: caddy.list
+    update_cache: true
+
+- name: caddy | add caddy apt source repository
+  ansible.builtin.apt_repository:
+    repo: "{{ caddy_apt_source_repository }}"
+    state: present
+    filename: caddy.list
+    update_cache: true
+
+- name: caddy | install caddy
+  ansible.builtin.apt:
+    name: "{{ caddy_package }}"
+    state: "{{ caddy_package_state }}"
+  notify: restart caddy

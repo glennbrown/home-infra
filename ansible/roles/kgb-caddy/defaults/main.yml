@@ -1,0 +1,11 @@
+---
+# defaults file for caddy
+
+# Packages
+caddy_package: caddy
+caddy_package_state: present
+
+# Debian
+caddy_apt_repository: 'deb https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main'
+caddy_apt_source_repository: 'deb-src https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main'
+caddy_apt_gpg_key: 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key'
