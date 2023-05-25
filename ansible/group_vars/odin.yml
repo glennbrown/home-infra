@@ -237,6 +237,8 @@ containers:
       - LOG_LEVEL=debug
     volumes:
       - "{{ appdata_path }}/overseerr:/app/config"
+    ports:
+      - 5055:5055
     network_mode: bridge
     restart: unless-stopped
     depends_on:

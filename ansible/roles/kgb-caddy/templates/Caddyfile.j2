@@ -1,0 +1,16 @@
+(cloudflare) {
+    tls {
+        dns cloudflare {{ cloudflare_caddy_api_key }}
+    }
+}
+
+# Overseerr
+requests.{{ ext_domain_1 }} {
+    log {
+        output file /var/log/caddy/requests.{{ ext_domain_1 }}-access.log
+    }
+    reverse_proxy https://overseerr.o.{{ local_domain }} {
+        header_up Host {header.X-Forwarded-Host}
+    }
+    import cloudflare
+}

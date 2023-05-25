@@ -1,12 +1,8 @@
 ---
 # defaults file for caddy
 
-# Packages
-caddy_package: caddy
-caddy_package_state: present
+caddy_config_path: /etc/caddy
+caddy_log_path: /var/log/caddy
 
-# Debian
-caddy_apt_repository: 
-  - 'deb https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main'
-  - 'deb-src https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main'
-caddy_apt_gpg_key: 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key'
+# Caddy Binary with cloudflare dns plugin
+caddy_amd64_linux_binary: 'https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com%2Fcaddy-dns%2Fcloudflare'
