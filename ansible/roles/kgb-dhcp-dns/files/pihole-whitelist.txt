@@ -1,3 +1,0 @@
-www.googletagmanager.com
-www.googletagservices.com
-analytics.plex.tv

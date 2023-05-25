@@ -2,7 +2,7 @@
 
 - name: install pihole
   ansible.builtin.include_tasks: install.yml
-  
+
 - name: check for duplicate items
   ansible.builtin.include_tasks: duplicate_checks.yml
 

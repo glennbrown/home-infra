@@ -22,6 +22,7 @@ pihole_rev_server_cidr: 192.168.16.0/21
 pihole_rev_server_target: "{{ pihole_dhcp_router }}"
 
 pihole_dns_overrides:
+  - {ip: 192.168.16.6, custom_dns: "pa.ikgb.me"}
   - {ip: 192.168.16.6, custom_dns: "ikgb.me"}
   - {ip: 192.168.16.6, custom_dns: "glennbrown.org"}
 
@@ -30,7 +31,7 @@ pihole_dhcp_reservations:
   ## Firewall
   - {mac: 7c:2b:e1:13:bd:b1, ip: 192.168.16.1, hostname: opnsense}
   ## heimdall (Topton)
-  - {mac: 7c:2b:e1:13:bd:b3, ip: 192.168.16.20, hostname: heimdall} # eth3 port proxmox plus VM/LXC services
+  - {mac: 7c:2b:e1:13:bd:b3, ip: 192.168.16.20, hostname: heimdall, custom_dns: ["h"]} # eth3 port proxmox plus VM/LXC services
   #- {mac: 7c:2b:e1:13:bd:b0, ip: WAN, hostname: opnsense-WAN} # eth0 WAN port passed through to opnsense
   #- {mac: 7c:2b:e1:13:bd:b1, ip: LAN, hostname: opnsense-LAN1} # eth1 LAN port passed through to opnsense
   #- {mac: 7c:2b:e1:13:bd:b2, ip: , hostname: } # eth2 NOT USED!
