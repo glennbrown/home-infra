@@ -1,0 +1,4 @@
+---
+
+opnsense_mimugmail_repo: 'https://www.routerperformance.net/mimugmail.conf'
+opnsense_mimugmail_conf: '/usr/local/etc/pkg/repos/mimugmail.conf'

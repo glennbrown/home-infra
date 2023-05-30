@@ -1,0 +1,27 @@
+---
+
+- name: check if tailscale is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/tailscaled
+  register: tailscale_status
+
+- name: get mimugmail repository config file
+  ansible.builtin.get_url:
+    url: "{{ opnsense_mimugmail_repo }}"
+    dest: "{{ opnsense_mimugmail_conf }}"
+
+- name: update pkg cache
+  ansible.builtin.command: 'pkg update'
+  when: not tailscale_status.stat.exists
+
+- name: install tailscale
+  ansible.builtin.package:
+    name: tailscale
+    state: present
+  when: not tailscale_status.stat.exists
+
+- name: enable and start tailscaled
+  ansible.builtin.service:
+    name: tailscaled
+    enabled: true
+    state: started

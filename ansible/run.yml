@@ -64,6 +64,14 @@
       #- role: ironicbadger.docker_compose_generator
       #  tags: compose
 
+  # Configure Opnsense Firewall
+  - name: configure opnsense Firewall
+    hosts: opnsensekgb
+    vars_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: kgb-opnsense-tailscale
+
   # Configure pihole
   # Debian
   - name: configure pihole dns
