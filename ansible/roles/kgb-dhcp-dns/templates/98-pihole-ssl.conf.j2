@@ -21,3 +21,11 @@ $HTTP["host"] == "{{ ansible_hostname }}.{{ pihole_pihole_domain }}" {
     }
   }
 }
+
+$HTTP["host"] == "pi.hole" {
+  $HTTP["scheme"] == "http" {
+    $HTTP["host"] =~ ".*" {
+      url.redirect = (".*" => "https://{{ ansible_hostname }}.{{ pihole_pihole_domain }}$0")
+    }
+  }
+}
