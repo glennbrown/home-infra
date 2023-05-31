@@ -41,6 +41,10 @@ roles:
   - src: tigattack.mergerfs
     version: 1.1.0
 
+  # Managing acme.sh 
+  - src: nickjj.acme_sh
+    version: v1.1.0
+
 collections:
   - name: prometheus.prometheus
     version: 0.3.1

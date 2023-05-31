@@ -50,6 +50,8 @@ pihole_dhcp_leasetime: '24'
 pihole_pihole_domain: 'home'
 pihole_dhcp_ipv6: false 
 pihole_dhcp_rapid_commit: false
+pihole_enable_ssl: false
+pihole_ssl_cert: ''
 
 # Pihole Updatelists
 whitelists_config_dir: /var/opt/pihole-custom-whitelists

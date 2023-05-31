@@ -18,7 +18,7 @@ run HOST *TAGS:
 
 # Roles and Collections Repos
 # optionally use --force to reinstall all requirements
-reqs FORCE:
+reqs *FORCE:
     cd {{ansible_dir}} && ansible-galaxy install -r requirements.yml {{FORCE}}
 
 # just vault (encrypt/decrypt/edit/view)

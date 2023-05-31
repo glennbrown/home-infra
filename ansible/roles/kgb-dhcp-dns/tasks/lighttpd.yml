@@ -1,6 +1,36 @@
 ---
 
-- name: postinstall | copy redirect conf file
+- name: lighttpd | install dependencies for ssl
+  ansible.builtin.apt:
+    name: lighttpd-mod-openssl
+    update_cache: true
+  when: pihole_enable_ssl
+
+- name: lighttpd | verify acme.sh created cert exists
+  ansible.builtin.stat: 
+    path: "{{ pihole_ssl_cert }}"
+  register: pihole_ssl_cert_check
+  when: pihole_enable_ssl 
+
+- name: lighttpd | copy ssl conf file
+  ansible.builtin.template:
+    src: 98-pihole-ssl.conf.j2
+    dest: /etc/lighttpd/conf-available/98-pihole-ssl.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart lighttpd
+  when: (pihole_enable_ssl) and (pihole_ssl_cert_check.stat.exists)
+
+- name: lighttpd | enable ssl conf file
+  ansible.builtin.file:
+    src: /etc/lighttpd/conf-available/98-pihole-ssl.conf
+    dest: /etc/lighttpd/conf-enabled/98-pihole-ssl.conf
+    state: link
+  notify: restart lighttpd 
+  when: (pihole_enable_ssl) and (pihole_ssl_cert_check.stat.exists)
+  
+- name: lighttpd | copy redirect conf file
   ansible.builtin.template:
     src: 99-redirect.conf.j2
     dest: /etc/lighttpd/conf-available/99-redirect.conf
@@ -9,12 +39,9 @@
     group: root
   notify: restart lighttpd
 
-- name: postinstall | create symlink to enable conf file
+- name: lighttpd | enable redirect conf file
   ansible.builtin.file:
     src: /etc/lighttpd/conf-available/99-redirect.conf
     dest: /etc/lighttpd/conf-enabled/99-redirect.conf
-    owner: root
-    group: root
     state: link
   notify: restart lighttpd
-

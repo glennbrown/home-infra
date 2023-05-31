@@ -89,6 +89,8 @@
       - role: kgb-htop
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases
+      - role: nickjj.acme_sh
+        tags: ssl
       - role: kgb-dhcp-dns
         tags: dns, dhcp, pihole
 
