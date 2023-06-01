@@ -4,7 +4,9 @@
 # Ubuntu 
 
 ubuntu_apt_mirror: 'https://mirrors.iu13.net'
+ubuntu_backports_enable: 'false'
 
 # Debian
 
 debian_apt_mirror: 'https://mirrors.rit.edu'
+debian_backports_enable: 'false'
