@@ -1,8 +1,5 @@
 ---
 
-# enable backports repo
-debian_backports_enable: 'true'
-
 # grog.package
 package_list_group:
   - name: apt-file
