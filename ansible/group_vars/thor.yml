@@ -12,8 +12,3 @@ package_list_group:
 # geerlingguy.ntp
 ntp_package: ntp
 ntp_daemon: ntp
-
-# Domains
-local_domain: "{{ traefik_internal_domain }}"
-ext_domain_1: "{{ caddy_domain_public_1 }}"
-ext_domain_2: "{{ caddy_domain_public_2 }}"

@@ -6,7 +6,7 @@ deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }} main c
 deb {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-updates main contrib non-free
 deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-updates main contrib non-free
 
-{% if debian_backports_enable %}
+{% if debian_backports_enable is defined and debian_backports_enable | bool %}
 deb {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-backports main contrib non-free
 deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-backports main contrib non-free
 {% else %}

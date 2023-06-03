@@ -28,7 +28,7 @@ deb-src {{ ubuntu_apt_mirror }}/ubuntu {{ ansible_distribution_release }} multiv
 deb {{ ubuntu_apt_mirror }}/ubuntu {{ ansible_distribution_release }}-updates multiverse
 deb-src {{ ubuntu_apt_mirror }}/ubuntu {{ ansible_distribution_release }}-updates multiverse
 
-{% if ubuntu_backports_enable %}
+{% if ubuntu_backports_enable is defined and ubuntu_backports_enable | bool %}
 ## N.B. software from this repository may not have been tested as
 ## extensively as that contained in the main release, although it includes
 ## newer versions of some applications which may provide useful features.

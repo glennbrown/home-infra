@@ -113,4 +113,21 @@
       - role: ironicbadger.figurine
       - role: kgb-caddy
         tags: caddy
-        
+
+  # Configure thor
+  # Debian        
+  - name: configure thor
+    hosts: thor
+    vars_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: kgb-apt-mirror
+        tags: packages, apt
+      - role: grog.package
+        tags: packages
+      - role: geerlingguy.ntp
+      - role: ironicbadger.bash_aliases
+      - role: ironicbadger.figurine  
