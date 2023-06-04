@@ -11,8 +11,8 @@
       - role: grog.user
       - role: grog.authorized-key
       - role: ironicbadger.proxmox_nag_removal
-      - role: kgb-htop
-      - role: kgb-apt-mirror
+      - role: htop
+      - role: apt-mirror
         tags: packages
       - role: grog.package
         tags: packages
@@ -20,16 +20,16 @@
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases
       - role: ironicbadger.figurine
-      - role: kgb-odin
+      - role: odin
         tags: tools, disks, file-sharing
       - role: tigattack.mergerfs
       - role: ironicbadger.snapraid
       - role: geerlingguy.nfs
       - role: prometheus.prometheus.node_exporter
         tags: prom
-      - role: kgb-prom
+      - role: custom_prometheus
         tags: prom
-      - role: kgb-traefik
+      - role: traefik
         tags: compose
       - role: ironicbadger.docker_compose_generator
         tags: compose
@@ -45,21 +45,21 @@
       - role: grog.user
       - role: grog.authorized-key
       - role: ironicbadger.proxmox_nag_removal
-      - role: kgb-apt-mirror
+      - role: apt-mirror
         tags: packages
       - role: grog.package
         tags: packages
-      - role: kgb-htop
+      - role: htop
       - role: geerlingguy.docker
       - role: geerlingguy.ntp
-      - role: kgb-heimdall
+      - role: heimdall
       - role: ironicbadger.figurine
       - role: ironicbadger.bash_aliases
       - role: prometheus.prometheus.node_exporter
         tags: prom
-      - role: kgb-prom
+      - role: custom_prometheus
         tags: prom
-      #- role: kgb-traefik
+      #- role: traefik
       #  tags: compose
       #- role: ironicbadger.docker_compose_generator
       #  tags: compose
@@ -70,7 +70,7 @@
     vars_files:
       - 'vars/vault.yml'
     roles:
-      - role: kgb-opnsense-tailscale
+      - role: opnsense-tailscale
 
   # Configure pihole
   # Debian
@@ -82,16 +82,16 @@
       - role: grog.group
       - role: grog.user
       - role: grog.authorized-key
-      - role: kgb-apt-mirror
+      - role: apt-mirror
         tags: packages
       - role: grog.package
         tags: packages
-      - role: kgb-htop
+      - role: htop
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases
       - role: nickjj.acme_sh
         tags: ssl
-      - role: kgb-dhcp-dns
+      - role: pihole-dhcp-dns
         tags: dns, dhcp, pihole
 
   # Configure caddy
@@ -104,14 +104,14 @@
       - role: grog.group
       - role: grog.user
       - role: grog.authorized-key
-      - role: kgb-apt-mirror
+      - role: apt-mirror
         tags: packages
       - role: grog.package
         tags: packages
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases
       - role: ironicbadger.figurine
-      - role: kgb-caddy
+      - role: caddy
         tags: caddy
 
   # Configure thor
@@ -124,7 +124,7 @@
       - role: grog.group
       - role: grog.user
       - role: grog.authorized-key
-      - role: kgb-apt-mirror
+      - role: apt-mirror
         tags: packages, apt
       - role: grog.package
         tags: packages
