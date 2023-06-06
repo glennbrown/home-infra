@@ -1,0 +1,71 @@
+---
+
+# Replace stock debian config, but create a backup!
+- name: write dnsmasq conf file
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify: restart dnsmasq
+
+# Write DNS Config (mostly borrowed from pihole)
+- name: write dnsmasq dns config
+  ansible.builtin.template:
+    src: dns.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/01-dnsmasq-dns.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart dnsmasq
+
+# Write DHCP Configuration File
+- name: write pihole dhcp configuration file
+  ansible.builtin.template:
+    src: dhcp.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/02-dnsmasq-dhcp.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart dnsmasq
+
+- name: write dns file
+  ansible.builtin.template:
+    src: dns-overrides.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/03-dns-overrides.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart dnsmasq
+
+- name: write static dhcp file
+  ansible.builtin.template:
+    src: static-dhcp.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/04-static-dhcp.conf"
+    owner: root
+    group: root
+    mode: 0644
+  register: dhcp_changed
+
+- name: write reverse dns file
+  ansible.builtin.template:
+    src: reverse-lookup.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/07-reverse-lookup.conf"
+    owner: root
+    group: root
+  notify: restart dnsmasq
+
+- block:
+    - name: revoke existing leases if dhcp file changed
+      ansible.builtin.file:
+        path: "/var/lib/misc/dnsmasq.leases"
+        state: absent
+
+    - name: revoke existing leases if dhcpd file changed
+      ansible.builtin.file:
+        path: "/var/lib/misc/dnsmasq.leases"
+        state: touch
+  when: dhcp_changed.changed
+  notify: restart dnsmasq

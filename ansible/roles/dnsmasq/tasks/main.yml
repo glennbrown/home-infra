@@ -1,0 +1,10 @@
+---
+
+- name: install dnsmasq
+  ansible.builtin.include_tasks: install.yml
+
+- name: check for duplicate items
+  ansible.builtin.include_tasks: duplicate_checks.yml
+
+- name: copy template config files into place
+  ansible.builtin.include_tasks: template.yml  

@@ -1,0 +1,10 @@
+---
+
+- name: restart dnsmasq
+  listen: restart dnsmasq
+  ansible.builtin.systemd:
+    name: dnsmasq.service
+    daemon_reload: true
+    state: restarted
+    
+

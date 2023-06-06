@@ -1,0 +1,32 @@
+# {{ ansible_managed }}
+addn-hosts=/etc/custom.hosts
+
+localise-queries
+
+no-resolv
+
+{% if dnsmasq_query_logging is defined and dnsmasq_query_logging | bool %}
+log-queries
+log-facility=/var/log/dnsmasq.log
+{% endif %}
+
+log-async
+cache-size={{ dnsmasq_cache_size }}
+{% if dnsmasq_local_domains is defined %}
+{% for local in dnsmasq_local_domains %}
+server=/{{ local.domain }}/{{ local.server }}
+{% endfor %}
+{% endif %}
+server={{ dnsmasq_dns1 }}
+server={{ dnsmasq_dns2 }}
+{% if dnsmasq_dns_fqdn_required is defined and dnsmasq_dns_fqdn_required | bool %}
+domain-needed
+{% endif %}
+expand-hosts
+bogus-priv
+{% if dnsmasq_dnssec is defined and dnsmasq_dnssec | bool %}
+dnssec
+trust-anchor=.,20326,8,2,E06D44B80B8F1D39A95C0B0D7C65D08458E880409BBC683457104237C7F8EC8D
+{% endif %}
+
+local-service

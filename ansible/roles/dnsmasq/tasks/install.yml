@@ -1,0 +1,18 @@
+---
+###############################################################################
+# Dnsmasq Install
+###############################################################################
+# Lightweight DNS and DHCP Server
+#
+
+- name: install dnsmasq
+  ansible.builtin.apt:
+    name: "{{ dnsmasq_default_packages_apt }}"
+    state: present
+    update_cache: true
+
+- name: enable dnsmasq on boot
+  ansible.builtin.systemd:
+    name: dnsmasq.service
+    enabled: true
+    daemon-reload: true

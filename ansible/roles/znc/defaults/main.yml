@@ -1,0 +1,64 @@
+---
+
+# ZNC Install
+znc_user: '_znc'
+znc_group: '_znc'
+znc_config_root: '/var/lib/znc'
+znc_apt_package_list:
+  - znc
+  - znc-dev
+  - znc-perl
+  - znc-python
+  - znc-tcl
+  - znc-push
+znc_clientbuffer_repo: 'https://github.com/CyberShadow/znc-clientbuffer.git'
+
+# ZNC Global Configuration
+znc_max_buffer_size: 100000
+znc_port: 7070
+znc_ipv4: true
+znc_ipv6: false
+znc_ssl: true
+znc_ssl_certfile: "{{ znc_config_root }}/znc.pem"
+znc_global_modules:
+  - webadmin
+
+# ZNC User Definitions
+# See http://wiki.znc.in/Configuration
+# This should be defined in group_vars
+# Passwords can be created using znc --makepass
+# znc_users:
+#   - name: test
+#     password:
+#       method: 'sha256'
+#       hash: ''
+#       salt: ''
+#     nick: testuser
+#     altnick: testuser_
+#     realname: 'Real Test User'
+#     admin: true
+#     ident: 'testuser'
+#     allow: "*"
+#     altnick: adminuser_
+#     autoclearchanbuffer: true
+#     autoclearquerybuffer: true
+#     buffer: 100000
+#     chanmodes: "+stn"
+#     ident: adminuser
+#     multiclients: false
+#     networks:
+#       freenode:
+#         server: chat.freenode.net
+#         port: 6697
+#         ssl: true
+#         password: ""
+#         channels:
+#           - "#freenode"
+#         modules:
+#           - route_replies
+#           - keepnick
+#           - clientbuffer
+#     modules:
+#       - chansaver
+#       - controlpanel
+

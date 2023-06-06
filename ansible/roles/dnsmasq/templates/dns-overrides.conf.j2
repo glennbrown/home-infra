@@ -1,0 +1,18 @@
+# {{ ansible_managed }}
+# Custom DNS Overrides
+{% if dnsmasq_dns_overrides is defined %}
+{% for override in dnsmasq_dns_overrides %}
+address=/{{ override.custom_dns }}/{{ override.ip }}
+{% endfor %}
+{% endif %}
+# DHCP Static Clients and Shortnames
+{% if dnsmasq_dhcp_reservations is defined %}
+{% for client in dnsmasq_dhcp_reservations %}
+{% if client.custom_dns is defined %}
+{% for item in client.custom_dns %}
+address=/{{ item }}.{{ dnsmasq_domain }}/{{ client.ip }}
+{% endfor %}
+{% endif %}
+address=/{{ client.hostname }}.{{ dnsmasq_domain }}/{{ client.ip }}
+{% endfor %}
+{% endif %}

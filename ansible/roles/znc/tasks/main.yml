@@ -1,0 +1,70 @@
+---
+
+- name: znc | install znc packages
+  ansible.builtin.apt:
+    name: "{{ znc_apt_package_list }}"
+    state: present
+    update_cache: true
+
+- name: znc | check if znc-clientbuffer is already installed
+  ansible.builtin.stat:
+    path: /usr/lib/znc/clientbuffer.so
+  register: clientbuffer_installed
+
+# Only need to do once, we will use a script and DPkg::Post-Invoke for future updates
+- block:
+
+  - name: znc | git clone znc-clientbuffer module
+    ansible.builtin.git:
+      repo: "{{ znc_clientbuffer_repo }}"
+      dest: /usr/local/src
+      update: false
+      version: master
+
+  - name: znc | build znc-clientbuffer module
+    ansible.builtin.command: make install PREFIX=/usr
+    args:
+      chdir: /usr/local/src/znc-clientbuffer
+      creates: /usr/lib/znc/clientbuffer.so
+
+  when: not clientbuffer_installed.stat.exists
+
+- name: znc | copy clientbuffer build script
+  ansible.builtin.copy:
+    src: clientbuffer-build.sh
+    dest: /usr/local/bin/clientbuffer-build.sh
+    mode: 0755
+
+- name: znc | copy apt conf file
+  ansible.builtin.copy:
+    src: 99znc-dev
+    dest: /etc/apt/apt.conf.d/99znc-dev
+    mode: 0644
+
+- name: znc | check if ssl cert file is there
+  ansible.builtin.stat:
+    path: "{{ znc_ssl_certfile }}"
+  register: znc_sslcert_status
+  
+- name: znc | copy znc configuration file
+  ansible.builtin.template:
+    src: znc.conf.j2
+    dest: "{{ znc_config_root }}/configs/znc.conf"
+    owner: "{{ znc_user }}"
+    group: "{{ znc_group }}"
+    mode: 0600
+  notify: restart znc
+
+# Clientbuffer needs UTC timezone for playback to work right
+- name: znc | clientbuffer timezone fix
+  ansible.builtin.lineinfile:
+    path: /lib/systemd/system/znc.service
+    insertafter: '\[Service\]'
+    line: 'Environment=TZ=UTC'
+  notify: restart znc
+
+- name: znc | enable systemd service
+  ansible.builtin.systemd:
+    name: znc.service
+    daemon_reload: true
+    enabled: true

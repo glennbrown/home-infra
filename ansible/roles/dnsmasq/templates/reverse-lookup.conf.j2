@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+# PTR DNS Records
+{% for client in dnsmasq_dhcp_reservations %}
+ptr-record={{ client.ip.split('.') | reverse | join('.') }}.in-addr.arpa.,{{ client.hostname }}.{{ dnsmasq_domain }}
+{% endfor %}
