@@ -17,6 +17,7 @@ dnsmasq_default_packages_apt:
   - dnsmasq
   - dnsmasq-base
   - dnsmasq-utils
+  - dns-root-data
 
 ###############################################################################
 # dnsmasq role defaults
@@ -29,8 +30,8 @@ dnsmasq_cache_size: 10000
 dnsmasq_dns_fqdn_required: true
 dnsmasq_listening: local
 dnsmasq_dnssec: true
-#dnsmasq_rev_server_cidr: ''
-#dnsmasq_rev_server_target: ''
+dnsmasq_rev_server_cidr: ''
+dnsmasq_rev_server_target: ''
 dnsmasq_dns1: '1.1.1.1'
 dnsmasq_dns2: '1.0.0.1'
 dnsmasq_dhcp_active: 'false'

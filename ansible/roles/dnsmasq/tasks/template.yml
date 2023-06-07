@@ -2,23 +2,17 @@
 
 # Replace stock debian config, but create a backup!
 - name: write dnsmasq conf file
-  ansible.builtin.template:
-    src: dnsmasq.conf.j2
+  ansible.builtin.copy:
+    src: dnsmasq.conf
     dest: /etc/dnsmasq.conf
-    owner: root
-    group: root
-    mode: 0644
     backup: yes
   notify: restart dnsmasq
 
 # Write DNS Config (mostly borrowed from pihole)
 - name: write dnsmasq dns config
   ansible.builtin.template:
-    src: dns.conf.j2
-    dest: "{{ dnsmasq_config_dir }}/01-dnsmasq-dns.conf"
-    owner: root
-    group: root
-    mode: 0644
+    src: dnsmasq-base.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/01-dnsmasq-base.conf"
   notify: restart dnsmasq
 
 # Write DHCP Configuration File
@@ -26,44 +20,44 @@
   ansible.builtin.template:
     src: dhcp.conf.j2
     dest: "{{ dnsmasq_config_dir }}/02-dnsmasq-dhcp.conf"
-    owner: root
-    group: root
-    mode: 0644
   notify: restart dnsmasq
 
+# Write DNS Records
 - name: write dns file
   ansible.builtin.template:
     src: dns-overrides.conf.j2
     dest: "{{ dnsmasq_config_dir }}/03-dns-overrides.conf"
-    owner: root
-    group: root
-    mode: 0644
   notify: restart dnsmasq
 
+# Write Static DHCP Reservations
 - name: write static dhcp file
   ansible.builtin.template:
     src: static-dhcp.conf.j2
     dest: "{{ dnsmasq_config_dir }}/04-static-dhcp.conf"
-    owner: root
-    group: root
-    mode: 0644
   register: dhcp_changed
 
+# RFC671 config, taken from pihole
+- name: copy rfc6761 config file
+  ansible.builtin.copy:
+    src: 06-rfc6761.conf
+    dest: "{{ dnsmasq_config_dir }}/06-rfc6761.conf"
+  notify: restart dnsmasq
+
+# Pointer DNS Records
 - name: write reverse dns file
   ansible.builtin.template:
     src: reverse-lookup.conf.j2
     dest: "{{ dnsmasq_config_dir }}/07-reverse-lookup.conf"
-    owner: root
-    group: root
   notify: restart dnsmasq
 
+# Revoke DHCP Leases when dhcp has changed.
 - block:
-    - name: revoke existing leases if dhcp file changed
+    - name: revoke existing leases | remove file
       ansible.builtin.file:
         path: "/var/lib/misc/dnsmasq.leases"
         state: absent
 
-    - name: revoke existing leases if dhcpd file changed
+    - name: revoke existing leases | create new file
       ansible.builtin.file:
         path: "/var/lib/misc/dnsmasq.leases"
         state: touch

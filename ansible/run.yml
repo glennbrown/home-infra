@@ -2,7 +2,7 @@
 
   # Configure primary server
   # Proxmox
-  - name: configure odin
+  - name: Configure odin
     hosts: odin
     vars_files:
       - 'vars/vault.yml'
@@ -36,7 +36,7 @@
   
   # Configure heimdall (Topton unit)
   # Proxmox
-  - name: configure heimdall
+  - name: Configure heimdall
     hosts: heimdall
     vars_files:
       - 'vars/vault.yml'
@@ -65,7 +65,7 @@
       #  tags: compose
 
   # Configure Opnsense Firewall
-  - name: configure opnsense Firewall
+  - name: Configure opnsense Firewall
     hosts: opnsensekgb
     vars_files:
       - 'vars/vault.yml'
@@ -74,7 +74,7 @@
 
   # Configure pihole
   # Debian
-  - name: configure pihole dns
+  - name: Configure pihole dns
     hosts: pihole
     vars_files:
       - 'vars/vault.yml'
@@ -94,9 +94,26 @@
       - role: pihole-dhcp-dns
         tags: dns, dhcp, pihole
 
+  # Configure hodur (dhcp/dns)
+  # Debian
+  - name: "Configure hodur (dhcp/dns server)"
+    hosts: hodur
+    vars_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: apt-mirror
+        tag: packages
+      - role: grog.package
+        tags: packages
+      - role: geerlingguy.ntp
+      - role: ironicbadger.bash_aliases
+
   # Configure caddy
   # Debian
-  - name: configure caddy server
+  - name: Configure caddy server
     hosts: caddy
     vars_files:
       - 'vars/vault.yml' 
@@ -116,7 +133,7 @@
 
   # Configure thor
   # Debian        
-  - name: configure thor
+  - name: Configure thor
     hosts: thor
     vars_files:
       - 'vars/vault.yml'
