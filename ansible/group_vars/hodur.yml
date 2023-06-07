@@ -18,8 +18,8 @@ dnsmasq_dhcp_start: 192.168.23.100
 dnsmasq_dhcp_end: 192.168.23.253
 dnsmasq_dhcp_router: 192.168.16.1
 dnsmasq_domain: pa.ikgb.me
-dnsmasq_rev_server_cidr: 192.168.16.0/21
-dnsmasq_rev_server_target: "{{ dnsmasq_dhcp_router }}"
+dnsmasq_server_arpa: '168.192.in-addr.arpa'
+dnsmasq_server_target: "{{ dnsmasq_dhcp_router }}"
 
 dnsmasq_dns_overrides:
   - {ip: 192.168.16.6, custom_dns: "pa.ikgb.me"}
