@@ -8,7 +8,56 @@ package_list_group:
   - name: apt-file
   - name: command-not-found
   - name: dnsutils
+  - name: htop
   
 # geerlingguy.ntp
 ntp_package: ntp
 ntp_daemon: ntp
+
+# znc
+znc_config_root: '/var/lib/znc'
+znc_users:
+  - name: gbrown
+    password:
+      method: 'sha256'
+      hash: "{{ znc_gbrown_hash }}"
+      salt: "{{ znc_gbrown_salt }}"
+    nick: glenn
+    altnick: 'glenn|znc'
+    realname: 'Glenn Brown'
+    admin: true
+    allow: "*"
+    autoclearchanbuffer: false
+    autoclearquerybuffer: false
+    networks:
+      arstechnica:
+        server: irc.arstechnica.com
+        port: 6697
+        ssl: true
+        channels:
+          - "#linux"
+          - "#macintosh"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+    modules:
+      - chansaver
+      - controlpanel
+      - webadmin
+      - log
+
+# nickjj.acme_sh
+acme_sh_account_email: "{{ znc_acme_email }}"
+acme_sh_renew_time_in_days: '60'
+acme_sh_copy_certs_to_path: '/etc/letsencrypt'
+acme_sh_default_extra_flags_issue: '--server letsencrypt'
+acme_sh_default_staging: False
+acme_sh_default_debug: True
+acme_sh_default_dns_provider: "dns_cf"
+acme_sh_default_dns_provider_api_keys:
+  "CF_Token": "{{ cloudflare_acme_api_token }}"
+  "CF_Account_ID": "{{ cloudflare_account_id }}"
+acme_sh_default_install_cert_reloadcmd: "cat {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.pem {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.key > {{ znc_config_root }}/znc.pem; systemctl restart znc"
+acme_sh_domains: 
+  - domains: [ "{{ ansible_hostname }}.pa.ikgb.me", "znc.ikgb.me" ]

@@ -1,0 +1,42 @@
+---
+
+- name: install znc packages
+  ansible.builtin.apt:
+    name: "{{ znc_apt_package_list }}"
+    state: present
+    update_cache: true
+
+- name: check if znc-clientbuffer is already installed
+  ansible.builtin.stat:
+    path: /usr/lib/znc/clientbuffer.so
+  register: clientbuffer_installed
+
+# Only need to do once, we will use a script and DPkg::Post-Invoke for future updates
+- block:
+
+  - name: git clone znc-clientbuffer module
+    ansible.builtin.git:
+      repo: "{{ znc_clientbuffer_repo }}"
+      dest: /usr/local/src/znc-clientbuffer
+      update: false
+      version: master
+
+  - name: build znc-clientbuffer module
+    ansible.builtin.command: make install PREFIX=/usr
+    args:
+      chdir: /usr/local/src/znc-clientbuffer
+      creates: /usr/lib/znc/clientbuffer.so
+
+  when: not clientbuffer_installed.stat.exists
+
+- name: copy clientbuffer build script
+  ansible.builtin.copy:
+    src: clientbuffer-build.sh
+    dest: /usr/local/bin/clientbuffer-build.sh
+    mode: 0755
+
+- name: copy apt conf file
+  ansible.builtin.copy:
+    src: 99znc-dev
+    dest: /etc/apt/apt.conf.d/99znc-dev
+    mode: 0644

@@ -1,0 +1,17 @@
+- name: Get ZNC package version
+  hosts: thor
+  gather_facts: yes
+
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Store filtered ZNC version
+      set_fact:
+        znc_version: "{{ ansible_facts.packages['znc'].0.version | regex_replace('-.*$', '') }}"
+      when: "'znc' in ansible_facts.packages"
+
+    - name: Display ZNC version
+      debug:
+        var: znc_version

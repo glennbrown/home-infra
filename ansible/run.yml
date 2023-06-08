@@ -149,4 +149,8 @@
         tags: packages
       - role: geerlingguy.ntp
       - role: ironicbadger.bash_aliases
-      - role: ironicbadger.figurine  
+      - role: ironicbadger.figurine
+      - role: znc
+        tags: znc
+      - role: nickjj.acme_sh
+        tags: znc, ssl
