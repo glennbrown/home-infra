@@ -22,7 +22,7 @@
     group: "{{ znc_group }}"
     mode: 0700
   
-- name: znc | copy znc configuration file
+- name: copy znc configuration file
   ansible.builtin.template:
     src: znc.conf.j2
     dest: "{{ znc_config_root }}/configs/znc.conf"
@@ -32,14 +32,14 @@
   notify: restart znc
 
 # Clientbuffer needs UTC timezone for playback to work right
-- name: znc | clientbuffer timezone fix
+- name: clientbuffer timezone fix
   ansible.builtin.lineinfile:
     path: /lib/systemd/system/znc.service
     insertafter: '\[Service\]'
     line: 'Environment=TZ=UTC'
   notify: restart znc
 
-- name: znc | enable systemd service
+- name: enable systemd service
   ansible.builtin.systemd:
     name: znc.service
     daemon_reload: true

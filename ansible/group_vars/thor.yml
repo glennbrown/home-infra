@@ -16,6 +16,7 @@ ntp_daemon: ntp
 
 # znc
 znc_config_root: '/var/lib/znc'
+znc_skin: 'dark-clouds'
 znc_users:
   - name: gbrown
     password:
@@ -41,6 +42,37 @@ znc_users:
           - route_replies
           - keepnick
           - clientbuffer
+          - nickserv
+          - savebuff
+      libera:
+        server: irc.libera.chat
+        port: 6697
+        ssl: true
+        nick: GlennB
+        altnick: 'GlennB|znc'
+        channels:
+          - "#atpfm"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+          - nickserv
+          - savebuff
+      btn:
+        server: irc.broadcasthe.net
+        port: 6697
+        ssl: true
+        nick: evane7911
+        altnick: "evane7911|znc"
+        realname: "ZNC - https://znc.in"
+        channels:
+          - "#BTN-Mafia"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+          - nickserv
+          - savebuff
     modules:
       - chansaver
       - controlpanel

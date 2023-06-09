@@ -11,6 +11,23 @@
     path: /usr/lib/znc/clientbuffer.so
   register: clientbuffer_installed
 
+- name: check if znc-palaver is already installed
+  ansible.builtin.stat:
+    path: /usr/lib/znc/palaver.so
+  register: palaver_installed
+
+- name: copy clientbuffer build script
+  ansible.builtin.copy:
+    src: clientbuffer-build.sh
+    dest: /usr/local/bin/clientbuffer-build.sh
+    mode: 0755
+
+- name: copy palaver build script
+  ansible.builtin.copy:
+    src: palaver-build.sh
+    dest: /usr/local/bin/palaver-build.sh
+    mode: 0755
+
 # Only need to do once, we will use a script and DPkg::Post-Invoke for future updates
 - block:
 
@@ -22,18 +39,30 @@
       version: master
 
   - name: build znc-clientbuffer module
-    ansible.builtin.command: make install PREFIX=/usr
+    ansible.builtin.command: /usr/local/bin/clientbuffer-build.sh
     args:
       chdir: /usr/local/src/znc-clientbuffer
       creates: /usr/lib/znc/clientbuffer.so
 
   when: not clientbuffer_installed.stat.exists
 
-- name: copy clientbuffer build script
-  ansible.builtin.copy:
-    src: clientbuffer-build.sh
-    dest: /usr/local/bin/clientbuffer-build.sh
-    mode: 0755
+# Only need to do once, we will use a script and DPkg::Post-Invoke for future updates
+- block:
+
+  - name: git clone znc-palaver module
+    ansible.builtin.git:
+      repo: "{{ znc_palaver_repo }}"
+      dest: /usr/local/src/znc-palaver
+      update: false
+      version: master
+
+  - name: build znc-palaver module
+    ansible.builtin.command: /usr/local/bin/palaver-build.sh
+    args:
+      chdir: /usr/local/src/znc-palaver
+      creates: /usr/lib/znc/palaver.so
+    
+  when: not palaver_installed.stat.exists
 
 - name: copy apt conf file
   ansible.builtin.copy:
