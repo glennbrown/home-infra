@@ -27,6 +27,9 @@ znc_ssl_certfile: "{{ znc_config_root }}/znc.pem"
 znc_global_modules:
   - webadmin
   - palaver
+  - admindebug
+  - adminlog
+  - block_motd
 
 # ZNC User Definitions
 # See http://wiki.znc.in/Configuration
