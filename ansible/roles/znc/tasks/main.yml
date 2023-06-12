@@ -5,8 +5,3 @@
 
 - name: configure znc
   ansible.builtin.include_tasks: config.yml
-
-- name: clients
-  ansible.builtin.include_tasks: clients.yml
-    
-    
