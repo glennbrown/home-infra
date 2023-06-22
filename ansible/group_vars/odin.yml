@@ -252,7 +252,7 @@ containers:
     container_name: jellyfin
     include_global_env_vars: true
     environment:
-      - "JELLYFIN_PublishedServerUrl=jellyfin.{{ local_domain }}"
+      - "JELLYFIN_PublishedServerUrl=jellyfin.o.{{ local_domain }}"
     volumes:
       - "{{ appdata_path }}/jellyfin:{{ container_config_path }}"
       - "{{ storage_path }}/TV Shows:/data/tv:ro"
@@ -500,6 +500,19 @@ containers:
       - /etc/localtime:/etc/localtime
     ports:
       - 1688:1688
+    network_mode: bridge
+    restart: unless-stopped
+  ###
+  - service_name: prometheus-plex-exporter
+    active: true
+    image: ghcr.io/jsclayton/prometheus-plex-exporter
+    container_name: prometheus-plex-exporter
+    environment:
+      - "TZ={{ ntp_timezone }}"
+      - "PLEX_SERVER={{ plex_server_address }}"
+      - "PLEX_TOKEN={{ plex_auth_token }}"
+    ports:
+      - 9000:9000
     network_mode: bridge
     restart: unless-stopped
   ###
