@@ -103,6 +103,8 @@ samba_users:
 # ironicbadger.snapraid + kgb-odin
 snapraid_runner: true
 snapraid_install: true
+snapraid_install_mode: package_manager
+snapraid_bin_path: /usr/bin/snapraid
 snapraid_parity_disks:
   - { path: /mnt/parity1, diskbyid: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGZA3D-part1, fs: xfs, opts: defaults, content: false }
 
@@ -132,8 +134,7 @@ snapraid_config_excludes:
   - ".nfo"
 
 # tigattack.mergerfs
-mergerfs_install_mode: github_releases
-mergerfs_version: 2.35.1
+mergerfs_install_mode: package_manager
 mergerfs_mounts:
   - path: /mnt/storage
     branches: 
