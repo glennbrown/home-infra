@@ -50,6 +50,13 @@
     dest: "{{ dnsmasq_config_dir }}/07-reverse-lookup.conf"
   notify: restart dnsmasq
 
+# DNS CNAME's
+- name: write dns cname file
+  ansible.builtin.template:
+    src: cnames.conf.j2
+    dest: "{{ dnsmasq_config_dir }}/08-dns-cnames.conf"
+  notify: restart dnsmasq
+
 # Revoke DHCP Leases when dhcp has changed.
 - block:
     - name: revoke existing leases | remove file

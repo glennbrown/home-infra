@@ -162,6 +162,8 @@ storage_path: /mnt/storage
 download_path: "{{ storage_path }}/downloads"
 container_config_path: /config
 local_domain: "{{ traefik_internal_domain }}"
+external_domain_1: "{{ traefik_public_domain_1 }}"
+external_domain_2: "{{ traefik_public_domain_2 }}"
 
 containers:
   ###
@@ -245,7 +247,7 @@ containers:
       - sonarr
       - radarr
     labels:
-      - '"traefik.http.routers.overseerr.rule=Host(`overseerr.o.{{ local_domain }}`)"'
+      - '"traefik.http.routers.overseerr.rule=Host(`overseerr.o.{{ local_domain }}`,`requests.{{ external_domain_1 }}`)"'
   ###
   - service_name: jellyfin
     active: true
