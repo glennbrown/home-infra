@@ -25,11 +25,10 @@ dnsmasq_dns_overrides:
   - {ip: 192.168.16.6, custom_dns: "pa.ikgb.me"}
   - {ip: 192.168.16.6, custom_dns: "ikgb.me"}
   - {ip: 192.168.16.6, custom_dns: "glennbrown.org"}
-  - {ip: 192.168.17.11, custom_dns: "znc.ikgb.me"}
 
 dnsmasq_dns_cnames:
-  - {host: odin.pa.ikgb.me, cname: requests.ikgb.me}
-  - {host: odin.pa.ikgb.me, cname: kms.pa.ikgb.me}
+  - {host: odin.pa.ikgb.me, cname: "kms.pa.ikgb.me"}
+  - {host: thor.pa.ikgb.me, cname: "znc.ikgb.me"}
 
 dnsmasq_dhcp_reservations:
   # Core Instructure
