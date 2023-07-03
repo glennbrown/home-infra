@@ -18,7 +18,7 @@ http:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "https://{{ ansible_default_ipv4.address }}:8006"
+          - url: "https://{{ ansible_hostname}}.{{ local_domain }}:8006"
 
   middlewares: 
     https-redirectscheme:

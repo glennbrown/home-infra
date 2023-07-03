@@ -1,0 +1,110 @@
+---
+
+# grog.package
+package_list_group:
+  - name: apt-file
+  - name: command-not-found
+  - name: dnsutils
+  
+# geerlingguy.ntp
+ntp_package: ntp
+ntp_daemon: ntp
+
+# nickjj.acme_sh
+acme_sh_account_email: "{{ pihole_admin_email }}"
+acme_sh_renew_time_in_days: '60'
+acme_sh_copy_certs_to_path: '/etc/ssl/ansible'
+acme_sh_default_extra_flags_issue: '--server letsencrypt'
+acme_sh_default_staging: False
+acme_sh_default_debug: True
+acme_sh_default_dns_provider: "dns_cf"
+acme_sh_default_dns_provider_api_keys:
+  "CF_Token": "{{ cloudflare_acme_api_token }}"
+  "CF_Account_ID": "{{ cloudflare_account_id }}"
+acme_sh_default_install_cert_reloadcmd: "cat {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.pem {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.key > {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me-lighttpd.pem"
+acme_sh_domains: 
+  - domains: [ "{{ ansible_hostname }}.pa.ikgb.me" ]
+
+# kgb-dhcp-dns
+dnsmasq_config_dir: /etc/dnsmasq.d
+pihole_config_dir: /etc/pihole
+pihole_dhcp_active: true
+pihole_dhcp_start: 192.168.23.100
+pihole_dhcp_end: 192.168.23.253
+pihole_dhcp_router: 192.168.16.1
+pihole_pihole_domain: pa.ikgb.me
+pihole_rev_server_cidr: 192.168.16.0/21
+pihole_rev_server_target: "{{ pihole_dhcp_router }}"
+pihole_enable_ssl: true
+pihole_ssl_cert: "{{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.{{ pihole_pihole_domain }}-lighttpd.pem"
+
+pihole_dns_overrides:
+  - {ip: 192.168.16.6, custom_dns: "pa.ikgb.me"}
+  - {ip: 192.168.16.6, custom_dns: "ikgb.me"}
+  - {ip: 192.168.16.6, custom_dns: "glennbrown.org"}
+
+pihole_dhcp_reservations:
+  # Core Instructure
+  ## Firewall
+  - {mac: 7c:2b:e1:13:bd:b1, ip: 192.168.16.1, hostname: opnsense}
+  ## heimdall (Topton)
+  - {mac: 7c:2b:e1:13:bd:b3, ip: 192.168.16.20, hostname: heimdall, custom_dns: ["h"]} # eth3 port proxmox plus VM/LXC services
+  #- {mac: 7c:2b:e1:13:bd:b0, ip: WAN, hostname: opnsense-WAN} # eth0 WAN port passed through to opnsense
+  #- {mac: 7c:2b:e1:13:bd:b1, ip: LAN, hostname: opnsense-LAN1} # eth1 LAN port passed through to opnsense
+  #- {mac: 7c:2b:e1:13:bd:b2, ip: , hostname: } # eth2 NOT USED!
+  ## heimdall services
+  - {mac: 5e:76:09:bf:f3:e3, ip: 192.168.16.5, hostname: pihole}
+  - {mac: 82:3f:c3:7a:ac:7b, ip: 192.168.16.6, hostname: caddy}
+  #
+  #
+  ## Testing
+  #- {mac: AA:32:6E:E0:40:C7, ip: 192.168.16.10, hostname: popos-test, custom_dns: ["p"]}
+
+  ## odin - Primary Server
+  - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.17.10, hostname: odin, custom_dns: ["o"]}
+  ## odin - Services/VM's
+  - {mac: 52:54:00:92:8f:15, ip: 192.168.17.11, hostname: thor}
+  - {mac: 6a:cc:5c:74:4f:c1, ip: 192.168.17.12, hostname: homeassistant, custom_dns: ["ha"]}
+  - {mac: 52:54:00:44:9a:92, ip: 192.168.17.13, hostname: njord}
+  - {mac: 0a:11:d7:46:c3:eb, ip: 192.168.17.14, hostname: balder}
+  #-{mac:  , ip: 192.168.17.15, hostname: loki}
+
+  ##
+  ## Networking Equipment
+  - {mac: 60:5f:8d:1e:db:b2, ip: 192.168.16.100, hostname: eero-pro-bedroom}
+  - {mac: f8:bb:bf:c0:6e:2b, ip: 192.168.16.101, hostname: eero-beacon-diningroom}
+
+  ##
+  ## miscellaneous
+  - {mac: b8:27:eb:09:66:1f, ip: 192.168.17.21, hostname: pi3b}
+  - {mac: 80:e8:2c:61:95:dc, ip: 192.168.17.30, hostname: hp-officejet-pro}
+
+  ##
+  ## Media Players and TV's
+  - {mac: c0:d2:f3:e3:5f:7a, ip: 192.168.17.100, hostname: livingroom-roku}
+  - {mac: 9c:95:61:53:56:6b, ip: 192.168.17.101, hostname: master-bedroom-roku}
+  - {mac: ac:bc:32:6a:84:f4, ip: 192.168.17.102, hostname: bedroom-appletv}
+  - {mac: a8:8c:3e:80:c1:88, ip: 192.168.17.103, hostname: xbox}
+
+  ##
+  ## IOT Devices
+  - {mac: 90:23:5b:49:4f:bb, ip: 192.168.21.10, hostname: amazon-echo-livingroom}
+  - {mac: 44:00:49:26:8b:44, ip: 192.168.21.11, hostname: amazon-echo-masterbedroom}
+  - {mac: 00:04:20:f9:70:8b, ip: 192.168.21.12, hostname: harmony-hub-livingroom}
+  - {mac: 00:17:88:a2:25:17, ip: 192.168.21.13, hostname: hue-hub-bedroom}
+  - {mac: 7c:27:bc:95:5f:ce, ip: 192.168.21.14, hostname: smartrent-hub}
+
+  ##
+  ## Clients
+  - {mac: 0c:e4:41:e4:97:b8, ip: 192.168.23.10, hostname: glenns-laptop}
+  - {mac: f4:be:ec:c3:9c:cc, ip: 192.168.23.11, hostname: glenns-iphone}
+  - {mac: 4c:56:9d:68:ea:0e, ip: 192.168.23.12, hostname: glenns-ipad}
+  - {mac: 20:e8:74:7b:a0:e2, ip: 192.168.23.13, hostname: glenns-iphone-work}
+  - {mac: f0:18:98:5e:f3:51, ip: 192.168.23.14, hostname: wchmlqvc00665, custom_dns: ["glenns-laptop-work"]}
+
+  - {mac: 5c:3e:1b:d8:3e:51, ip: 192.168.23.20, hostname: kristens-iphone}
+  - {mac: a4:83:e7:80:09:35, ip: 192.168.23.21, hostname: kristens-laptop}
+  - {mac: 10:ce:e9:e4:7f:97, ip: 192.168.23.22, hostname: kristens-watch}
+
+  - {mac: 64:4b:f0:1a:73:e7, ip: 192.168.23.30, hostname: caldigit-ts3}
+  - {mac: 20:7b:d2:4f:3e:9e, ip: 192.168.23.31, hostname: ugreen-usb-nic}
