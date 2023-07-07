@@ -51,15 +51,14 @@ pihole_dns_cnames:
 pihole_dhcp_reservations:
   # Core Instructure
   ## Firewall/OpenWRT
-  # - {mac: 7c:2b:e1:13:bd:b1, ip: 192.168.10.1, hostname: openwrt}
+  - {mac: d8:ec:5e:8f:23:dc, ip: 192.168.10.1, hostname: openwrt}
 
   ## Raspberry Pi3B running Pihole
-  - {mac: b8:27:eb:09:66:1f, ip: 192.168.10.5, hostname: pihole01}
+  - {mac: b8:27:eb:09:66:1f, ip: 192.168.10.5, hostname: pihole}
 
   ## odin - Primary Server
   - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.10.10, hostname: odin, custom_dns: ["o"]}
   ## odin - Services/VM's
-  #- {mac: 5e:76:09:bf:f3:e3, ip: 192.168.10.6, hostname: pihole02}
   #- {mac: 1a:ef:b7:42:3b:da, ip: 192.168.10.5, hostname: hodur}
   - {mac: 82:3f:c3:7a:ac:7b, ip: 192.168.10.7, hostname: caddy}
   - {mac: 52:54:00:92:8f:15, ip: 192.168.10.11, hostname: thor}

@@ -116,3 +116,14 @@
         tags: znc
       - role: nickjj.acme_sh
         tags: znc, ssl
+
+  # Configure Loki
+  - name: Configure loki
+    hosts: loki
+    vars_files:
+      - 'vars/vault.yml'
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: geerlingguy.ntp

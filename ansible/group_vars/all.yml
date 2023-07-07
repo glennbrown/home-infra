@@ -37,6 +37,7 @@ package_list:
   - name: net-tools
   - name: python3
   - name: python3-apt
+    yum_ignore: yes
   - name: python3-pip
   - name: pv
   - name: tmux
