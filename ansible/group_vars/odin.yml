@@ -56,16 +56,16 @@ package_list_group:
   - name: wget
   - name: xfsprogs
   - name: zfsutils-linux
+  - name: iperf3
 
 # grog.group
 group_list_group:
-  - { name: kbrown, gid: 1001, state: present }
+  - { name: kbrown, state: present }
   - { name: prometheus, gid: 180, state: present }
 
 # grog.user
 user_list_group:
   - name: kbrown
-    uid: 1001
     group: kbrown
     groups:
       - users

@@ -1,0 +1,17 @@
+---
+main_username: gbrown
+
+# geerlingguy.ntp
+ntp_daemon: ntp
+ntp_package: ntp
+ntp_timezone: "America/New_York"
+
+# geerlingguy.security
+security_ssh_permit_root_login: "no"
+security_ssh_password_authentication: "no"
+security_ssh_usedns: "no"
+security_autoupdate_enabled: true
+security_fail2ban_enabled: true
+security_ssh_port: "{{ cloud_ssh_port }}"
+security_sudoers_passwordless:
+ - "{{ main_username }}"

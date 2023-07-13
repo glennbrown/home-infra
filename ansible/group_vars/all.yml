@@ -58,12 +58,11 @@ package_list:
 
 # grog.group
 group_list:
-  - { name: gbrown, gid: 1000, state: present }
+  - { name: gbrown, state: present }
 
 # grog.user
 user_list:
   - name: gbrown
-    uid: 1000
     group: gbrown
     groups:
       - adm

@@ -65,7 +65,7 @@ dnsmasq_dhcp_reservations:
   - {mac: 9c:95:61:53:56:6b, ip: 192.168.10.71, hostname: master-bedroom-roku}
   - {mac: ac:bc:32:6a:84:f4, ip: 192.168.10.72, hostname: bedroom-appletv}
   - {mac: a8:8c:3e:80:c1:88, ip: 192.168.10.73, hostname: xbox}
-
+  - {mac: ac:ae:19:3a:4f:ad, ip: 192.168.10.74, hostname: roku-streamingsstick}
   ##
   ## IOT Devices
   - {mac: 90:23:5b:49:4f:bb, ip: 192.168.10.80, hostname: amazon-echo-livingroom}

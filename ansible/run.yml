@@ -127,3 +127,16 @@
       - role: grog.user
       - role: grog.authorized-key
       - role: geerlingguy.ntp
+
+  - name: Configure cloud server
+    hosts: cloud
+    vars_files:
+      'vars/vault.yml'
+    roles:
+      - role: grog.group
+      - role: grog.user
+      - role: grog.authorized-key
+      - role: geerlingguy.ntp
+      - role: geerlingguy.security
+      - role: artis3n.tailscale
+

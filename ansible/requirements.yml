@@ -46,6 +46,10 @@ roles:
   - src: nickjj.acme_sh
     version: v1.1.0
 
+  # Taiscale
+  - src: artis3n.tailscale
+    version: v4.2.2
+
 collections:
   - name: prometheus.prometheus
     version: 0.3.1
