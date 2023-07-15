@@ -50,19 +50,19 @@ package_list:
   - name: zip
   - name: unzip
   - name: p7zip-full
-  - name: rar
+  - name: p7zip-rar
   - name: vim
     yum: vim-enhanced
     apt: vim
-  - name: unrar
 
 # grog.group
 group_list:
-  - { name: gbrown, state: present }
+  - { name: gbrown, gid: 1000, state: present }
 
 # grog.user
 user_list:
   - name: gbrown
+    uid: 1000
     group: gbrown
     groups:
       - adm
@@ -83,7 +83,10 @@ user_list:
 authorized_key_list:
   - name: gbrown
     authorized_keys:
-      - key: "{{ secret_gbrown_key }}"
+      - key: "{{ secret_gbrown_sshkey }}"
+  - name: root
+    authorized_keys:
+      - key: "{{ secret_root_sshkey }}"
 
 # geerlingguy.docker
 docker_install_compose: false
@@ -109,4 +112,6 @@ compose_schema_version: "3.8"
 docker_compose_generator_uid: "{{ main_uid }}"
 docker_compose_generator_gid: "{{ main_gid }}"
 docker_compose_generator_output_path: "/home/{{ main_username }}"
-
+local_domain: "{{ traefik_internal_domain }}"
+external_domain_1: "{{ traefik_public_domain_1 }}"
+external_domain_2: "{{ traefik_public_domain_2 }}"

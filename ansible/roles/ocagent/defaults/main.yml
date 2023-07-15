@@ -1,0 +1,4 @@
+---
+
+apt_required_packages:
+  - snapd
