@@ -150,7 +150,7 @@ mergerfs_mounts:
 # geerlingguy.nfs
 nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
 
-# kgb-traefik
+# traefik
 traefik_enable_dashboard: true
 traefik_insecure_transport: true
 traefik_exposed_by_default: true
@@ -161,9 +161,6 @@ appdata_path: /mnt/nvme1tb/appdata
 storage_path: /mnt/storage
 download_path: "{{ storage_path }}/downloads"
 container_config_path: /config
-local_domain: "{{ traefik_internal_domain }}"
-external_domain_1: "{{ traefik_public_domain_1 }}"
-external_domain_2: "{{ traefik_public_domain_2 }}"
 
 containers:
   ###
