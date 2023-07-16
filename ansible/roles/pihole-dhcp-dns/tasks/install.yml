@@ -5,29 +5,29 @@
 # DNS blackhole.
 #
 
-- name: install | create pihole group
+- name: Install | create pihole group
   ansible.builtin.group:
     name: pihole
-    gid: 998
+    gid: 900
     state: present
 
-- name: install | create pihole user
+- name: Install | create pihole user
   ansible.builtin.user:
     name: pihole
-    uid: 998
+    uid: 900
     group: pihole
     create_home: false
     home: /home/pihole
     shell: /usr/sbin/nologin
     state: present
 
-- name: install | install pihole dependencies
+- name: Install | install pihole dependencies
   ansible.builtin.apt:
     name: "{{ pihole_default_packages_apt }}"
-    state: latest
+    state: present
     update_cache: true
   
-- name: install | create "{{ pihole_config_dir }}"
+- name: Install | create "{{ pihole_config_dir }}"
   ansible.builtin.file:
     path: "{{ pihole_config_dir }}"
     mode: 0775
@@ -35,7 +35,7 @@
     group: pihole
     state: directory
 
-- name: install | set deployment config
+- name: Install | set deployment config
   ansible.builtin.template:
     src: pihole-setupVars.conf.j2
     dest: "{{ pihole_config_dir }}/setupVars.conf"
@@ -43,16 +43,16 @@
     group: root
     mode: 0644
 
-- name: install | set binary location
+- name: Install | set binary location
   ansible.builtin.stat:
     path: /usr/local/bin/pihole
   register: pihole_binary
 
-- name: install | determine if pihole is already installed
+- name: Install | determine if pihole is already installed
   ansible.builtin.set_fact:
     pihole_installed: "{{ pihole_binary.stat.exists|default(false) }}"
 
-- name: install | fetching latest installer
+- name: Install | fetching latest installer
   ansible.builtin.get_url:
     url: 'https://install.pi-hole.net'
     dest: '/tmp/pihole-install.sh'
@@ -60,10 +60,10 @@
   notify: start pihole-FTL
   when: not pihole_installed
 
-- name: install | run installer
+- name: Install | run installer
   ansible.builtin.command: '/tmp/pihole-install.sh --unattended'
   notify: start pihole-FTL
   when: not pihole_installed
 
-- name: postinstall | auto-redirect to admin page
+- name: Post Install | lighttpd config
   ansible.builtin.include_tasks: lighttpd.yml
