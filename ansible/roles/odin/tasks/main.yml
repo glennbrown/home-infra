@@ -5,10 +5,6 @@
 ###############################################################################
 #
 
-- name: odin - ensure hostname is set correctly
-  hostname:
-    name: "{{ hostname_odin }}"
-  
 - name: odin - disk setup
   include_tasks: disks.yml
 
