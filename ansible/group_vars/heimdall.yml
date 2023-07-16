@@ -6,14 +6,7 @@ ntp_package: chrony
 
 # grog.package
 package_list_group:
-- name: bash-completion
-- name: apt-file
-- name: aptitude
-- name: curl
-- name: command-not-found
-- name: dnsutils
 - name: lm-sensors
-- name: net-tools
 - name: nvme-cli
 - name: wget
 - name: smartmontools

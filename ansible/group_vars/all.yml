@@ -24,36 +24,43 @@ ntp_timezone: America/New_York
 # grog.package
 package_update_cache: yes
 package_list:
+  - name: apt-file
+  - name: aptitude
   - name: bash-completion
+  - name: command-not-found
   - name: curl
   - name: dialog
+  - name: dnsutils
   - name: git
   - name: gnupg2
   - name: gawk
   - name: htop
+  - name: iotop
+  - name: iftop
   - name: jq
+  - name: mc
   - name: ncdu
   - name: neofetch
   - name: net-tools
+  - name: openssh-server
   - name: python3
   - name: python3-apt
     yum_ignore: yes
   - name: python3-pip
+  - name: python3-setuptools
   - name: pv
   - name: tmux
   - name: wget
-  - name: mc
+  - name: screen
   - name: sudo
-  - name: tree
-  - name: iotop
-  - name: iftop
-  - name: zip
+  - name: tree 
   - name: unzip
   - name: p7zip-full
   - name: p7zip-rar
   - name: vim
     yum: vim-enhanced
     apt: vim
+  - name: zip
 
 # grog.group
 group_list:
@@ -99,7 +106,7 @@ htop_users:
 
 # prometheus.prometheus.node_exporter
 node_exporter_textfile_dir: /var/lib/node-exporter
-node_exporter_version: 1.5.0
+node_exporter_version: 1.6.0
 node_exporter_system_group: prometheus
 node_exporter_system_user: prometheus
 
