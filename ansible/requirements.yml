@@ -50,6 +50,9 @@ roles:
   # Taiscale
   - src: artis3n.tailscale
     version: v4.2.2
+  
+  # Openwrt
+  - src: gekmihesg.openwrt
 
 collections:
   - name: prometheus.prometheus
