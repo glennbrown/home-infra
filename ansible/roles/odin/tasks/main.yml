@@ -5,16 +5,16 @@
 ###############################################################################
 #
 
-- name: odin - disk setup
+- name: Disk setup
   include_tasks: disks.yml
 
-- name: odin - file sharing
+- name: File sharing setup
   include_tasks: file_sharing.yml
 
-- name: odin - tools install
+- name: Tools install
   include_tasks: tools.yml
 
-- name: odin - setup lm_sensors
+- name: Setup lm_sensors
   include_tasks: sensors.yml
   
   

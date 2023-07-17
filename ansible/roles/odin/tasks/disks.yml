@@ -1,6 +1,6 @@
 ---
 
-- name: create /mnt points
+- name: Create /mnt points
   file:
     dest: "{{ item.path }}"
     state: directory
@@ -12,7 +12,7 @@
     - "{{ snapraid_data_disks }}"
     - "{{ extra_mountpoints }}"
 
-- name: mount disks
+- name: Mount disks
   mount:
     name: "{{ item.path }}"
     src: "{{ item.diskbyid }}"

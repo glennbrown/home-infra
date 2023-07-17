@@ -5,13 +5,13 @@
 ###############################################################################
 #
 
-- name: sensors | ensure lm_sensors is installed
+- name: Ensure lm_sensors is installed
   ansible.builtin.apt:
     name: lm-sensors
     update_cache: true
     state: present
   
-- name: sensors | apply nct6775 grub fix
+- name: Apply nct6775 grub fix
   ansible.builtin.lineinfile:
     path: /etc/default/grub
     regexp: '^GRUB_CMDLINE_LINUX=""$'
@@ -19,14 +19,14 @@
   notify: update grub
 
 # loading drivetemp module
-- name: sensors | load drivetemp module
+- name: Load drivetemp module
   community.general.modprobe: 
     name: drivetemp
     state: present
     persistent:  present
 
 # loading nct6775 module
-- name: sensors | load nct6775 module
+- name: Load nct6775 module
   community.general.modprobe:
     name: nct6775
     state: present

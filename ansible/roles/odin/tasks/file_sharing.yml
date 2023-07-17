@@ -52,36 +52,20 @@
   notify:
     - start avahi-daemon service
 
-- name: file_sharing | check weather wsdd2 is installed
+- name: Check weather wsdd2 is installed
   shell: "dpkg-query -W {{ wsdd2_apt_package_name }}"
   ignore_errors: true
   register: is_installed
   changed_when: "is_installed.rc != 0"
 
-- name: build wsdd2 | setting fact
+- name: Setting fact of weather to install wsdd2
   set_fact:
     install_wsdd2: "{{ wsdd2_force_install == true or is_installed.failed == true }}"
 
-- name: file_sharing | build wsdd2 | clone git repo
-  git:
-    repo: https://github.com/glennbrown/docker-wsdd2.git
-    dest: /tmp/wsdd2
-    force: yes
-  when: install_wsdd2
-
-- name: file_sharing | build wsdd2 | make build script executable
-  file:
-    path: /tmp/wsdd2/build.sh
-    mode: 0755
-  when: install_wsdd2
-
-- name: file_sharing | build wsdd2 | build .deb package
-  shell: cd /tmp/wsdd2 && ./build.sh
-  when: install_wsdd2
-
-- name: file_sharing | build wsdd2 | install .deb package
+- name: Install wsdd2
   apt:
-    deb: /tmp/wsdd2/build/wsdd2-from-source.deb
+    name: wsdd2
     state: present
+    update_cache: yes
   when: install_wsdd2
   notify: start wsdd2 service
