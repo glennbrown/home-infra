@@ -5,7 +5,7 @@
 # Lightweight DNS and DHCP Server
 #
 
-- name: install dnsmasq
+- name: Install dnsmasq
   ansible.builtin.apt:
     name: "{{ dnsmasq_default_packages_apt }}"
     state: present
@@ -13,29 +13,36 @@
   register: dnsmasq_install
   notify: restart dnsmasq
 
-- name: enable dnsmasq on boot
+- name: Enable dnsmasq on boot
   ansible.builtin.systemd:
     name: dnsmasq.service
     enabled: true
     daemon-reload: true
 
-- name: enable logrotate for dnsmasq logs
+- name: Enable logrotate for dnsmasq logs
   ansible.builtin.copy:
     src: logrotate-dnsmasq
     dest: /etc/logrotate.d/dnsmasq
 
-- name: touch custom hosts file
+- name: Touch custom hosts file
   ansible.builtin.file:
     path: /etc/hosts.custom
     state: touch
   when: dnsmasq_install.changed
 
-- name: remove local-service from start script
-  ansible.builtin.lineinfile:
-    path: /etc/init.d/dnsmasq
-    regexp: '^DNSMASQ_OPTS='
-    line: '# Commented out to allow Tailscale Split DNS\n# DNSMASQ_OPTS="${DNSMASQ_OPTS} --local-service"'
-    state: present
-    backrefs: yes
-  notify: restart dnsmasq
+- name: Backup stock configuration file
+  ansible.builtin.copy:
+    remote_src: true
+    src: /etc/dnsmasq.conf
+    dest: /etc/dnsmasq.conf.org
+  when: dnsmasq_install.changed
+
+# - name: remove local-service from start script
+#   ansible.builtin.lineinfile:
+#     path: /etc/init.d/dnsmasq
+#     regexp: '^DNSMASQ_OPTS='
+#     line: '# Commented out to allow Tailscale Split DNS\n# DNSMASQ_OPTS="${DNSMASQ_OPTS} --local-service"'
+#     state: present
+#     backrefs: yes
+#   notify: restart dnsmasq
   

@@ -1,5 +1,10 @@
 ---
-  
+
+#grog.package
+package_list_group:
+  - name: man-db
+  - name: locales
+
 # geerlingguy.ntp
 ntp_package: ntp
 ntp_daemon: ntp
@@ -8,11 +13,12 @@ ntp_daemon: ntp
 dnsmasq_config_dir: /etc/dnsmasq.d
 dnsmasq_dhcp_active: true
 dnsmasq_dhcp_start: 192.168.10.150
-dnsmasq_dhcp_end: 192.168.10.254
+dnsmasq_dhcp_end: 192.168.10.253
 dnsmasq_dhcp_router: 192.168.10.1
 dnsmasq_domain: pa.ikgb.me
-dnsmasq_server_arpa: '10.168.192.in-addr.arpa'
-dnsmasq_server_target: "{{ dnsmasq_dhcp_router }}"
+dnsmasq_rev_server: true
+dnsmasq_rev_server_cidr: 192.168.10.0/24
+dnsmasq_rev_server_target: "{{ dnsmasq_dhcp_router }}"
 
 dnsmasq_dns_overrides:
   - {ip: 192.168.10.7, custom_dns: "pa.ikgb.me"}
@@ -28,13 +34,13 @@ dnsmasq_dhcp_reservations:
   ## Firewall/OpenWRT
   - {mac: d8:ec:5e:8f:23:dc, ip: 192.168.10.1, hostname: openwrt}
 
-  ## Raspberry Pi3B running Pihole
-  # - {mac: b8:27:eb:09:66:1f, ip: 192.168.10.5, hostname: pihole}
+  ## Raspberry Pi3B running dnsmasq
+  - {mac: b8:27:eb:09:66:1f, ip: 192.168.10.5, hostname: hodur}
   
   ## odin - Primary Server
   - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.10.10, hostname: odin, custom_dns: ["o"]}
   ## odin - Services/VM's
-  - {mac: 1a:ef:b7:42:3b:da, ip: 192.168.10.5, hostname: hodur}
+  #- {mac: 1a:ef:b7:42:3b:da, ip: 192.168.10.5, hostname: hodur}
   - {mac: 82:3f:c3:7a:ac:7b, ip: 192.168.10.7, hostname: caddy}
   - {mac: 52:54:00:92:8f:15, ip: 192.168.10.11, hostname: thor}
   - {mac: 6a:cc:5c:74:4f:c1, ip: 192.168.10.12, hostname: homeassistant, custom_dns: ["ha"]}
