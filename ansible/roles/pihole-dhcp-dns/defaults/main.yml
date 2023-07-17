@@ -32,7 +32,7 @@ pihole_install_web_interface: true
 pihole_lighttpd_enabled: true
 pihole_cache_size: 10000
 pihole_dns_fqdn_required: true
-pihole_dnsmasq_listening: local
+pihole_dnsmasq_listening: single
 pihole_webpassword: ''
 pihole_blocking_enabled: true
 pihole_dnssec: true

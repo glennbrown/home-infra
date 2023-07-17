@@ -2,13 +2,17 @@
 
 - name: install pihole
   ansible.builtin.include_tasks: install.yml
+  tags: pihole
 
 - name: check for duplicate items
   ansible.builtin.include_tasks: duplicate_checks.yml
+  tags: [dhcp, dns]
 
 - name: copy template config files into place
   ansible.builtin.include_tasks: template.yml
+  tags: [dhcp, dns]
 
 - name: install pihole-updatelists
   ansible.builtin.include_tasks: updatelists.yml
+  tags: [dhcp, dns]
   

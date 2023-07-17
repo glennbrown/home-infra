@@ -10,19 +10,19 @@ ntp_package: ntp
 ntp_daemon: ntp
 
 # nickjj.acme_sh
-# acme_sh_account_email: "{{ pihole_admin_email }}"
-# acme_sh_renew_time_in_days: '60'
-# acme_sh_copy_certs_to_path: '/etc/ssl/ansible'
-# acme_sh_default_extra_flags_issue: '--server letsencrypt'
-# acme_sh_default_staging: False
-# acme_sh_default_debug: True
-# acme_sh_default_dns_provider: "dns_cf"
-# acme_sh_default_dns_provider_api_keys:
-#   "CF_Token": "{{ cloudflare_acme_api_token }}"
-#   "CF_Account_ID": "{{ cloudflare_account_id }}"
-# acme_sh_default_install_cert_reloadcmd: "cat {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.pem {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.key > {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me-lighttpd.pem"
-# acme_sh_domains: 
-#   - domains: [ "{{ ansible_hostname }}.pa.ikgb.me" ]
+acme_sh_account_email: "{{ pihole_admin_email }}"
+acme_sh_renew_time_in_days: '60'
+acme_sh_copy_certs_to_path: '/etc/letsencrypt'
+acme_sh_default_extra_flags_issue: '--server letsencrypt'
+acme_sh_default_staging: False
+acme_sh_default_debug: True
+acme_sh_default_dns_provider: "dns_cf"
+acme_sh_default_dns_provider_api_keys:
+  "CF_Token": "{{ cloudflare_acme_api_token }}"
+  "CF_Account_ID": "{{ cloudflare_account_id }}"
+acme_sh_default_install_cert_reloadcmd: "cat {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.pem {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me.key > {{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.pa.ikgb.me-lighttpd.pem; systemctl reload lighttpd"
+acme_sh_domains: 
+  - domains: [ "{{ ansible_hostname }}.pa.ikgb.me" ]
 
 # pihole-dhcp-dns
 dnsmasq_config_dir: /etc/dnsmasq.d
@@ -34,7 +34,7 @@ pihole_dhcp_router: 192.168.10.1
 pihole_pihole_domain: pa.ikgb.me
 pihole_rev_server_cidr: 192.168.10.0/24
 pihole_rev_server_target: "{{ pihole_dhcp_router }}"
-pihole_enable_ssl: false
+pihole_enable_ssl: true
 pihole_ssl_cert: "{{ acme_sh_copy_certs_to_path }}/{{ ansible_hostname }}.{{ pihole_pihole_domain }}-lighttpd.pem"
 
 pihole_dns_overrides:

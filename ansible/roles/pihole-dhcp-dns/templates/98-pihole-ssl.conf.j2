@@ -7,7 +7,7 @@ $HTTP["host"] == "{{ ansible_hostname }}.{{ pihole_pihole_domain }}" {
   # Enable the SSL engine with a LE cert, only for this specific host
   $SERVER["socket"] == ":443" {
     ssl.engine = "enable"
-    ssl.pemfile = "/etc/ssl/ansible/{{ ansible_hostname }}.{{ pihole_pihole_domain }}-lighttpd.pem"
+    ssl.pemfile = "/etc/letsencrypt/{{ ansible_hostname }}.{{ pihole_pihole_domain }}-lighttpd.pem"
     ssl.honor-cipher-order = "enable"
     ssl.cipher-list = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
     ssl.use-sslv2 = "disable"

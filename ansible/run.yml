@@ -89,21 +89,20 @@
     - role: htop
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
-    #- role: nickjj.acme_sh
-    #  tags: ssl
-    #- role: pihole-dhcp-dns
-    #  tags: dns, dhcp, pihole
+    - role: nickjj.acme_sh
+    - role: pihole-dhcp-dns
+      tags: [dns, dhcp, pihole]
 
 # Configure hodur (dhcp/dns)
 # Debian
-- name: "Configure hodur (dhcp/dns server)"
-  hosts: hodur
-  vars_files:
-    - 'vars/vault.yml'
-  roles:
-    - role: ironicbadger.bash_aliases
-    - role: dnsmasq
-      tags: [dhcp, dns]
+#- name: "Configure hodur (dhcp/dns server)"
+#  hosts: hodur
+#  vars_files:
+#    - 'vars/vault.yml'
+#  roles:
+#    - role: ironicbadger.bash_aliases
+#    - role: dnsmasq
+#      tags: [dhcp, dns]
 
 # Configure caddy
 # Debian
