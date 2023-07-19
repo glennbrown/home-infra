@@ -8,10 +8,6 @@ openwrt_dhcp_start: '150'
 openwrt_dhcp_limit: '103'
 openwrt_dhcp_leasetime: '24h'
 openwrt_dnsmasq_domain: 'pa.ikgb.me'
-openwrt_dnsmasq_rebind_domain:
-  - name: 'pa.ikgb.me'
-  - name: 'ikgb.me'
-  - name: 'glennbrown.org'
 
 openwrt_dns_overrides:
   - {ip: 192.168.10.10, custom_dns: "o.pa.ikgb.me"}
@@ -33,7 +29,6 @@ openwrt_dhcp_static_leases:
   ## odin - Primary Server
   - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.10.10, hostname: odin}
   ## odin - Services/VM's
-  #- {mac: 1a:ef:b7:42:3b:da, ip: 192.168.10.5, hostname: hodur}
   - {mac: 82:3f:c3:7a:ac:7b, ip: 192.168.10.7, hostname: caddy}
   - {mac: 52:54:00:92:8f:15, ip: 192.168.10.11, hostname: thor}
   - {mac: 6a:cc:5c:74:4f:c1, ip: 192.168.10.12, hostname: homeassistant}

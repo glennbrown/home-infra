@@ -15,6 +15,7 @@
     command: add_list
     key: "dhcp.cfg01411c.interface"
     value: "{{ openwrt_dnsmasq_listen }}"
+    unique: true
 
 #turning off rebind, don't really need it for internal use
 - name: Turn off DNS Rebind Protection
