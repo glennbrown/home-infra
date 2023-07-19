@@ -1,0 +1,82 @@
+---
+
+# gekmihesg.openwrt
+openwrt_scp_if_ssh: 'smart'
+
+# openwrt-dhcp-dns
+openwrt_dhcp_start: '150'
+openwrt_dhcp_limit: '103'
+openwrt_dhcp_leasetime: '24h'
+openwrt_dnsmasq_domain: 'pa.ikgb.me'
+openwrt_dnsmasq_rebind_domain:
+  - name: 'pa.ikgb.me'
+  - name: 'ikgb.me'
+  - name: 'glennbrown.org'
+
+openwrt_dns_overrides:
+  - {ip: 192.168.10.10, custom_dns: "o.pa.ikgb.me"}
+
+openwrt_dns_hostnames:
+  - {ip: 192.168.10.1, hostname: "openwrt.pa.ikgb.me"}
+  - {ip: 192.168.10.10, hostname: "kms.pa.ikgb.me"}
+  - {ip: 192.168.10.11, hostname: "znc.ikgb.me"}
+  - {ip: 192.168.10.7, hostname: "requests.ikgb.me"}
+
+openwrt_dhcp_static_leases:
+  # Core Instructure
+  ## Firewall/OpenWRT
+  #- {mac: d8:ec:5e:8f:23:dc, ip: 192.168.10.1, hostname: openwrt}
+
+  ## Raspberry Pi3B
+  #- {mac: b8:27:eb:09:66:1f, ip: 192.168.10.5, hostname: hodur}
+  
+  ## odin - Primary Server
+  - {mac: 04:42:1a:e6:5d:a1, ip: 192.168.10.10, hostname: odin}
+  ## odin - Services/VM's
+  #- {mac: 1a:ef:b7:42:3b:da, ip: 192.168.10.5, hostname: hodur}
+  - {mac: 82:3f:c3:7a:ac:7b, ip: 192.168.10.7, hostname: caddy}
+  - {mac: 52:54:00:92:8f:15, ip: 192.168.10.11, hostname: thor}
+  - {mac: 6a:cc:5c:74:4f:c1, ip: 192.168.10.12, hostname: homeassistant}
+  - {mac: 52:54:00:44:9a:92, ip: 192.168.10.13, hostname: njord}
+  - {mac: 0a:11:d7:46:c3:eb, ip: 192.168.10.14, hostname: balder}
+  - {mac: 52:54:00:75:d8:2c, ip: 192.168.10.15, hostname: loki}
+  - {mac: c6:31:dc:f7:a4:5d, ip: 192.168.10.16, hostname: popos-test}
+
+  ##
+  ## Networking Equipment
+  - {mac: 60:5f:8d:1e:db:b2, ip: 192.168.10.90, hostname: eero-pro-bedroom}
+  - {mac: f8:bb:bf:c0:6e:2b, ip: 192.168.10.91, hostname: eero-beacon-diningroom}
+
+  ##
+  ## Printers
+  - {mac: 80:e8:2c:61:95:dc, ip: 192.168.10.30, hostname: hp-officejet-pro}
+
+  ##
+  ## Media Players and TV's
+  - {mac: c0:d2:f3:e3:5f:7a, ip: 192.168.10.70, hostname: livingroom-roku}
+  - {mac: 9c:95:61:53:56:6b, ip: 192.168.10.71, hostname: master-bedroom-roku}
+  - {mac: ac:bc:32:6a:84:f4, ip: 192.168.10.72, hostname: bedroom-appletv}
+  - {mac: a8:8c:3e:80:c1:88, ip: 192.168.10.73, hostname: xbox}
+  - {mac: ac:ae:19:3a:4f:ad, ip: 192.168.10.74, hostname: roku-streamingsstick}
+  ##
+  ## IOT Devices
+  - {mac: 90:23:5b:49:4f:bb, ip: 192.168.10.80, hostname: amazon-echo-livingroom}
+  - {mac: 44:00:49:26:8b:44, ip: 192.168.10.81, hostname: amazon-echo-masterbedroom}
+  - {mac: 00:04:20:f9:70:8b, ip: 192.168.10.82, hostname: harmony-hub-livingroom}
+  - {mac: 00:17:88:a2:25:17, ip: 192.168.10.83, hostname: hue-hub-bedroom}
+  - {mac: 7c:27:bc:95:5f:ce, ip: 192.168.10.84, hostname: smartrent-hub}
+
+  ##
+  ## Clients
+  - {mac: 0c:e4:41:e4:97:b8, ip: 192.168.10.40, hostname: glenns-laptop}
+  - {mac: f4:be:ec:c3:9c:cc, ip: 192.168.10.41, hostname: glenns-iphone}
+  - {mac: 4c:56:9d:68:ea:0e, ip: 192.168.10.42, hostname: glenns-ipad}
+  - {mac: 20:e8:74:7b:a0:e2, ip: 192.168.10.43, hostname: glenns-iphone-work}
+  - {mac: f0:18:98:5e:f3:51, ip: 192.168.10.44, hostname: wchmlqvc00665}
+
+  - {mac: 5c:3e:1b:d8:3e:51, ip: 192.168.10.50, hostname: kristens-iphone}
+  - {mac: a4:83:e7:80:09:35, ip: 192.168.10.51, hostname: kristens-laptop}
+  - {mac: 10:ce:e9:e4:7f:97, ip: 192.168.10.52, hostname: kristens-watch}
+
+  - {mac: 64:4b:f0:1a:73:e7, ip: 192.168.10.60, hostname: caldigit-ts3}
+  - {mac: 20:7b:d2:4f:3e:9e, ip: 192.168.10.61, hostname: ugreen-usb-nic}

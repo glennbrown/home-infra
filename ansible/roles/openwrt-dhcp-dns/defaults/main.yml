@@ -1,0 +1,19 @@
+---
+
+# Disable ISP DNS Servers
+openwrt_wan_peerdns: '0'
+# Cloudflare DNS Servers
+openwrt_wan_dns:
+  - name: '1.1.1.1'
+  - name: '1.0.0.1'
+# Listen only on br-lan (plus localhost)
+openwrt_dnsmasq_listen: 'br-lan'
+# Internal Domain name, lan is Openwrt default override in group_vars
+openwrt_dnsmasq_domain: 'lan'
+# By default openwrt implements "local-service" option, turning of for Tailscale SplitDNS
+openwrt_dnsmasq_localservice: '0'
+# Turning on dnssec
+openwrt_dnsmasq_dnssec: '1'
+# dnsmasq query cache, openwrt's default is rather low
+openwrt_dnsmasq_cachesize: '10000'
+

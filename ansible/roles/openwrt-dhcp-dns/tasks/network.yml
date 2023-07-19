@@ -1,0 +1,21 @@
+---
+
+- name: Enable peerdns to allow Cloudflare DNS 
+  uci:
+    command: set
+    key: "network.wan"
+    value:
+      peerdns: "{{ openwrt_wan_peerdns }}"
+  
+- name: Add Cloudflare DNS Servers
+  uci:
+    command: add_list
+    key: "network.wan.dns"
+    value: "{{ item.name }}"
+    unique: true
+  with_items: "{{ openwrt_wan_dns }}"
+
+- name: Commit changes
+  uci:
+    command: commit
+  notify: reload network

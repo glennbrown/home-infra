@@ -1,0 +1,13 @@
+---
+- name: restart dhcp
+  with_items:
+    - dnsmasq
+    - odhcpd
+  service:
+    name: "{{ item }}"
+    state: restarted
+
+- name: reload network
+  service:
+    name: network
+    state: reloaded
