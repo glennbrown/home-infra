@@ -2,7 +2,7 @@
 
 # Basic Server setup
 - name: Basic server setup
-  hosts: kgbsys
+  hosts: systems
   tags: [setup, init]
   vars_files:
     - 'vars/vault.yml'
@@ -54,6 +54,13 @@
   roles:
     - role: geerlingguy.docker
 
+- name: Configure Proxmox
+  hosts: proxmox
+  vars_files:
+    - 'vars/vault.yml'
+  roles:
+    - role: ironicbadger.proxmox_nag_removal
+
 # Configure primary server
 # Proxmox
 - name: Configure odin
@@ -61,7 +68,6 @@
   vars_files:
     - 'vars/vault.yml'
   roles:
-    - role: ironicbadger.proxmox_nag_removal
     - role: htop
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine

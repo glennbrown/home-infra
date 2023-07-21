@@ -10,10 +10,11 @@ openwrt_dhcp_leasetime: '24h'
 openwrt_dnsmasq_domain: 'pa.ikgb.me'
 
 openwrt_dns_overrides:
-  - {ip: 192.168.10.10, custom_dns: "o.pa.ikgb.me"}
+  - {ip: 192.168.10.1, custom_dns: pa.ikgb.me}
+  - {ip: 192.168.10.1, custom_dns: openwrt.pa.ikgb.me}
+  - {ip: 192.168.10.10, custom_dns: "o.pa.ikgb.me"} 
 
 openwrt_dns_hostnames:
-  - {ip: 192.168.10.1, hostname: "openwrt.pa.ikgb.me"}
   - {ip: 192.168.10.10, hostname: "kms.pa.ikgb.me"}
   - {ip: 192.168.10.11, hostname: "znc.ikgb.me"}
   - {ip: 192.168.10.7, hostname: "requests.ikgb.me"}
