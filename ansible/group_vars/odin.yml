@@ -352,6 +352,24 @@ containers:
     labels:
       - '"traefik.http.routers.radarr.rule=Host(`radarr.o.{{ local_domain }}`)"'
   ###
+  - service_name: lidarr
+    active: true
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    include_global_env_vars: true
+    volumes:
+      - "{{ appdata_path }}/lidarr:{{ container_config_path }}"
+      - "{{ download_path }}:/downloads"
+      - "{{ storage_path }}/Music:/music"
+    network_mode: bridge
+    restart: unless-stopped
+    depends_on:
+      - sabnzbd
+      - prowlarr
+      - qbittorrent
+    labels:
+      - '"traefik.http.routers.libarr.rule=Host(`lidarr.o.{{ local_domain }}`)"'
+  ###
   - service_name: jellyplex-watched
     active: true
     image: luigi311/jellyplex-watched
@@ -522,6 +540,18 @@ containers:
       - 9000:9000
     network_mode: bridge
     restart: unless-stopped
+  ###
+  - service_name: librespeed
+    active: true
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    include_global_env_vars: true
+    volumes:
+      - "{{ appdata_path }}/librespeed:{{ container_config_path }}"
+    network_mode: bridge
+    restart: unless-stopped
+    labels:
+      - '"traefik.http.routers.librespeed.rule=Host(`librespeed.o.{{ local_domain }}`)"'
   ###
   - service_name: watchtower
     active: true
