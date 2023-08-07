@@ -85,17 +85,6 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
-# Configure hodur (dhcp/dns)
-# Debian
-#- name: "Configure hodur (dhcp/dns server)"
-#  hosts: hodur
-#  vars_files:
-#    - 'vars/vault.yml'
-#  roles:
-#    - role: ironicbadger.bash_aliases
-#    - role: dnsmasq
-#      tags: [dhcp, dns]
-
 # Configure caddy
 # Debian
 - name: Configure caddy
@@ -139,11 +128,3 @@
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: ocagent
-
-- name: Configure openwrt
-  hosts: openwrt
-  gather_facts: false
-  vars_files:
-    'vars/vault.yml'
-  roles:
-    - role: openwrt-dhcp-dns

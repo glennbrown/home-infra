@@ -115,7 +115,8 @@ snapraid_config_excludes:
   - ".nfo"
 
 # tigattack.mergerfs
-mergerfs_install_mode: package_manager
+mergerfs_install_mode: github_releases
+mergerfs_version: latest
 mergerfs_mounts:
   - path: /mnt/storage
     branches: 
@@ -216,9 +217,6 @@ containers:
       - /dev/dri:/dev/dri
     network_mode: host
     restart: unless-stopped
-    labels:
-      - '"traefik.http.routers.plex.rule=Host(`plex.o.{{ local_domain }}`)"'
-      - '"traefik.http.services.plex.loadbalancer.server.port=32400"'
   ###
   - service_name: tautulli
     active: true
@@ -351,24 +349,6 @@ containers:
       - qbittorrent
     labels:
       - '"traefik.http.routers.radarr.rule=Host(`radarr.o.{{ local_domain }}`)"'
-  ###
-  - service_name: lidarr
-    active: true
-    image: lscr.io/linuxserver/lidarr:latest
-    container_name: lidarr
-    include_global_env_vars: true
-    volumes:
-      - "{{ appdata_path }}/lidarr:{{ container_config_path }}"
-      - "{{ download_path }}:/downloads"
-      - "{{ storage_path }}/Music:/music"
-    network_mode: bridge
-    restart: unless-stopped
-    depends_on:
-      - sabnzbd
-      - prowlarr
-      - qbittorrent
-    labels:
-      - '"traefik.http.routers.libarr.rule=Host(`lidarr.o.{{ local_domain }}`)"'
   ###
   - service_name: jellyplex-watched
     active: true

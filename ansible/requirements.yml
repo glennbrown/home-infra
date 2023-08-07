@@ -2,7 +2,7 @@ roles:
   # IronicBadgers Roles
   - src: ironicbadger.docker_compose_generator
     version: 1.0.5
-  - src: https://github.com/glennbrown/ansible-role-figurine.git
+  - src: https://github.com/ironicbadger/ansible-role-figurine.git
     name: ironicbadger.figurine
     scm: git
   - src: https://github.com/glennbrown/ansible-role-snapraid.git
