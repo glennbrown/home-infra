@@ -10,7 +10,10 @@ http:
         - default-headers
         - https-redirectscheme
       tls:
-        certResolver: cloudflare
+        certResolver: default
+        domains:
+          - main: "{{ local_domain }}"
+            sans: "*.{{ local_domain }}"
       service: service-proxmox
     
   services:

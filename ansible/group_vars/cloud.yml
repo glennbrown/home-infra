@@ -5,6 +5,17 @@ ntp_daemon: ntp
 ntp_package: ntp
 ntp_timezone: "America/New_York"
 
+bash_aliases:
+  - { alias: "dtail", command: "docker logs -tf --tail='50' " }
+  - { alias: "dstop", command: "docker stop `docker ps -aq`" }
+  - { alias: "drm", command: "docker rm `docker ps -aq`" }
+  - { alias: "dcp", command: "docker compose -f ~/docker-compose.yml " }
+  - { alias: "dcporph", command: "docker compose -f ~/docker-compose.yml --remove-orphans " }
+  - { alias: "dprune", command: "docker image prune" }
+  - { alias: "dprunesys", command: "docker system prune --all"}
+  - { alias: "ctop", command: "docker run --name ctop  -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop " }
+
+
 # geerlingguy.security
 security_ssh_permit_root_login: "no"
 security_ssh_password_authentication: "no"
@@ -15,17 +26,25 @@ security_ssh_port: "{{ cloud_ssh_port }}"
 security_sudoers_passwordless:
  - "{{ main_username }}"
 
+# traefik
+traefik_docker_provider: true
+traefik_insecure_transport: true
+traefik_dns_propagationcheck: true
+traefik_domains:
+  - name: ikgb.me
+  - name: glennbrown.org
+
 # ironicbadger.docker_compose_generator
 global_env_vars:
   - TZ={{ ntp_timezone }}
   - PUID={{ main_uid }}
   - PGID={{ main_gid }}
-appdata_path: "/home/{{ main_username }}"
+appdata_path: "/home/{{ main_username }}/appdata"
 container_config_path: /config
 
 containers:
   ###
-  - service_name: traefik-cloud
+  - service_name: traefik
     active: true
     image: traefik:latest
     container_name: traefik
@@ -42,3 +61,41 @@ containers:
     ports:
       - 80:80
       - 443:443
+    network_mode: bridge
+    restart: unless-stopped
+  ###
+  - service_name: whoami
+    active: false
+    image: traefik/whoami
+    container_name: simple-service
+    include_global_env_vars: false
+    network_mode: bridge
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.whoami.rule=Host(`whoami.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.whoami.entrypoints=websecure"'
+      - '"traefik.http.routers.whoami.tls.certresolver=default"'
+      - '"traekik.http.routers.whoami.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traekik.http.routers.whoami.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+  ###
+  - service_name: overseerr
+    active: true
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - LOG_LEVEL=debug
+    volumes:
+      - "{{ appdata_path }}/overseerr:/app/config"
+    network_mode: bridge
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.overseerr.rule=Host(`requests.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.overseerr.entrypoints=websecure"'
+      - '"traefik.http.routers.overseerr.tls.certresolver=default"'
+      - '"traekik.http.routers.overseerr.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traekik.http.routers.overseerr.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+  

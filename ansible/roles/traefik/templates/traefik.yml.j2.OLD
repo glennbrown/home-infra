@@ -1,4 +1,4 @@
-{{ ansible_managed | comment }}
+# {{ ansible_managed }}
 ---
 entryPoints:
   web:
@@ -11,23 +11,23 @@ entryPoints:
   websecure:
     address: :443
     http:
-      tls: 
-        certresolver: default
+      tls:
+        certresolver: cloudflare
         domains:
-{% for domain in traefik_domains %}
-          - main: "{{ domain.name }}"
-            sans: "*.{{domain.name }}"
-{% endfor %}
-
+          - main: "{{ traefik_public_domain_1 }}"
+            sans: "*.{{ traefik_public_domain_1 }}"
+          - main: "{{ traefik_internal_domain }}"
+            sans: "*.{{ traefik_internal_domain }}"
+          - main: "{{ ansible_hostname[0] }}.{{ traefik_internal_domain }}"
+            sans: "*.{{ ansible_hostname[0] }}.{{ traefik_internal_domain }}"
 ping: {}
 
 providers:
-{% if traefik_docker_provider %}
   docker:
     endpoint: unix:///var/run/docker.sock
     watch: true
-    exposedByDefault: {{ traefik_exposed_by_default | lower }}
-{% endif %}
+    exposedByDefault: {{ traefik_exposed_by_default }}
+
 {% if traefik_file_provider %}
   file:
     filename: /etc/traefik/rules.yml
@@ -43,21 +43,17 @@ api:
   debug: false
 {% endif %}
 
-{% if traefik_debug_log %}
-log:
-  level: debug
-{% else %}
 log:
   level: info
-{% endif %}
 
 certificatesResolvers:
-  default:
+  cloudflare:
     acme:
       email: "{{ traefik_acme_email }}"
       storage: /etc/traefik/acme.json
       dnsChallenge:
         provider: cloudflare
+        delayBeforeCheck: 0
         resolvers:
           - 1.1.1.1:53
           - 1.0.0.1:53
@@ -66,4 +62,3 @@ certificatesResolvers:
 serversTransport:
   insecureSkipVerify: true
 {% endif %}
- 

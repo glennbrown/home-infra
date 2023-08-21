@@ -1,7 +1,9 @@
 ---
 
 traefik_file_provider: false
+traefik_docker_provider: false
 traefik_enable_dashboard: false
 traefik_insecure_transport: false
 traefik_exposed_by_default: false
 traefik_enable_proxmox: false
+traefik_debug_log: false
