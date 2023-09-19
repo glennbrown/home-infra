@@ -98,4 +98,25 @@ containers:
       - '"traefik.http.routers.overseerr.tls.certresolver=default"'
       - '"traekik.http.routers.overseerr.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traekik.http.routers.overseerr.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+  ###
+  - service_name: freshrss
+    active: true
+    image: freshrss/freshrss:arm
+    container_name: freshrss
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - CRON_MIN=1,31
+    volumes:
+      - "{{ appdata_path }}/freshrss/data:/var/www/FreshRSS/data"
+      - "{{ appdata_path }}/freshrss/extensions:/var/www/FreshRSS/extensions"
+    network_mode: bridge
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.freshrss.rule=Host(`freshrss.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.freshrss.entrypoints=websecure"'
+      - '"traefik.http.routers.freshrss.tls.certresolver=default"'
+      - '"traekik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traekik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   

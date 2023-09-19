@@ -27,6 +27,7 @@ package_list:
   - name: apt-file
   - name: aptitude
   - name: bash-completion
+  - name: bc
   - name: command-not-found
   - name: curl
   - name: dialog
