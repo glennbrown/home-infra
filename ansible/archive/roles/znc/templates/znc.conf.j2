@@ -4,7 +4,7 @@
 LoadModule = {{ module }}
 {% endfor %}
 MaxBufferSize = {{ znc_max_buffer_size }}
-SSLCertFile = {{ znc_container_cert }}
+SSLCertFile = {{ znc_ssl_certfile }}
 Skin = {{ znc_skin | default(_default_) }}
 Version = {{ znc_version }}
 

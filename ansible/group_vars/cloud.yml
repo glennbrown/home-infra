@@ -26,10 +26,100 @@ security_ssh_port: "{{ cloud_ssh_port }}"
 security_sudoers_passwordless:
  - "{{ main_username }}"
 
+# znc
+znc_user: 'gbrown'
+znc_group: 'gbrown'
+znc_config_root: "/home/gbrown/appdata/znc"
+znc_skin: 'dark-clouds'
+znc_users:
+  - name: gbrown
+    password:
+      method: 'sha256'
+      hash: "{{ znc_gbrown_hash }}"
+      salt: "{{ znc_gbrown_salt }}"
+    nick: glenn
+    altnick: 'glenn|znc'
+    realname: 'Glenn'
+    admin: true
+    allow: "*"
+    autoclearchanbuffer: false
+    autoclearquerybuffer: false
+    networks:
+      arstechnica:
+        server: irc.arstechnica.com
+        port: 6697
+        ssl: true
+        channels:
+          - "#linux"
+          - "#macintosh"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+          - nickserv
+          - savebuff
+      dalnet:
+        server: choopa.nj.us.dal.net
+        port: 6697
+        ssl: true
+        nick: glennb
+        altnick: "glennb|znc"
+        channels:
+          - "#macintosh"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+          - nickserv
+          - savebuff
+      libera:
+        server: irc.libera.chat
+        port: 6697
+        ssl: true
+        nick: GlennB
+        altnick: 'GlennB|znc'
+        channels:
+          - "#atpfm"
+          - "#reddit-sysadmin"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+          - nickserv
+          - savebuff
+          - sasl
+      btn:
+        server: irc.broadcasthe.net
+        port: 6697
+        ssl: true
+        nick: evane7911
+        altnick: "evane7911|znc"
+        channels:
+          - "#BTN"
+          - "#BTN-Announce"
+          - "#BTN-Sport"
+          - "#BTN-Mafia"
+          - "#Coders"
+          - "#Linux"
+        modules:
+          - route_replies
+          - keepnick
+          - clientbuffer
+          - nickserv
+          - savebuff
+    modules:
+      - chansaver
+      - controlpanel
+      - webadmin
+      - log
+      - logsearch
+
 # traefik
+traefik_debug_log: true
+traefik_enable_dashboard: true
 traefik_docker_provider: true
 traefik_insecure_transport: true
-traefik_dns_propagationcheck: true
+traefik_irc_entrypoint: true
 traefik_domains:
   - name: ikgb.me
   - name: glennbrown.org
@@ -61,8 +151,19 @@ containers:
     ports:
       - 80:80
       - 443:443
+      - 7000:7000
     network_mode: bridge
     restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.dashboard.rule=Host(`traefik.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.dashboard.entrypoints=websecure"'
+      - '"traefik.http.routers.dashboard.service=api@internal"'
+      - '"traefik.http.routers.dashboard.middlewares=auth"'
+      - '"traefik.http.routers.dashboard.tls.certresolver=default"'
+      - '"traefik.http.routers.dashboard.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.http.routers.dashboard.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+      - '"traefik.http.middlewares.auth.basicauth.users={{ traefik_dashboard_auth }}"'
   ###
   - service_name: whoami
     active: false
@@ -117,6 +218,33 @@ containers:
       - '"traefik.http.routers.freshrss.rule=Host(`freshrss.{{ public_domain_1 }}`)"'
       - '"traefik.http.routers.freshrss.entrypoints=websecure"'
       - '"traefik.http.routers.freshrss.tls.certresolver=default"'
-      - '"traekik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
-      - '"traekik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-  
+      - '"traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+  ###
+  - service_name: znc
+    active: true
+    image: znc
+    container_name: znc
+    user: "{{ main_uid }}:{{ main_gid }}"
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - "{{ appdata_path }}/znc:/znc-data"
+    network_mode: bridge
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.zncweb.rule=Host(`znc.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.zncweb.entrypoints=websecure"'
+      - '"traefik.http.routers.zncweb.tls.certresolver=default"'
+      - '"traefik.http.routers.zncweb.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.http.routers.zncweb.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+      - '"traefik.http.services.zncweb.loadbalancer.server.port=6501"'
+      - '"traefik.tcp.routers.zncirc.rule=HostSNI(`znc.{{ public_domain_1 }}`)"'
+      - '"traefik.tcp.routers.zncirc.entrypoints=irc"'
+      - '"traefik.tcp.routers.zncirc.tls=true"'
+      - '"traefik.tcp.routers.zncirc.tls.certresolver=default"'
+      - '"traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+      - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'

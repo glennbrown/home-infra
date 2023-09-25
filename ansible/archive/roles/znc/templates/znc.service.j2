@@ -1,0 +1,18 @@
+[Unit]
+Description=ZNC, an advanced IRC bouncer
+Documentation=man:znc(1)
+After=network-online.target
+
+[Service]
+Environment=TZ=UTC
+ExecStart=/usr/bin/znc -f --datadir={{ znc_config_root }}
+User={{ znc_user }}
+PrivateTmp=true
+NonBlocking=yes
+ProtectSystem=full
+ProtectHome=no
+PrivateDevices=true
+LimitNOFILE=1024
+
+[Install]
+WantedBy=multi-user.target

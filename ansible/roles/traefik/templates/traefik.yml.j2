@@ -18,6 +18,10 @@ entryPoints:
           - main: "{{ domain.name }}"
             sans: "*.{{domain.name }}"
 {% endfor %}
+{% if traefik_irc_entrypoint %}
+  irc:
+    address: :7000
+{% endif %}
 
 ping: {}
 

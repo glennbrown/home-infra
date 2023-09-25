@@ -21,6 +21,15 @@
     owner: "{{ znc_user }}"
     group: "{{ znc_group }}"
     mode: 0700
+
+# Create self signed cert, but this will get replaced
+- name: create self signed cert
+  ansible.builtin.command: /usr/bin/znc -d {{ znc_config_root}} --makepem
+  args:
+    creates: "{{ znc_config_root }}/znc.pem"
+  become: true
+  become_user: "{{ znc_user }}"
+  when: not znc_sslcert_status.stat.exists
   
 - name: copy znc configuration file
   ansible.builtin.template:
@@ -31,12 +40,12 @@
     mode: 0600
   notify: restart znc
 
-# Clientbuffer needs UTC timezone for playback to work right
-- name: clientbuffer timezone fix
-  ansible.builtin.lineinfile:
-    path: /lib/systemd/system/znc.service
-    insertafter: '\[Service\]'
-    line: 'Environment=TZ=UTC'
+# Replace stock znc service unit file
+- name: znc systemd unit file
+  ansible.builtin.template:
+    src: znc.service.j2
+    dest: /lib/systemd/system/znc.service
+    mode: 0644
   notify: restart znc
 
 - name: enable systemd service

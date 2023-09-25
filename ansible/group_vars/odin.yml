@@ -193,6 +193,8 @@ containers:
       - 80:80
       - 443:443
     network_mode: bridge
+    extra_hosts:
+      - '"host.docker.internal:172.17.0.1"'
     restart: unless-stopped
     labels:
       - '"traefik.http.routers.dashboard.rule=Host(`traefik.o.{{ local_domain }}`)"'
@@ -263,8 +265,8 @@ containers:
     labels:
       - '"traefik.http.routers.overseerr.rule=Host(`overseerr.o.{{ local_domain }}`)"'
   ###
-  - service_name: jellyfin
-    active: true
+  - service_name: jellyfin-lsio
+    active: false
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
     include_global_env_vars: true
@@ -278,6 +280,36 @@ containers:
       - /dev/dri:/dev/dri
     network_mode: bridge
     restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.jellyfin.rule=Host(`jellyfin.o.{{ local_domain }}`)"'
+      - '"traefik.http.routers.jellyfin.entrypoints=websecure"'
+      - '"traefik.http.routers.jellyfin.tls.certresolver=default"'
+      - '"traefik.http.routers.jellyfin.tls.domains[0].main={{ ansible_hostname[0] }}.{{ local_domain }}"'
+      - '"traefik.http.routers.jellyfin.tls.domains[0].sans=*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
+      - '"traefik.http.services.jellyfin.loadbalancer.server.port=8096"'
+  ###
+  - service_name: jellyfin
+    active: true
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    user: 99:100
+    environment:
+      - TZ={{ ntp_timezone }}
+      - "JELLYFIN_PublishedServerUrl=https://jellyfin.o.{{ local_domain }}"
+    volumes:
+      - "{{ appdata_path }}/jellyfin/config:/config"
+      - "{{ appdata_path }}/jellyfin/cache:/cache"
+      - "{{ storage_path }}/TV Shows:/media/tv:ro"
+      - "{{ storage_path }}/Movies:/media/movies:ro"
+    tmpfs:
+      - /transcode:size=32G,mode=0777
+    devices:
+      - /dev/dri:/dev/dri
+    network_mode: host
+    restart: unless-stopped
+    extra_hosts:
+      - '"host.docker.internal:host-gateway"'
     labels:
       - '"traefik.enable=true"'
       - '"traefik.http.routers.jellyfin.rule=Host(`jellyfin.o.{{ local_domain }}`)"'
