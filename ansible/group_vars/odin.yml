@@ -115,7 +115,7 @@ snapraid_config_excludes:
 
 # tigattack.mergerfs
 mergerfs_install_mode: github_releases
-mergerfs_version: latest
+mergerfs_version: 2.37.1
 mergerfs_mounts:
   - path: /mnt/storage
     branches: 

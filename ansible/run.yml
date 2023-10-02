@@ -130,7 +130,7 @@
     - role: ocagent
     - role: traefik
       tags: compose
-    - role: znc
-      tags: compose
+    #- role: znc
+    #  tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose

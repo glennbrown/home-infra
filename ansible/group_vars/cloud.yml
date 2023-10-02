@@ -115,11 +115,10 @@ znc_users:
       - logsearch
 
 # traefik
-traefik_debug_log: true
+#traefik_debug_log: true
 traefik_enable_dashboard: true
 traefik_docker_provider: true
 traefik_insecure_transport: true
-traefik_irc_entrypoint: true
 traefik_domains:
   - name: ikgb.me
   - name: glennbrown.org
@@ -222,13 +221,13 @@ containers:
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   ###
   - service_name: znc
-    active: true
+    active: false
     image: znc
     container_name: znc
     user: "{{ main_uid }}:{{ main_gid }}"
     include_global_env_vars: false
     environment:
-      - TZ={{ ntp_timezone }}
+      - TZ=UTC
     volumes:
       - "{{ appdata_path }}/znc:/znc-data"
     network_mode: bridge
