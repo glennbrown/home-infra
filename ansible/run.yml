@@ -2,10 +2,11 @@
 
 # Basic Server setup
 - name: Basic server setup
-  hosts: systems
+  hosts: all
   tags: [setup, init]
   vars_files:
     - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
   
   pre_tasks:
     - name: Change hostname
@@ -50,7 +51,8 @@
   hosts: docker
   tags: [init, docker]
   vars_files:
-    'vars/vault.yml'
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
   roles:
     - role: geerlingguy.docker
 
@@ -67,6 +69,7 @@
   hosts: odin
   vars_files:
     - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
   roles:
     - role: htop
     - role: ironicbadger.bash_aliases
@@ -87,15 +90,18 @@
 
 # Configure caddy
 # Debian
-- name: Configure caddy
-  hosts: caddy
-  vars_files:
-    - 'vars/vault.yml' 
-  roles:
-    - role: ironicbadger.bash_aliases
-    - role: ironicbadger.figurine
-    - role: caddy
-      tags: caddy
+#- name: Configure caddy
+#  hosts: caddy
+#  
+#  vars_files:
+#    - 'vars/vault.yml'
+#    - 'vars/secrets_lookup.yml'
+#  
+#  roles:
+#    - role: ironicbadger.bash_aliases
+#    - role: ironicbadger.figurine
+#    - role: caddy
+#      tags: caddy
 
 # Configure thor
 # Debian        
@@ -103,25 +109,24 @@
   hosts: thor
   vars_files:
     - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
   roles:
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
-    #- role: znc
-    #  tags: znc
-    #- role: nickjj.acme_sh
-    #  tags: znc, ssl
 
 # Configure Loki
 #- name: Configure loki
 #  hosts: loki
 #  vars_files:
 #    - 'vars/vault.yml'
+#    - 'vars/secrets_lookup.yml'
 #  roles:
 
 - name: Configure cloud server
   hosts: cloud
   vars_files:
-    'vars/vault.yml'
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
   roles:
     - role: geerlingguy.security
     - role: artis3n.tailscale

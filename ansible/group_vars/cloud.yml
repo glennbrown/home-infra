@@ -5,6 +5,9 @@ ntp_daemon: ntp
 ntp_package: ntp
 ntp_timezone: "America/New_York"
 
+#Tailscale
+tailscale_args: "--accept-routes"
+
 bash_aliases:
   - { alias: "dtail", command: "docker logs -tf --tail='50' " }
   - { alias: "dstop", command: "docker stop `docker ps -aq`" }
