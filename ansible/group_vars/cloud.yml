@@ -122,9 +122,22 @@ znc_users:
 traefik_enable_dashboard: true
 traefik_docker_provider: true
 traefik_insecure_transport: true
-traefik_domains:
-  - name: ikgb.me
-  - name: glennbrown.org
+traefik_irc_entrypoint: true
+traefik_domains: 
+  - name: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37313064363037626437636366366638623463373662376366323239356536343832623138643737
+          6538656136626464346364343237626164313062386234390a383939346238646637376130623933
+          63343666373461373563346131373732626639376132636266323035613933326166626432633731
+          3034656534623730380a623865623864353438656632633632633636653133383933316436643961
+          6266
+  - name: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61323934343732636265653938383865373832346162346465336635636638623433653763633830
+          6138633138663134393830636131623935643334356539660a633865343131616638633934323066
+          63633039366230663861326130643938366232376665363538376639643737653731363662363563
+          3363646364613662640a336663306437623331383734393538306636353037363430383432346663
+          3865
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -224,7 +237,7 @@ containers:
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   ###
   - service_name: znc
-    active: false
+    active: true
     image: znc
     container_name: znc
     user: "{{ main_uid }}:{{ main_gid }}"
@@ -250,3 +263,19 @@ containers:
       - '"traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"'
       - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'
+  ###
+  - service_name: watchtower
+    active: true
+    image: containrrr/watchtower
+    container_name: watchtower
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - WATCHTOWER_SCHEDULE=0 0 2 * * MON
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      - WATCHTOWER_NOTIFICATION_URL={{ watchtower_email_alert }}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: bridge
+    restart: unless-stopped

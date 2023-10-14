@@ -71,7 +71,7 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-    - role: htop
+    - role: install/htop
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: odin
@@ -83,7 +83,7 @@
       tags: prom
     - role: custom_prometheus
       tags: prom
-    - role: traefik
+    - role: install/traefik_docker
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
@@ -132,10 +132,10 @@
     - role: artis3n.tailscale
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
-    - role: ocagent
-    - role: traefik
+    - role: install/ocagent
+    - role: install/traefik_docker
       tags: compose
-    #- role: znc
-    #  tags: compose
+    - role: install/znc_docker
+      tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
