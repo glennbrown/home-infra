@@ -1,5 +1,8 @@
 ---
 
+# Default ssh port to use
+ansible_ssh_port: "{{ cloud_ssh_port }}"
+
 # geerlingguy.ntp
 ntp_daemon: ntp
 ntp_package: ntp
@@ -59,57 +62,8 @@ znc_users:
           - route_replies
           - keepnick
           - clientbuffer
-          - nickserv
-          - savebuff
-      dalnet:
-        server: choopa.nj.us.dal.net
-        port: 6697
-        ssl: true
-        nick: glennb
-        altnick: "glennb|znc"
-        channels:
-          - "#macintosh"
-        modules:
-          - route_replies
-          - keepnick
-          - clientbuffer
-          - nickserv
-          - savebuff
-      libera:
-        server: irc.libera.chat
-        port: 6697
-        ssl: true
-        nick: GlennB
-        altnick: 'GlennB|znc'
-        channels:
-          - "#atpfm"
-          - "#reddit-sysadmin"
-        modules:
-          - route_replies
-          - keepnick
-          - clientbuffer
-          - nickserv
           - savebuff
           - sasl
-      btn:
-        server: irc.broadcasthe.net
-        port: 6697
-        ssl: true
-        nick: evane7911
-        altnick: "evane7911|znc"
-        channels:
-          - "#BTN"
-          - "#BTN-Announce"
-          - "#BTN-Sport"
-          - "#BTN-Mafia"
-          - "#Coders"
-          - "#Linux"
-        modules:
-          - route_replies
-          - keepnick
-          - clientbuffer
-          - nickserv
-          - savebuff
     modules:
       - chansaver
       - controlpanel
@@ -180,21 +134,6 @@ containers:
       - '"traefik.http.routers.dashboard.tls.domains[0].sans=*.{{ public_domain_1 }}"'
       - '"traefik.http.middlewares.auth.basicauth.users={{ traefik_dashboard_auth }}"'
   ###
-  - service_name: whoami
-    active: false
-    image: traefik/whoami
-    container_name: simple-service
-    include_global_env_vars: false
-    network_mode: bridge
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.whoami.rule=Host(`whoami.{{ public_domain_1 }}`)"'
-      - '"traefik.http.routers.whoami.entrypoints=websecure"'
-      - '"traefik.http.routers.whoami.tls.certresolver=default"'
-      - '"traekik.http.routers.whoami.tls.domains[0].main={{ public_domain_1 }}"'
-      - '"traekik.http.routers.whoami.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-  ###
   - service_name: overseerr
     active: true
     image: sctx/overseerr:latest
@@ -243,7 +182,7 @@ containers:
     user: "{{ main_uid }}:{{ main_gid }}"
     include_global_env_vars: false
     environment:
-      - TZ=UTC
+      - TZ={{ ntp_timezone }}
     volumes:
       - "{{ appdata_path }}/znc:/znc-data"
     network_mode: bridge

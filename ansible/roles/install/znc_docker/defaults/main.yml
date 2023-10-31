@@ -15,8 +15,8 @@ znc_listener:
   - {name: irc, ipv4: true, ipv6: false, port: 6502, irc: true, web: false, ssl: false}
   - {name: web, ipv4: true, ipv6: false, port: 6501, irc: false, web: true, ssl: false}
 
+znc_ssl_enable: false
 znc_ssl_certfile: "{{ znc_config_root }}/znc.pem"
-znc_container_cert: '/znc-data/znc.pem'
 znc_global_modules:
   - webadmin
   - palaver

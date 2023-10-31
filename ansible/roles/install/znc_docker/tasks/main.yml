@@ -12,7 +12,8 @@
     owner: "{{ znc_user }}"
     group: "{{ znc_group }}"
     mode: 0700
-# Create self signed cert, but this will get replaced
+
+# Create self signed cert
 - name: create self signed cert
   ansible.builtin.command: docker run --rm --user "{{ main_uid }}:{{ main_gid }}" -v {{ znc_config_root }}:/znc-data znc:slim --makepem
   args:

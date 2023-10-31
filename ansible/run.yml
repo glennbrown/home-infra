@@ -123,7 +123,7 @@
 #  roles:
 
 - name: Configure cloud server
-  hosts: cloud
+  hosts: celtic
   vars_files:
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
@@ -133,9 +133,9 @@
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: install/ocagent
-    - role: install/traefik_docker
-      tags: compose
     - role: install/znc_docker
+      tags: compose
+    - role: install/traefik_docker
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
