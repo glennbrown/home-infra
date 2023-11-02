@@ -133,8 +133,6 @@
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: install/ocagent
-    - role: install/znc_docker
-      tags: compose
     - role: install/traefik_docker
       tags: compose
     - role: ironicbadger.docker_compose_generator
