@@ -5,3 +5,6 @@ Description=Collect apt metrics for node-exporter
 Type=oneshot
 Environment="TMPDIR={{ node_exporter_textfile_dir }}"
 ExecStart=/bin/bash -c "{{ node_exporter_collector_install_dir }}/apt_info.py | sponge {{ node_exporter_textfile_dir }}/apt.prom"
+
+[Install]
+WantedBy=multi-user.target

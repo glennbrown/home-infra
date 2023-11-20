@@ -1,0 +1,11 @@
+[Unit]
+Description=Run NVMe metrics collection
+ConditionPathExists=/usr/sbin/nvme
+ConditionPathExistsGlob=/dev/nvme*
+
+[Timer]
+OnBootSec=0
+OnUnitActiveSec={{ node_exporter_collector_interval }}
+
+[Install]
+WantedBy=timers.target

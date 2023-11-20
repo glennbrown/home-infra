@@ -5,3 +5,6 @@ Description=Collect NVMe metrics for node-exporter
 Type=oneshot
 Environment="TMPDIR={{ node_exporter_textfile_dir }}"
 ExecStart=/bin/sh -c "{{ node_exporter_collector_install_dir }}/nvme_metrics.sh | sponge {{ node_exporter_textfile_dir }}/nvme.prom"
+
+[Install]
+WantedBy=multi-user.target

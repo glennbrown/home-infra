@@ -265,30 +265,6 @@ containers:
     labels:
       - '"traefik.http.routers.overseerr.rule=Host(`overseerr.o.{{ local_domain }}`)"'
   ###
-  - service_name: jellyfin-lsio
-    active: false
-    image: lscr.io/linuxserver/jellyfin:latest
-    container_name: jellyfin
-    include_global_env_vars: true
-    environment:
-      - "JELLYFIN_PublishedServerUrl=jellyfin.o.{{ local_domain }}"
-    volumes:
-      - "{{ appdata_path }}/jellyfin:{{ container_config_path }}"
-      - "{{ storage_path }}/TV Shows:/data/tv:ro"
-      - "{{ storage_path }}/Movies:/data/movies:ro"
-    devices:
-      - /dev/dri:/dev/dri
-    network_mode: bridge
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.jellyfin.rule=Host(`jellyfin.o.{{ local_domain }}`)"'
-      - '"traefik.http.routers.jellyfin.entrypoints=websecure"'
-      - '"traefik.http.routers.jellyfin.tls.certresolver=default"'
-      - '"traefik.http.routers.jellyfin.tls.domains[0].main={{ ansible_hostname[0] }}.{{ local_domain }}"'
-      - '"traefik.http.routers.jellyfin.tls.domains[0].sans=*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
-      - '"traefik.http.services.jellyfin.loadbalancer.server.port=8096"'
-  ###
   - service_name: jellyfin
     active: true
     image: jellyfin/jellyfin
@@ -631,6 +607,18 @@ containers:
       - '"traefik.http.routers.librespeed.tls.certresolver=default"'
       - '"traefik.http.routers.librespeed.tls.domains[0].main={{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.routers.librespeed.tls.domains[0].sans=*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
+  ###
+  - service_name: cloudflare-ddns
+    active: true
+    image: timothyjmiller/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    security_opt:
+      - no-new-privileges:true
+    include_global_env_vars: true
+    volumes:
+      - "{{ appdata_path }}/cloudflare-ddns/config.json:/config.json"
+    network_mode: host
+    restart: unless-stopped
   ###
   - service_name: watchtower
     active: true

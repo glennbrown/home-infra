@@ -56,15 +56,16 @@
   roles:
     - role: geerlingguy.docker
 
+# Configure proxmox hosts
 - name: Configure Proxmox
   hosts: proxmox
   vars_files:
     - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
   roles:
     - role: ironicbadger.proxmox_nag_removal
 
 # Configure primary server
-# Proxmox
 - name: Configure odin
   hosts: odin
   vars_files:
@@ -81,7 +82,7 @@
     - role: geerlingguy.nfs
     - role: prometheus.prometheus.node_exporter
       tags: prom
-    - role: custom_prometheus
+    - role: install/node_exporter_collectors
       tags: prom
     - role: install/traefik_docker
       tags: compose
@@ -89,7 +90,6 @@
       tags: compose
 
 # Configure caddy
-# Debian
 #- name: Configure caddy
 #  hosts: caddy
 #  
@@ -103,8 +103,7 @@
 #    - role: caddy
 #      tags: caddy
 
-# Configure thor
-# Debian        
+# Configure thor     
 - name: Configure thor
   hosts: thor
   vars_files:
@@ -122,7 +121,7 @@
 #    - 'vars/secrets_lookup.yml'
 #  roles:
 
-- name: Configure cloud server
+- name: Configure celtic
   hosts: celtic
   vars_files:
     - 'vars/vault.yml'
