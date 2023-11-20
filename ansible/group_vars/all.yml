@@ -107,7 +107,7 @@ htop_users:
 
 # prometheus.prometheus.node_exporter
 node_exporter_textfile_dir: /var/lib/node-exporter
-node_exporter_version: 1.6.0
+node_exporter_version: 1.7.0
 node_exporter_system_group: prometheus
 node_exporter_system_user: prometheus
 

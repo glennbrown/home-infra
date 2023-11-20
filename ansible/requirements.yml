@@ -16,11 +16,9 @@ roles:
 
   # Jeff Geerling's Roles
   - src: geerlingguy.docker
-    version: 6.1.0
-  - src: geerlingguy.docker_arm
-    version: 5.0.0
+    version: 7.0.2
   - src: geerlingguy.ntp
-    version: 2.3.1
+    version: 2.3.3
   - src: geerlingguy.nfs
     version: 2.0.0
   - src: geerlingguy.security
@@ -36,10 +34,6 @@ roles:
   - src: grog.authorized-key
     version: v1.1.5
 
-  # Install Oh-my-zsh
-  - src: gantsign.oh-my-zsh
-    version: 2.7.0
-
   # MergerFS
   - src: tigattack.mergerfs
     version: 1.1.0
@@ -50,13 +44,15 @@ roles:
 
   # Taiscale
   - src: artis3n.tailscale
-    version: v4.2.2
+    version: v4.2.3
   
   # Openwrt
-  - src: gekmihesg.openwrt
+  - src: https://github.com/gekmihesg/ansible-openwrt
+    name: gekmihesg.openwrt
+    scm: git
 
 collections:
   - name: prometheus.prometheus
-    version: 0.3.1
+    version: 0.8.1
   - name: community.general
-    version: 6.5.0
+    version: 8.0.2

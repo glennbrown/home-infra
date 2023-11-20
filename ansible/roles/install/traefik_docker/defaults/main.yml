@@ -7,4 +7,3 @@ traefik_insecure_transport: false
 traefik_exposed_by_default: false
 traefik_enable_proxmox: false
 traefik_debug_log: false
-traefik_irc_entrypoint: false

@@ -16,12 +16,8 @@ entryPoints:
         domains:
 {% for domain in traefik_domains %}
           - main: "{{ domain.name }}"
-            sans: "*.{{domain.name }}"
+            sans: "{{ domain.sans }}"
 {% endfor %}
-{% if traefik_irc_entrypoint %}
-  irc:
-    address: :7000
-{% endif %}
 
 ping: {}
 
