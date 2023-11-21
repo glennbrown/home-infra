@@ -15,6 +15,7 @@ Role Variables
 ***Define these variables in group_vars or host_vars***
 
 If you are using Global API Key
+
     certbot_cloudflare_email: "cloudflare@example.com"
     certbot_cloudflare_api_key: ''
 
