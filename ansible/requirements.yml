@@ -23,6 +23,8 @@ roles:
     version: 2.0.0
   - src: geerlingguy.security
     version: 2.2.0
+  - src: geerlingguy.certbot
+    version: 5.1.0
 
   # Grog Roles
   - src: grog.package
