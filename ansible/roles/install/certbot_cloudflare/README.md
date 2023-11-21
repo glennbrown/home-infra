@@ -20,6 +20,7 @@ If you are using Global API Key
     certbot_cloudflare_api_key: ''
 
 If you are using API token which currently only works with Snap version
+
     certbot_cloudflare_api_token: ''
 
 ***Secrets should be stored in Ansible Vault or some other secrets management platform, do not commit secrets plain text!***
