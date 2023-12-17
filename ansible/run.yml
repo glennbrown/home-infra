@@ -59,6 +59,7 @@
 # Configure proxmox hosts
 - name: Configure Proxmox
   hosts: proxmox
+  tags: ['proxmox']
   vars_files:
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
