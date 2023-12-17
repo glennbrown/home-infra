@@ -1,0 +1,10 @@
+---
+
+- name: userScripts | git clone userScripts repoistory
+  ansible.builtin.git:
+    repo: https://github.com/Drazzilb08/userScripts.git
+    dest: /opt/userScripts
+  
+- name: userScripts | copy backup-plex config
+  ansible.builtin.template:
+    

@@ -121,6 +121,15 @@
 #    - 'vars/secrets_lookup.yml'
 #  roles:
 
+# Testing certbot role    
+- name: Testing Server
+  hosts: test
+  vars_files:
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
+  roles:
+    - role: install/certbot_cloudflare
+
 - name: Configure celtic
   hosts: celtic
   vars_files:

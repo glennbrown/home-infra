@@ -136,7 +136,8 @@ traefik_enable_dashboard: true
 traefik_insecure_transport: true
 traefik_exposed_by_default: true
 traefik_docker_provider: true
-traefik_file_provider: true
+traefik_file_providers:
+  - name: 'proxmox-rules.yml'
 traefik_domains:
   - name: "{{ local_domain }}"
     sans: "*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"

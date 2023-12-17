@@ -1,0 +1,26 @@
+---
+
+certbot_create_command: "{{ certbot_script }} certonly --noninteractive --dns-cloudflare --dns-cloudflare-propagation-seconds 60 --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
+certbot_create_method: standalone
+certbot_create_if_missing: true
+certbot_create_standalone_stop_services: []
+certbot_testmode: true
+
+certbot_install_method: package
+#certbot_cloudlare_api_token: "{{ cloudflare_acme_api_token }}"
+certbot_cloudflare_api_key: "{{ cloudflare_global_api_key }}"
+certbot_cloudflare_email: "{{ cloudflare_account_email }}"
+certbot_certs:
+  - email: "{{ certbot_cloudflare_email }}"
+    domains:
+      - "{{ local_domain }}"
+      - "*.{{ local_domain }}"
+      - "*.o.{{ local_domain }}"
+  - email: "{{ certbot_cloudflare_email }}"
+    domains:
+      - "{{ public_domain_1 }}"
+      - "*.{{ public_domain_1 }}"
+  - email: "{{ certbot_cloudflare_email }}"
+    domains:
+      - "{{ public_domain_2 }}"
+      - "*.{{ public_domain_2 }}"

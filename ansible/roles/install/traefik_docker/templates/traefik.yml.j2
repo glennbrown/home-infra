@@ -28,9 +28,10 @@ providers:
     watch: true
     exposedByDefault: {{ traefik_exposed_by_default | lower }}
 {% endif %}
-{% if traefik_file_provider %}
+{% if traefik_file_providers %}
   file:
-    filename: /etc/traefik/rules.yml
+    directory: /etc/traefik/rules
+    watch: true
 {% endif %}
 
 {% if traefik_enable_dashboard %}

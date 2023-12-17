@@ -1,6 +1,6 @@
 ---
 
-- name: traefik | ensure config directory exists
+- name: Ensure config directory exists
   ansible.builtin.file:
     dest: "{{ appdata_path }}/traefik"
     state: directory
@@ -8,12 +8,12 @@
     group: users
     mode: 0775
 
-- name: traefik | check if acme file exists already
+- name: Check if acme file exists already
   ansible.builtin.stat:
     path: "{{ appdata_path }}/traefik/acme.json"
   register: acme_json_file
 
-- name: traefik | ensure acme file exists
+- name: Ensure acme file exists
   ansible.builtin.file:
     dest: "{{ appdata_path }}/traefik/acme.json"
     state: touch
@@ -22,7 +22,7 @@
     mode: 0600
   when: not acme_json_file.stat.exists
 
-- name: traefik | copy traefik config file from template
+- name: Copy traefik config file from template
   ansible.builtin.template:
     src: traefik.yml.j2
     dest: "{{ appdata_path }}/traefik/traefik.yml"
@@ -31,12 +31,23 @@
     mode: 0664
   tags: traefik
 
-- name: traefik | copy traefik file provider rules
+- name: Create traefik file provider directory
+  ansible.builtin.file:
+    dest: "{{ appdata_path }}/traefik/rules"
+    state: directory
+    owner: root
+    group: users
+    mode: 0775
+  tags: traefik
+  when: traefik_file_providers
+
+- name: Copy traefik file provider rules
   ansible.builtin.template:
-    src: "{{ ansible_hostname }}-rules.yml.j2"
-    dest: "{{ appdata_path }}/traefik/rules.yml"
+    src: "{{ item.name }}.j2"
+    dest: "{{ appdata_path }}/traefik/rules/{{ item.name }}"
     owner: root
     group: users
     mode: 0664
+  loop: "{{ traefik_file_providers }}"
   tags: traefik
-  when: traefik_file_provider
+  when: traefik_file_providers
