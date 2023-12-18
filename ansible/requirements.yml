@@ -30,7 +30,7 @@ roles:
   - src: grog.package
     version: v1.3.1
   - src: grog.user
-    version: v1.3.0
+    version: v1.3.1
   - src: grog.group
     version: v1.1.2
   - src: grog.authorized-key
@@ -38,7 +38,7 @@ roles:
 
   # MergerFS
   - src: tigattack.mergerfs
-    version: 1.1.0
+    version: 1.2.0
 
   # Managing acme.sh 
   - src: nickjj.acme_sh
@@ -55,6 +55,4 @@ roles:
 
 collections:
   - name: prometheus.prometheus
-    version: 0.8.1
-  - name: community.general
-    version: 8.0.2
+    version: 0.10.0
