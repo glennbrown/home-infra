@@ -22,70 +22,7 @@ bash_aliases:
 ntp_timezone: America/New_York
 
 # grog.package
-package_update_cache: yes
-package_list:
-  - name: apt-file
-  - name: aptitude
-  - name: bash-completion
-  - name: bc
-  - name: command-not-found
-  - name: curl
-  - name: dialog
-  - name: dnsutils
-  - name: git
-  - name: gnupg2
-  - name: gawk
-  - name: htop
-  - name: iotop
-  - name: iftop
-  - name: jq
-  - name: mc
-  - name: ncdu
-  - name: neofetch
-  - name: net-tools
-  - name: openssh-server
-  - name: python3
-  - name: python3-apt
-    yum_ignore: yes
-  - name: python3-pip
-  - name: python3-setuptools
-  - name: pv
-  - name: tmux
-  - name: wget
-  - name: screen
-  - name: sudo
-  - name: tree 
-  - name: unzip
-  - name: p7zip-full
-  - name: p7zip-rar
-  - name: vim
-    yum: vim-enhanced
-    apt: vim
-  - name: zip
-
-# grog.group
-group_list:
-  - { name: gbrown, gid: 1000, state: present }
-
-# grog.user
-user_list:
-  - name: gbrown
-    uid: 1000
-    group: gbrown
-    groups:
-      - adm
-      - sudo
-      - users
-      - cdrom
-      - dip
-      - plugdev
-      - video
-    append: yes
-    password: "{{ secret_gbrown_pass }}"
-    move_home: yes
-    shell: /bin/bash
-    comment: "Glenn Brown"
-    state: present
+package_update_cache: true
 
 # grog.authorized-key
 authorized_key_list:

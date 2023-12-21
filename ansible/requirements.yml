@@ -27,8 +27,9 @@ roles:
     version: 5.1.0
 
   # Grog Roles
-  - src: grog.package
-    version: v1.3.1
+  - src: https://github.com/glennbrown/ansible-role-package.git
+    name: grog.package
+    scm: git
   - src: grog.user
     version: v1.3.1
   - src: grog.group
@@ -44,7 +45,7 @@ roles:
   - src: nickjj.acme_sh
     version: v1.1.0
 
-  # Taiscale
+  # Tailscale
   - src: artis3n.tailscale
     version: v4.2.3
   
