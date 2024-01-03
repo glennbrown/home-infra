@@ -1,0 +1,6 @@
+---
+
+- name: restart coredns
+  shell:
+    chdir: "{{ coredns_config_dir }}"
+    cmd: "{{ coredns_update_command }}"

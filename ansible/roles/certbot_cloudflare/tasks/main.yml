@@ -55,3 +55,9 @@
 
 - include_role:
     name: geerlingguy.certbot
+    tasks_from: create-cert-standalone.yml
+  with_items: "{{ certbot_certs }}"
+  when:
+    - certbot_create_if_missing
+  loop_control:
+    loop_var: cert_item

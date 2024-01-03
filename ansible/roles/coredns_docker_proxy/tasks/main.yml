@@ -1,0 +1,36 @@
+---
+
+- name: Create Docker network
+  docker_network:
+    name: coredns
+    internal: true
+  become: true
+
+- name: Create configuration directory
+  file:
+    path: "{{ coredns_config_dir }}"
+    state: directory
+    owner: root
+    group: users
+    mode: 0775
+  become: true
+
+- name: Copy coredns configuration file
+  copy:
+    src: Corefile
+    dest: "{{ coredns_config_dir }}/Corefile"
+    owner: root
+    group: users
+    mode: 0664
+  become: true
+
+- name: Copy compose configuration file
+  template:
+    src: files/docker-compose.yml.j2
+    dest: "{{ coredns_config_dir }}/docker-compose.yml"
+    owner: root
+    group: users
+    mode: 0664
+    validate: docker compose -f %s config
+  notify: restart coredns
+  become: true

@@ -73,7 +73,7 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-    - role: install/htop
+    - role: htop
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: odin
@@ -83,9 +83,9 @@
     - role: geerlingguy.nfs
     - role: prometheus.prometheus.node_exporter
       tags: prom
-    - role: install/node_exporter_collectors
+    - role: node_exporter_collectors
       tags: prom
-    - role: install/traefik_docker
+    - role: traefik_docker
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
@@ -122,14 +122,20 @@
 #    - 'vars/secrets_lookup.yml'
 #  roles:
 
-# Testing certbot role    
-#- name: Testing Server
-#  hosts: test
-#  vars_files:
-#    - 'vars/vault.yml'
-#    - 'vars/secrets_lookup.yml'
-#  roles:
-#    - role: grog.package
+# Debian Testing Server
+- name: Debian Testing Server
+  hosts: test
+  vars_files:
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
+  roles:
+    - role: certbot_cloudflare
+    #- role: traefik_docker
+    #  tags: compose
+    - role: coredns_docker_proxy
+      tags: compose
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
 - name: Configure celtic
   hosts: celtic
@@ -141,8 +147,8 @@
     - role: artis3n.tailscale
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
-    - role: install/ocagent
-    - role: install/traefik_docker
+    - role: ocagent
+    - role: traefik_docker
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose

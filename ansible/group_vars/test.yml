@@ -6,21 +6,58 @@ certbot_create_if_missing: true
 certbot_create_standalone_stop_services: []
 certbot_testmode: true
 
-certbot_install_method: package
-#certbot_cloudlare_api_token: "{{ cloudflare_acme_api_token }}"
-certbot_cloudflare_api_key: "{{ cloudflare_global_api_key }}"
-certbot_cloudflare_email: "{{ cloudflare_account_email }}"
+certbot_install_method: snap
+certbot_admin_email: "{{ cloudflare_account_email }}"
+certbot_cloudlare_api_token: "{{ cloudflare_acme_api_token }}"
+#certbot_cloudflare_api_key: "{{ cloudflare_global_api_key }}"
+#certbot_cloudflare_email: "{{ cloudflare_account_email }}"
 certbot_certs:
-  - email: "{{ certbot_cloudflare_email }}"
-    domains:
+  - domains:
       - "{{ local_domain }}"
       - "*.{{ local_domain }}"
       - "*.o.{{ local_domain }}"
-  - email: "{{ certbot_cloudflare_email }}"
-    domains:
+  - domains:
       - "{{ public_domain_1 }}"
       - "*.{{ public_domain_1 }}"
-  - email: "{{ certbot_cloudflare_email }}"
-    domains:
+  - domains:
       - "{{ public_domain_2 }}"
       - "*.{{ public_domain_2 }}"
+
+# traefik
+traefik_enable_dashboard: true
+traefik_insecure_transport: true
+traefik_exposed_by_default: false
+traefik_docker_provider: true
+traefik_file_providers:
+  - name: 'tls.yml'
+traefik_default_cert: "{{ local_domain }}"
+traefik_certs:
+  - domain: "{{ local_domain }}"
+  - domain: "{{ public_domain_1 }}"
+  - domain: "{{ public_domain_2 }}"
+
+# ironicbadger.docker_compose_generator
+global_env_vars:
+  - TZ={{ ntp_timezone }}
+  - PUID={{ main_uid }}
+  - PGID={{ main_gid }}
+appdata_path: "/home/{{ main_username }}/appdata"
+container_config_path: /config
+
+container_networks:
+  ###
+  - network_name: coredns
+    active: true
+    external: true
+
+containers:
+  ###
+  - service_name: whoami
+    active: true
+    image: traefik/whoami
+    container_name: whoami
+    include_global_env_vars: false
+    networks:
+      - default
+      - coredns
+    restart: unless-stopped

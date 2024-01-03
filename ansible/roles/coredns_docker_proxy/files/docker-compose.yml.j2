@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  coredns:
+    image: coredns/coredns:latest
+    container_name: coredns
+    volumes:
+      - ./Corefile:/home/nonroot/Corefile:ro
+    ports:
+      - "{{ coredns_private_ip }}:5353:53/udp"
+    networks:
+      - default
+      - coredns
+
+networks:
+  coredns:
+    name: coredns
+    external: true

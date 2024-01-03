@@ -1,0 +1,5 @@
+---
+
+coredns_config_dir: /etc/coredns
+coredns_private_ip: "{{ ansible_lo.ipv4.address }}"
+coredns_update_command: docker compose pull && docker compose down --remove-orphans && docker compose rm && docker compose up -d

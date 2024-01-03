@@ -1,0 +1,23 @@
+{{ ansible_managed | comment }}
+---
+
+{% if traefik_certs %}
+tls:
+  stores:
+{% if traefik_default_cert %}
+    default:
+      defaultCertificate:
+        certFile: /etc/letsencrypt/live/{{ traefik_default_cert }}/fullchain.pem
+        keyFile: /etc/letsencrypt/live/{{ traefik_default_cert }}/privkey.pem
+{% else %}
+    default: {}
+{% endif %}
+
+  certificates:
+{% for cert in traefik_certs %}
+    - certFile: /etc/letsencrypt/live/{{ cert.domain }}/fullchain.pem
+      keyFile: /etc/letsencrypt/live/{{ cert.domain }}/privkey.pem
+      stores: 
+        - default
+{% endfor %}
+{% endif %}
