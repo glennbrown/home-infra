@@ -1,0 +1,4 @@
+---
+
+nginx_config_dir: /etc/nginx
+docker_resolver_address: "{{ ansible_lo.ipv4.address }}:5353"

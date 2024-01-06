@@ -1,0 +1,73 @@
+---
+
+- name: Generate Diffie-Hellman Parameters
+  community.crypto.openssl_dhparam:
+    path: "{{ nginx_config_dir }}/dhparams.pem"
+    size: 4096
+  become: true
+
+- name: Ensure config directories exist
+  file:
+    path: "{{ nginx_config_dir }}"
+    state: directory
+    mode: 0755
+  loop:
+    - sites-enabled
+    - streams-enabled
+    - conf.d
+  become: true
+
+- name: Check if we already backed up stock config
+  stat:
+    path: "{{ nginx_config_dir }}/nginx.conf"
+  register: debian_stock_config
+  become: true
+
+- name: Copy Debian stock config
+  copy:
+    src: "{{ nginx_config_dir }}/nginx.conf"
+    dest: "{{ nginx_config_dir }}/nginx.conf.org"
+    remote_src: true
+  when: debian_stock_config.stat.exists
+  become: true
+
+- name: Install Config
+  template:
+    src: files/nginx.conf
+    dest: "{{ nginx_config_dir }}/nginx.conf"
+    mode: 0644
+  become: true
+  notify: reload nginx
+
+- name: Copy config files
+  template:
+    src: "{{ item }}"
+    dest: "{{ nginx_config_dir }}/conf.d/{{ item | basename }}"
+    mode: 0644
+  with_fileglob: files/conf.d/*.conf
+  become: true
+  notify: reload nginx
+
+- name: Disable default site
+  file:
+    path: "{{ nginx_config_dir }}/sites-enabled/default"
+    state: absent
+  become: true
+  notify: reload nginx
+
+- name: Install HTTPS Redirect
+  template:
+    src: files/nginx-https-redirect.conf
+    dest: "{{ nginx_config_dir }}/sites-enabled/nginx-https-redirect.conf"
+    mode: 0644
+  become: true
+  notify: reload nginx
+
+- name: Copy nginx config for docker proxied sites
+  template:
+    src: files/nginx-docker.conf
+    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}.conf"
+    mode: 0644
+  become: true
+  notify: reload nginx
+  loop: "{{ nginx_docker_sites }}"

@@ -136,6 +136,8 @@
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
+    - role: nginx
+      tags: webserver
 
 - name: Configure celtic
   hosts: celtic

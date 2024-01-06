@@ -5,6 +5,7 @@ certbot_create_method: standalone
 certbot_create_if_missing: true
 certbot_create_standalone_stop_services: []
 certbot_testmode: true
+certbot_webroot: []
 
 certbot_install_method: snap
 certbot_admin_email: "{{ cloudflare_account_email }}"
@@ -22,6 +23,13 @@ certbot_certs:
   - domains:
       - "{{ public_domain_2 }}"
       - "*.{{ public_domain_2 }}"
+
+# nginx
+nginx_docker_sites:
+  - server_name: "whoami.{{ local_domain }}"
+    upstream: "whoami.docker:80"
+    ssl_cert_path: "/etc/letsencrypt/live/{{ local_domain }}"
+    filename: "whoami.conf"
 
 # traefik
 traefik_enable_dashboard: true

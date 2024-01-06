@@ -1,0 +1,17 @@
+---
+
+- name: Install nginx
+  import_role:
+    name: nginxinc.nginx_core.nginx
+  vars:
+    nginx_install_from: os_repository
+  become: true
+
+- name: Install nginx modules
+  package:
+    name: "{{ item }}"
+  loop:
+    - libnginx-mod-http-headers-more-filter
+    - libnginx-mod-http-brotli-filter
+    - libnginx-mod-stream
+  become: true
