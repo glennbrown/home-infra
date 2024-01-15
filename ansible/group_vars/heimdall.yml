@@ -1,4 +1,5 @@
 ---
+target_os: proxmox
 
 # geerlingguy.ntp
 ntp_daemon: chrony

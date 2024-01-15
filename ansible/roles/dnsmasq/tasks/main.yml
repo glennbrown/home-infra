@@ -5,6 +5,7 @@
 
 - name: check for duplicate items
   ansible.builtin.include_tasks: duplicate_checks.yml
+  when: dnsmasq_dhcp_active | bool
 
 - name: copy template config files into place
-  ansible.builtin.include_tasks: template.yml  
+  ansible.builtin.include_tasks: template.yml 

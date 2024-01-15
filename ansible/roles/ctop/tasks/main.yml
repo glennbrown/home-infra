@@ -1,0 +1,13 @@
+---
+
+- name: Install ctop via apt package manager
+  include_tasks: install-debian.yml
+  when: ansible_os_family == 'Debian' and ctop_install_method == 'package_manager'
+
+# - name: Install ctop via pacman package manager
+#   include_tasks: install-pacman.yml
+#   when: ansible_pkg_mgr == 'pacman' and ctop_install_method == 'package_manager'
+# 
+# - name: Install ctop from github releases
+#   include_tasks: install-github.yml
+#   when: ctop_install_method == 'github_releases'

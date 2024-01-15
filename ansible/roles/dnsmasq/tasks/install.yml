@@ -7,10 +7,11 @@
 
 - name: Install dnsmasq
   ansible.builtin.apt:
-    name: "{{ dnsmasq_default_packages_apt }}"
+    name: "{{ item }}"
     state: present
     update_cache: true
   register: dnsmasq_install
+  loop: "{{ dnsmasq_default_packages_apt }}"
   notify: restart dnsmasq
 
 - name: Enable dnsmasq on boot

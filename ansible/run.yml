@@ -138,6 +138,8 @@
       tags: compose
     - role: nginx
       tags: webserver
+    - role: ctop
+      tags: ctoptest
 
 - name: Configure celtic
   hosts: celtic
@@ -154,3 +156,14 @@
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
+
+- name: Configure DNS Servers
+  hosts: dns
+  vars_files:
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
+  roles:
+    - role: ironicbadger.figurine
+    - role: ironicbadger.bash_aliases
+    - role: dnsmasq
+      tags: dns

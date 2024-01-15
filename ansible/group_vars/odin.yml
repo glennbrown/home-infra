@@ -69,13 +69,13 @@ user_list_group:
     append: false
     state: present
 
-# kgb-odin
+# odin
 # TODO: change secret to 1password lookup
 odin_main_storage_path: /mnt/storage
 extra_mountpoints:
   - { path: /mnt/nvme1tb, diskbyid: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1, fs: ext4, opts: "defaults,discard" }
 samba_users:
-  - username: gbrown
+  - username: "{{ main_username }}"
     password: "{{ secret_samba_gbrown }}"
   - username: kbrown
     password: "{{ secret_samba_kbrown }}"

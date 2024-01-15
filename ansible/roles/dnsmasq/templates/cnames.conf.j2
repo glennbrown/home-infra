@@ -1,7 +1,7 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 # DNS CNAMES
 {% if dnsmasq_dns_cnames is defined %}
 {% for record in dnsmasq_dns_cnames %}
-cname={{ record.cname }},{{record.host }}
+cname={{ record.cname }},{{ record.hostname }}
 {% endfor %}
 {% endif %}

@@ -1,5 +1,14 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 # PTR DNS Records
+# DHCP Clients
+{% if dnsmasq_dhcp_reservations is defined %}
 {% for client in dnsmasq_dhcp_reservations %}
 ptr-record={{ client.ip.split('.') | reverse | join('.') }}.in-addr.arpa.,{{ client.hostname }}.{{ dnsmasq_domain }}
 {% endfor %}
+{% endif %}
+# DNS A Records
+{% if dnsmasq_dns_records is defined %}
+{% for client in dnsmasq_dns_records %}
+ptr-record={{ client.ip.split('.') | reverse | join('.') }}.in-addr.arpa.,{{ client.hostname }}.{{ dnsmasq_domain }}
+{% endfor %}
+{% endif %}

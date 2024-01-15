@@ -5,7 +5,7 @@
 address=/{{ override.custom_dns }}/{{ override.ip }}
 {% endfor %}
 {% endif %}
-# DHCP Static Clients and Shortnames
+# DHCP Static Clients with override
 {% if dnsmasq_dhcp_reservations is defined %}
 {% for client in dnsmasq_dhcp_reservations %}
 {% if client.custom_dns is defined %}
@@ -13,6 +13,15 @@ address=/{{ override.custom_dns }}/{{ override.ip }}
 address=/{{ item }}.{{ dnsmasq_domain }}/{{ client.ip }}
 {% endfor %}
 {% endif %}
-address=/{{ client.hostname }}.{{ dnsmasq_domain }}/{{ client.ip }}
+{% endfor %}
+{% endif %}
+# DNS A Records with override
+{% if dnsmasq_dns_records is defined %}
+{% for client in dnsmasq_dns_records %}
+{% if client.custom_dns is defined %}
+{% for item in client.custom_dns %}
+address=/{{ item }}.{{ dnsmasq_domain }}/{{ client.ip }}
+{% endfor %}
+{% endif %}
 {% endfor %}
 {% endif %}

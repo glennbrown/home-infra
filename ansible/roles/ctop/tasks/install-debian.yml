@@ -1,0 +1,17 @@
+---
+
+- name: Add Azlux Repository
+  deb822_repository:
+    name: azlux
+    types: deb
+    uris: "{{ azlux_apt_repo }}" 
+    suites: "{{ ansible_distribution_release }}"
+    components: "{{ azlux_apt_component }}"
+    signed_by: "{{ azlux_apt_keyurl }}"
+
+- name: Install ctop
+  apt:
+    name: "{{ item }}"
+    update_cache: true
+  loop: 
+    - "{{ debian_package_name }}"

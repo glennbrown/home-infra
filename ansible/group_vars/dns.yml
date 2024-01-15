@@ -1,0 +1,51 @@
+---
+
+#grog.package
+package_list_group:
+  - name: man-db
+  - name: locales
+
+# geerlingguy.ntp
+ntp_package: ntp
+ntp_daemon: ntp
+
+# dnsmasq config
+dnsmasq_config_dir: /etc/dnsmasq.d
+dnsmasq_domain: pa.ikgb.me
+dnsmasq_gateway: 192.168.10.1
+
+dnsmasq_dns_overrides: []
+
+dnsmasq_dns_cnames:
+  - { hostname: "odin.pa.ikgb.me", cname: "kms.pa.ikgb.me" }
+  - { hostname: "odin.pa.ikgb.me", cname: "prometheus.pa.ikgb.me" }
+  - { hostname: "odin.pa.ikgb.me", cname: "influxdb.pa.ikgb.me" }
+  - { hostname: "thor.pa.ikgb.me", cname: "znc.pa.ikgb.me" }
+
+dnsmasq_dns_records:
+## odin - Primary Server
+- { ip: 192.168.10.10, hostname: odin, custom_dns: ["o"] }
+## odin - Services/VM's
+- { ip: 192.168.10.11, hostname: thor } 
+- { ip: 192.168.10.12, hostname: homeassistant }
+- { ip: 192.168.10.13, hostname: njord }
+- { ip: 192.168.10.14, hostname: balder }
+- { ip: 192.168.10.15, hostname: loki }
+## heimdall - Secondary Server
+- { ip: 192.168.10.20, hostname: heimdall }
+# Printer
+- { ip: 192.168.10.30, hostname: hp-officejet-pro }
+# Clients
+- { ip: 192.168.10.40, hostname: glenns-laptop }
+- { ip: 192.168.10.41, hostname: STPMLHSN07579 }
+- { ip: 192.168.10.42, hostname: kristens-laptop }
+- { ip: 192.168.10.60, hostname: caldigit-ts3 }
+- { ip: 192.168.10.61, hostname: ugreen-usb-nic }
+# IOT Devices
+- { ip: 192.168.10.82, hostname: harmony-hub-livingroom }
+- { ip: 192.168.10.83, hostname: hue-hub-bedroom }
+- { ip: 192.168.10.84, hostname: smartrent-hub }
+# Media Players
+- { ip: 192.168.10.104, hostname: livingroom-rokutv }
+- { ip: 192.168.10.105, hostname: masterbedroom-rokutv }
+- { ip: 192.168.10.106, hostname: bedroom-appletv }
