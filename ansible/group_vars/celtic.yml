@@ -10,6 +10,7 @@ ntp_timezone: "America/New_York"
 
 #Tailscale
 tailscale_args: "--accept-routes"
+tailscale_authkey: "{{ tailscale_oci_authkey }}"
 
 bash_aliases:
   - { alias: "dtail", command: "docker logs -tf --tail='50' " }
@@ -37,6 +38,7 @@ security_sudoers_passwordless:
 traefik_enable_dashboard: true
 traefik_docker_provider: true
 traefik_insecure_transport: true
+traefik_acme: true
 traefik_domains: 
   - name: "{{ public_domain_1 }}"
     sans: "*.{{ public_domain_1 }}"
@@ -124,7 +126,7 @@ containers:
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   ###
   - service_name: thelounge
-    active: true
+    active: false
     image: thelounge/thelounge:latest
     container_name: thelounge
     user: "{{ main_uid }}:{{ main_gid }}"

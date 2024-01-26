@@ -39,7 +39,7 @@
     group: users
     mode: 0775
   tags: traefik
-  when: traefik_file_providers
+  when: traefik_file_providers is defined
 
 - name: Copy traefik file provider rules
   ansible.builtin.template:
@@ -50,4 +50,4 @@
     mode: 0664
   loop: "{{ traefik_file_providers }}"
   tags: traefik
-  when: traefik_file_providers
+  when: traefik_file_providers is defined

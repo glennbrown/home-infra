@@ -3,6 +3,7 @@
 #traefik_file_providers:
 #  - file: 'proxmox-rules.yml'
 traefik_docker_provider: false
+traefik_file_providers: []
 traefik_enable_dashboard: false
 traefik_insecure_transport: false
 traefik_exposed_by_default: false
@@ -12,3 +13,4 @@ traefik_acme: false
 traefik_domains: []
 traefik_default_cert: []
 traefik_certs: []
+traefik_acme: false

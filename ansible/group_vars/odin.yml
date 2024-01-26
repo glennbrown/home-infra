@@ -136,6 +136,7 @@ traefik_enable_dashboard: true
 traefik_insecure_transport: true
 traefik_exposed_by_default: true
 traefik_docker_provider: true
+traefik_acme: true
 traefik_file_providers:
   - name: 'proxmox-rules.yml'
 traefik_domains:
@@ -247,7 +248,7 @@ containers:
       - '"traefik.http.routers.tautulli.tls.certresolver=default"'
   ###
   - service_name: jellyfin
-    active: true
+    active: false
     image: jellyfin/jellyfin
     container_name: jellyfin
     user: 99:100
@@ -376,7 +377,7 @@ containers:
       - '"traefik.http.routers.radarr.tls.certresolver=default"'
   ###
   - service_name: jellyplex-watched
-    active: true
+    active: false
     image: luigi311/jellyplex-watched
     container_name: jellyplex-watched
     include_global_env_vars: true

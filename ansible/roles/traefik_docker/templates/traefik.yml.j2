@@ -10,7 +10,7 @@ entryPoints:
           scheme: https
   websecure:
     address: :443
-{% if traefik_acme %}
+{% if traefik_acme | bool %}
     http:
       tls: 
         certresolver: default

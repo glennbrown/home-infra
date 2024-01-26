@@ -39,7 +39,10 @@ docker_install_compose_plugin: true
 docker_users: 
   - "{{ main_username }}"
 
-# kgb-htop
+# GitHub
+github_api_user: 'glennbrown'
+
+# htop
 htop_users:
   - homedir: "/home/{{ main_username }}"
 
