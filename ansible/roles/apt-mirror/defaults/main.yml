@@ -10,3 +10,4 @@ ubuntu_backports_enable: 'false'
 
 debian_apt_mirror: 'https://mirrors.rit.edu'
 debian_backports_enable: 'false'
+debian_source_enable: 'false'
