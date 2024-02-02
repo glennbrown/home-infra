@@ -1,0 +1,72 @@
+---
+
+- name: Install Virt Manager
+  apt:
+    name: "{{ item.name }}"
+    state: present
+    update_cache: true
+  loop: "{{ libvirt_packages }}"
+  notify: Start libvirtd
+
+- name: Check for orignal interfaces file
+  stat:
+    path: /etc/network/interfaces.bak
+  register: debian_interfaces
+
+- name: Copy orignal interfaces file
+  copy:
+    src: /etc/network/interfaces
+    dest: /etc/network/interfaces.bak
+    remote_src: true
+  when: not debian_interfaces.stat.exists
+
+- name: Create interfaces config with a bridge
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+  register: interfaces_updated
+  when: "not libvirt_network_interface == 'br0'"
+
+- name: Interfaces changed reboot
+  reboot:
+    msg: Reboot initiated by Ansible due to interfaces change
+    connect_timeout: 5
+    reboot_timeout: 300
+    pre_reboot_delay: 5
+    post_reboot_delay: 120
+    test_command: uptime
+  when: interfaces_updated.changed
+  
+- name: Load br-netfilter module
+  community.general.modprobe:
+    name: br-netfilter
+    state: present
+    persistent: present
+
+- name: Disable netfilter on the bridge interface
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_file: "{{ item.file }}"
+    state: present
+    reload: true
+  loop:
+    - { name: net.bridge.bridge-nf-call-ip6tables, value: 0, file: /etc/sysctl.d/99-netfilter-bridge.conf }
+    - { name: net.bridge.bridge-nf-call-iptables, value: 0, file: /etc/sysctl.d/99-netfilter-bridge.conf }
+    - { name: net.bridge.bridge-nf-call-arptables, value: 0, file: /etc/sysctl.d/99-netfilter-bridge.conf }
+
+- name: Define libvirt bridge network
+  community.libvirt.virt_net:
+    name: "{{ libvirt_bridge_name }}"
+    xml: '{{ lookup("template", "templates/bridge.xml.j2") }}'
+    state: present
+
+- name: Start libvirt bridge network
+  community.libvirt.virt_net:
+    name: "{{ libvirt_bridge_name }}"
+    state: active
+
+- name: Remove default libvirt nat network
+  community.libvirt.virt_net:
+    name: default
+    state: absent

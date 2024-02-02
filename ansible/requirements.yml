@@ -50,6 +50,10 @@ roles:
   # Openwrt
   - src: gekmihesg.openwrt
 
+  # Podman
+  - src: alvistack.podman
+    version: 8.4.0
+
 collections:
   - name: prometheus.prometheus
     version: 0.10.0

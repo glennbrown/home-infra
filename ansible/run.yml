@@ -138,17 +138,19 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-    - role: certbot_cloudflare
-    #- role: traefik_docker
-    #  tags: compose
-    - role: coredns_docker_proxy
-      tags: compose
-    - role: ironicbadger.docker_compose_generator
-      tags: compose
-    - role: nginx
-      tags: webserver
-    - role: ctop
-      tags: ctoptest
+    - role: alvistack.podman
+    - role: libvirt
+#    - role: certbot_cloudflare
+#    #- role: traefik_docker
+#    #  tags: compose
+#    - role: coredns_docker_proxy
+#      tags: compose
+#    - role: ironicbadger.docker_compose_generator
+#      tags: compose
+#    - role: nginx
+#      tags: webserver
+#    - role: ctop
+#      tags: ctoptest
 
 - name: Configure celtic
   hosts: celtic

@@ -1,0 +1,16 @@
+---
+
+- name: Start libvirtd
+  systemd:
+    daemon-reload: true
+    enabled: true
+    state: started
+    name: libvirtd.service
+  
+- name: Start xrdp
+  systemd:
+    daemon-reload: true
+    enabled: true
+    state: started
+    name: xrdp.service
+  

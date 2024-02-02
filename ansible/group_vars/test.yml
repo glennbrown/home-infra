@@ -1,5 +1,7 @@
 ---
 
+debian_backports_enable: true
+
 certbot_create_command: "{{ certbot_script }} certonly --noninteractive --dns-cloudflare --dns-cloudflare-propagation-seconds 60 --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
 certbot_create_method: standalone
 certbot_create_if_missing: true

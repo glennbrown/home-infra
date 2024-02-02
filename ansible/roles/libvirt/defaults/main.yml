@@ -1,0 +1,23 @@
+---
+
+libvirt_packages:
+  - name: qemu-system
+  - name: qemu-utils
+  - name: libvirt-clients
+  - name: libvirt-daemon-system
+  - name: libvirt-daemon-driver-storage-zfs
+  - name: bridge-utils
+  - name: python3-libvirt 
+  - name: python3-lxml
+
+libvirt_gui_packages:
+  - name: virt-manager
+  - name: lxqt-core
+  - name: xrdp
+
+libvirt_gui_install: 'true'  
+libvirt_network_interface: "{{ ansible_default_ipv4.interface }}"
+libvirt_bridge_name: 'br0'
+libvirt_bridge_address: "{{ ansible_default_ipv4.address }}"
+libvirt_bridge_prefix: "{{ ansible_default_ipv4.prefix }}"
+libvirt_bridge_gateway: "{{ ansible_default_ipv4.gateway }}"

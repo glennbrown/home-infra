@@ -1,0 +1,7 @@
+---
+
+- name: Install libvirt
+  include_tasks: install-libvirt.yml
+
+- name: Install GUI Tools
+  include_tasks: install-gui.yml
