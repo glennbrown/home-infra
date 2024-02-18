@@ -431,7 +431,7 @@ containers:
   ###
   - service_name: influxdb
     active: true
-    image: influxdb:1.8.10-alpine
+    image: influxdb:2.7.5-alpine
     container_name: influxdb
     include_global_env_vars: false
     environment:
