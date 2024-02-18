@@ -1,0 +1,9 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": ["ansible", "docker-compose", "dockerfile"],
+  "dependencyDashboard": true,
+  "prConcurrentLimit": 0,
+  "ansible": {
+    "fileMatch": ["^group_vars/.*\\.ya?ml$"]
+  }
+}
