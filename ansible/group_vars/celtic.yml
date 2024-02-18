@@ -58,7 +58,7 @@ containers:
   - service_name: traefik
     active: true
     image: traefik:latest
-    container_name: traefik
+    container_name: traefik:v2.11
     security_opt:
       - no-new-privileges:true
     include_global_env_vars: false
@@ -86,7 +86,7 @@ containers:
   ###
   - service_name: overseerr
     active: true
-    image: sctx/overseerr:latest
+    image: sctx/overseerr:d28e13187bc31cc1981731707b6d6f97af79a8b1
     container_name: overseerr
     include_global_env_vars: false
     environment:
@@ -106,7 +106,7 @@ containers:
   ###
   - service_name: freshrss
     active: true
-    image: freshrss/freshrss:latest
+    image: freshrss/freshrss:1.23.1-alpine
     container_name: freshrss
     include_global_env_vars: false
     environment:
@@ -124,38 +124,3 @@ containers:
       - '"traefik.http.routers.freshrss.tls.certresolver=default"'
       - '"traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-  ###
-  - service_name: thelounge
-    active: false
-    image: thelounge/thelounge:latest
-    container_name: thelounge
-    user: "{{ main_uid }}:{{ main_gid }}"
-    environment:
-      - TZ={{ ntp_timezone }}
-    volumes:
-      - "{{ appdata_path }}/thelounge:/var/opt/thelounge"
-    network_mode: bridge
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.thelounge.rule=Host(`thelounge.{{ public_domain_1 }}`)"'
-      - '"traefik.http.routers.thelounge.entrypoints=websecure"'
-      - '"traefik.http.routers.thelounge.tls.certresolver=default"'
-      - '"traefik.http.routers.thelounge.tls.domains[0].main={{ public_domain_1 }}"'
-      - '"traefik.http.routers.thelounge.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-  ###
-  - service_name: watchtower
-    active: false
-    image: containrrr/watchtower
-    container_name: watchtower
-    include_global_env_vars: false
-    environment:
-      - TZ={{ ntp_timezone }}
-      - WATCHTOWER_SCHEDULE=0 0 2 * * MON
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_NOTIFICATIONS=shoutrrr
-      - WATCHTOWER_NOTIFICATION_URL={{ watchtower_email_alert }}
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    network_mode: bridge
-    restart: unless-stopped
