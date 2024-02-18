@@ -4,6 +4,6 @@
   "dependencyDashboard": true,
   "prConcurrentLimit": 0,
   "ansible": {
-    "fileMatch": ["^group_vars/.*\\.ya?ml$"]
+    "fileMatch": ["^group_vars/.*\\.y?ml$"]
   }
 }
