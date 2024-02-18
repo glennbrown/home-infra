@@ -45,7 +45,7 @@ roles:
 
   # Tailscale
   - src: artis3n.tailscale
-    version: v4.4.0
+    version: v4.4.2
   
   # Openwrt
   - src: gekmihesg.openwrt
