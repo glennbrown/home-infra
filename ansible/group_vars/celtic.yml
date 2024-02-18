@@ -106,7 +106,7 @@ containers:
   ###
   - service_name: freshrss
     active: true
-    image: freshrss/freshrss:1.22.1-arm
+    image: freshrss/freshrss:latest
     container_name: freshrss
     include_global_env_vars: false
     environment:
@@ -145,7 +145,7 @@ containers:
       - '"traefik.http.routers.thelounge.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   ###
   - service_name: watchtower
-    active: true
+    active: false
     image: containrrr/watchtower
     container_name: watchtower
     include_global_env_vars: false

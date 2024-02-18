@@ -580,7 +580,7 @@ containers:
       - '"traefik.http.routers.librespeed.tls.certresolver=default"'
   ###
   - service_name: watchtower
-    active: true
+    active: false
     image: containrrr/watchtower
     container_name: watchtower
     include_global_env_vars: false

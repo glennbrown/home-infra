@@ -12,6 +12,10 @@ export JUST_LOG := log
 
 ansible_dir := "ansible"
 
+### Updates
+docker_update:
+    cd {{ansible_dir}} && ansible-playbook docker_update.yml 
+
 # just run HOST TAGS
 run HOST *TAGS:
     cd {{ansible_dir}} && ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}

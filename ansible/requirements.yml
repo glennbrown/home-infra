@@ -59,3 +59,7 @@ collections:
     version: 0.10.0
   - name: nginxinc.nginx_core
     version: 0.8.0
+  - name: community.general
+    version: 8.3.0
+  - name: community.docker
+    version: 3.7.0

@@ -1,7 +1,7 @@
-ansible==8.6.1
-ansible-lint==6.22.0
+ansible==8.7.0
+ansible-lint==6.22.2
 yamllint==1.33.0
 jmespath==1.0.1
-pre-commit==3.5.0
-wheel==0.41.3
-passlib==1.7.4 ; sys_platform == 'darwin'
+pre-commit==3.6.0
+wheel==0.42.0
+passlib==1.7.4
