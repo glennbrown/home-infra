@@ -21,7 +21,7 @@ roles:
   - src: geerlingguy.nfs
     version: 2.0.0
   - src: geerlingguy.security
-    version: 2.2.0
+    version: 2.2.2
   - src: geerlingguy.certbot
     version: 5.1.0
     
