@@ -58,7 +58,7 @@ containers:
   - service_name: traefik
     active: true
     image: traefik:latest
-    container_name: traefik:v2.11
+    container_name: traefik:v2.11.0
     security_opt:
       - no-new-privileges:true
     include_global_env_vars: false
