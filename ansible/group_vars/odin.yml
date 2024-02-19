@@ -434,8 +434,8 @@ containers:
   ###
   - service_name: telegraf
     active: true
-    image: telegraf:alpine
-    container_name: telegraf:1.29
+    image: telegraf:1.29.4-alpine
+    container_name: telegraf
     cap_add:
       - NET_RAW
     include_global_env_vars: false
