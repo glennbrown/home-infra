@@ -86,7 +86,7 @@ containers:
   ###
   - service_name: overseerr
     active: true
-    image: sctx/overseerr:d28e13187bc31cc1981731707b6d6f97af79a8b1
+    image: sctx/overseerr:1.33.2
     container_name: overseerr
     include_global_env_vars: false
     environment:
