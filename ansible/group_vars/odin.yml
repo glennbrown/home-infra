@@ -376,7 +376,7 @@ containers:
   ###
   - service_name: speedtest-tracker
     active: true
-    image: ghcr.io/alexjustesen/speedtest-tracker:v0.17.2
+    image: ghcr.io/alexjustesen/speedtest-tracker:v0.18.1
     container_name: speedtest-tracker
     include_global_env_vars: true
     volumes:
