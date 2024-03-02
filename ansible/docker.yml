@@ -28,5 +28,3 @@
     - name: Prune Docker Images
       docker_prune:
         images: 'true'
-        images_filters:
-          dangling: 'true'

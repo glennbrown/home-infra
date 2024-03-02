@@ -2,6 +2,10 @@
 # ^ A shebang isn't required, but allows a justfile to be executed
 #   like a script, with `./justfile test`, for example.
 
+# Recipes
+@default:
+  just --list
+
 bt := '0'
 
 export RUST_BACKTRACE := bt
@@ -12,9 +16,9 @@ export JUST_LOG := log
 
 ansible_dir := "ansible"
 
-### Updates
-docker_update:
-    cd {{ansible_dir}} && ansible-playbook docker_update.yml 
+# Docker Container Updates
+docker:
+    cd {{ansible_dir}} && ansible-playbook docker.yml 
 
 # just run HOST TAGS
 run HOST *TAGS:
@@ -25,6 +29,11 @@ run HOST *TAGS:
 reqs *FORCE:
     cd {{ansible_dir}} && ansible-galaxy install -r requirements.yml {{FORCE}}
 
-# just vault (encrypt/decrypt/edit/view)
-vault ACTION:
-    cd {{ansible_dir}} && EDITOR='code --wait' ansible-vault {{ACTION}} vars/vault.yml
+# Ansible Vault Decrypt
+decrypt:
+    cd {{ansible_dir}} && ansible-vault decrypt vars/vault.yml
+
+# Ansible Vault Encrypt
+encrypt:
+    cd {{ansible_dir}} && ansible-vault encrypt vars/vault.yml
+
