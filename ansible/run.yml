@@ -45,7 +45,6 @@
     - role: apt-mirror
       when: ansible_os_family == 'Debian'
     - role: grog.package
-      tags: packages
     - role: geerlingguy.ntp
     - role: geerlingguy.docker
       when: "'docker' in group_names"
@@ -94,7 +93,7 @@
       tags: prom
     - role: node_exporter_collectors
       tags: prom
-    - role: traefik_docker
+    - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
@@ -138,19 +137,12 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-    - role: alvistack.podman
-    - role: libvirt
-#    - role: certbot_cloudflare
-#    #- role: traefik_docker
+#    #- role: traefik
 #    #  tags: compose
 #    - role: coredns_docker_proxy
 #      tags: compose
 #    - role: ironicbadger.docker_compose_generator
 #      tags: compose
-#    - role: nginx
-#      tags: webserver
-#    - role: ctop
-#      tags: ctoptest
 
 - name: Configure celtic
   hosts: celtic
@@ -163,7 +155,7 @@
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: ocagent
-    - role: traefik_docker
+    - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose

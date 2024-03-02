@@ -23,10 +23,12 @@ package_list_group:
   - name: curl
   - name: diceware
   - name: fio
+  - name: fwupd
   - name: hddtemp
   - name: iperf3
   - name: ffmpeg
   - name: intel-gpu-tools
+  - name: intel-microcode
   - name: lm-sensors
   - name: mutt
   - name: nfs-kernel-server

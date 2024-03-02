@@ -7,7 +7,10 @@
     - 'vars/secrets_lookup.yml'
   vars_prompt:
     - name: host
-      prompt: Host to update containers on?
+      prompt: "Host to update containers on?"
+      private: no
+    - name: containers_to_update
+      prompt: "Containers to update? (comma seperated)"
       private: no
   
   roles:
@@ -19,7 +22,8 @@
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_generator_output_path }}"
         pull: 'missing'
-        state: 'present'
+        services: "{{ containers_to_update.split(', ') }}"
+        state: present
 
     - name: Prune Docker Images
       docker_prune:
