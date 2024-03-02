@@ -22,9 +22,12 @@
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_generator_output_path }}"
         pull: 'missing'
-        services: "{{ containers_to_update.split(', ') }}"
+        services: "{{ item }}"
         state: present
+      loop: "{{ containers_to_update.split(', ') }}"
 
     - name: Prune Docker Images
       docker_prune:
         images: 'true'
+        images_filters:
+          dangling: false
