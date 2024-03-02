@@ -332,7 +332,7 @@ containers:
   ###
   - service_name: sonarr
     active: true
-    image: lscr.io/linuxserver/sonarr:4.0.1
+    image: lscr.io/linuxserver/sonarr:4.0.2
     container_name: sonarr
     include_global_env_vars: true
     volumes:
