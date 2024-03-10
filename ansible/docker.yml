@@ -24,7 +24,7 @@
         pull: 'missing'
         services: "{{ item }}"
         state: present
-      loop: "{{ containers_to_update.split(', ') }}"
+      loop: "{{ containers_to_update.split(',') }}"
 
     - name: Prune Docker Images
       docker_prune:
