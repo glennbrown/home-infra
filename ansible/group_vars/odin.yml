@@ -394,7 +394,7 @@ containers:
   ###
   - service_name: prometheus
     active: true
-    image: prom/prometheus:v2.50.1
+    image: prom/prometheus:v2.51.0
     container_name: prometheus
     include_global_env_vars: false
     environment:
