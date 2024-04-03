@@ -53,6 +53,12 @@ global_env_vars:
 appdata_path: "/home/{{ main_username }}/appdata"
 container_config_path: /config
 
+container_networks:
+  ###
+  - network_name: traefik
+    active: true
+    external: true
+
 containers:
   ###
   - service_name: traefik
@@ -71,7 +77,9 @@ containers:
     ports:
       - 80:80
       - 443:443
-    network_mode: bridge
+    networks:
+      - default
+      - traefik
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -94,7 +102,9 @@ containers:
       - LOG_LEVEL=debug
     volumes:
       - "{{ appdata_path }}/overseerr:/app/config"
-    network_mode: bridge
+    networks:
+      - default
+      - traefik
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -115,7 +125,9 @@ containers:
     volumes:
       - "{{ appdata_path }}/freshrss/data:/var/www/FreshRSS/data"
       - "{{ appdata_path }}/freshrss/extensions:/var/www/FreshRSS/extensions"
-    network_mode: bridge
+    networks:
+      - default
+      - traefik
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'

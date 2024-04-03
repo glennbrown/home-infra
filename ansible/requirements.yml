@@ -17,13 +17,13 @@ roles:
   - src: geerlingguy.docker
     version: 7.1.0
   - src: geerlingguy.ntp
-    version: 2.3.3
+    version: 2.4.0
   - src: geerlingguy.nfs
     version: 2.0.0
   - src: geerlingguy.security
     version: 2.2.0
   - src: geerlingguy.certbot
-    version: 5.1.1
+    version: 5.1.0
     
   # Grog Roles
   - src: grog.package
@@ -41,13 +41,13 @@ roles:
 
   # Tailscale
   - src: artis3n.tailscale
-    version: v4.4.0
+    version: v4.4.4
   
   # Openwrt
   - src: gekmihesg.openwrt
 
 collections:
   - name: prometheus.prometheus
-    version: 0.14.2
+    version: 0.15.1
   - name: nginxinc.nginx_core
     version: 0.8.0

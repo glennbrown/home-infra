@@ -1,5 +1,10 @@
 ---
 
+- name: Create Docker network
+  docker_network:
+    name: traefik
+    internal: true
+
 - name: Ensure config directory exists
   ansible.builtin.file:
     dest: "{{ appdata_path }}/traefik"

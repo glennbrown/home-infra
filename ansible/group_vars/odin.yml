@@ -179,6 +179,12 @@ storage_path: /mnt/storage
 download_path: "{{ storage_path }}/downloads"
 container_config_path: /config
 
+container_networks:
+  ###
+  - network_name: traefik
+    active: true
+    external: true
+
 containers:
   ###
   - service_name: traefik
@@ -197,7 +203,9 @@ containers:
     ports:
       - 80:80
       - 443:443
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     extra_hosts:
       - '"host.docker.internal:172.17.0.1"'
     restart: unless-stopped
@@ -238,7 +246,9 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/tautulli:{{ container_config_path }}"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     depends_on:
       - plex
@@ -286,7 +296,9 @@ containers:
     volumes:
       - "{{ appdata_path }}/sabnzbd:{{ container_config_path }}"
       - "{{ download_path }}:/downloads"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -306,7 +318,9 @@ containers:
     ports:
       - 6881:6881
       - 6881:6881/udp
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -323,7 +337,9 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/prowlarr:{{ container_config_path }}"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -341,7 +357,9 @@ containers:
       - "{{ appdata_path }}/sonarr:{{ container_config_path }}"
       - "{{ download_path }}:/downloads"
       - "{{ storage_path }}/TV Shows:/tv"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     depends_on:
       - sabnzbd
@@ -363,7 +381,9 @@ containers:
       - "{{ appdata_path }}/radarr:{{ container_config_path }}"
       - "{{ download_path }}:/downloads"
       - "{{ storage_path }}/Movies:/movies"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     depends_on:
       - sabnzbd
@@ -383,7 +403,9 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/speedtest-tracker:{{ container_config_path }}"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -402,7 +424,9 @@ containers:
     volumes:
       - "{{ appdata_path }}/prometheus/data:/prometheus"
       - "{{ appdata_path }}/prometheus/etc:/etc/prometheus"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     command:
       - "'--storage.tsdb.retention.time=1y'"
       - "'--config.file=/etc/prometheus/prometheus.yml'"
@@ -425,7 +449,9 @@ containers:
       - "TZ={{ ntp_timezone }}"
     volumes:
       - "{{ appdata_path }}/influxdb:/var/lib/influxdb"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -472,7 +498,8 @@ containers:
       - /dev/kmsg:/dev/kmsg
     ports:
       - 9099:9099
-    network_mode: bridge
+    networks:
+      - default
     command: '-port 9099'
     restart: unless-stopped
   ###
@@ -486,7 +513,8 @@ containers:
       - "MOTO_PASSWORD={{ modem_secret }}"
     ports:
       - 9731:9731
-    network_mode: bridge
+    networks:
+      - default
     restart: unless-stopped
   ###
   - service_name: varken
@@ -498,7 +526,8 @@ containers:
       - "TZ={{ ntp_timezone }}"
     volumes:
       - "{{ appdata_path }}/varken:{{ container_config_path }}"
-    network_mode: bridge
+    networks:
+      - default
     restart: unless-stopped
   ###
   - service_name: grafana
@@ -513,7 +542,9 @@ containers:
       - "GF_SERVER_ROOT_URL=https://grafana.o.{{ local_domain }}"
     volumes:
       - "{{ appdata_path }}/grafana:/var/lib/grafana"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -534,7 +565,8 @@ containers:
       - /etc/localtime:/etc/localtime
     ports:
       - 1688:1688
-    network_mode: bridge
+    networks:
+      - default
     restart: unless-stopped
   ###
   - service_name: librespeed
@@ -544,7 +576,9 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/librespeed:{{ container_config_path }}"
-    network_mode: bridge
+    networks:
+      - traefik
+      - default
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
