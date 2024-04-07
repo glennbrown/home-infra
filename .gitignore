@@ -2,6 +2,7 @@
 ansible/*.retry
 ansible/galaxy_roles*
 ansible/galaxy_collections*
+ansible/testing*
 
 # MacOS
 .DS_Store
