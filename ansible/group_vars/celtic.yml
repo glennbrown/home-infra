@@ -63,7 +63,7 @@ containers:
   ###
   - service_name: traefik
     active: true
-    image: traefik:v2.11.0
+    image: traefik:2.11.2
     container_name: traefik
     security_opt:
       - no-new-privileges:true
