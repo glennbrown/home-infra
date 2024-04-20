@@ -2,7 +2,9 @@
 
 # grog.group
 group_list:
-  - { name: gbrown, gid: 1000, state: present }
+  - name: gbrown
+    gid: 1000
+
 
 # grog.user
 user_list:
@@ -17,12 +19,8 @@ user_list:
       - dip
       - plugdev
       - video
-    append: yes
     password: "{{ secret_gbrown_pass }}"
-    move_home: yes
-    shell: /bin/bash
     comment: "Glenn Brown"
-    state: present
 
 # grog.package
 package_list:

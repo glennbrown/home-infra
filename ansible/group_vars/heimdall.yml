@@ -1,15 +1,44 @@
 ---
-target_os: proxmox
+hostname: heimdall
 
 # geerlingguy.ntp
-ntp_daemon: chrony
-ntp_package: chrony
+ntp_daemon: ntp
+ntp_package: ntp
+
+# Bash Aliases
+bash_docker: true
+bash_apt: true
+bash_systemctl: true
 
 # grog.package
-package_list_group:
-- name: lm-sensors
-- name: nvme-cli
-- name: wget
-- name: smartmontools
-- name: lshw
-- name: dmidecode
+# package_list_group:
+# - name: lm-sensors
+# - name: nvme-cli
+# - name: wget
+# - name: smartmontools
+# - name: lshw
+# - name: dmidecode
+
+# ironicbadger.docker_compose_generator
+global_env_vars:
+  - TZ={{ ntp_timezone }}
+  - PUID={{ main_uid }}
+  - PGID={{ main_gid }}
+appdata_path: "/home/{{ main_username }}/appdata"
+container_config_path: /config
+
+containers:
+  ###
+  - service_name: hass
+    active: true
+    image: homeassistant/home-assistant:2024.4.3
+    container_name: hass
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - "{{ appdata_path }}/hass:/config"
+      - /etc/localtime:/etc/localtime
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    network_mode: host
+    restart: unless-stopped    

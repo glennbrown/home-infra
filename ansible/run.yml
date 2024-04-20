@@ -15,33 +15,11 @@
       notify:
         - Hostname has changed
       when: set_hostname is defined
-    - block:
-        - name: Disable proxmox enterprise repo
-          replace:
-            path: /etc/apt/sources.list.d/pve-enterprise.list
-            regexp: '^deb https://enterprise\.proxmox\.com/debian/pve bookworm pve-enterprise'
-            replace: '#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
-          notify: Update apt cache
-        - name: Disable proxmox enterprise ceph repo
-          replace:
-            path: /etc/apt/sources.list.d/ceph.list
-            regexp: '^deb https://enterprise\.proxmox\.com/debian/ceph-quincy bookworm enterprise'
-            replace: '#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise'
-          notify: Update apt cache
-        - name: Switch to proxmox community repo
-          apt_repository:
-            filename: /etc/apt/sources.list.d/pve-no-subscription
-            repo: 'deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription'
-            state: present
-          notify: Update apt cache
-      when: "'proxmox' in group_names"
     
   roles:
-    - role: grog.group
-    - role: grog.user
-    - role: grog.authorized-key
-    - role: proxmox_nag_removal
-      when: "'proxmox' in group_names"
+    #- role: grog.group
+    #- role: grog.user
+    #- role: grog.authorized-key
     - role: apt-mirror
       when: ansible_os_family == 'Debian'
     - role: grog.package
@@ -69,10 +47,6 @@
         pre_reboot_delay: 2
         post_reboot_delay: 30
         test_command: uptime
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-        cache_valid_time: 3600
 
 # Configure primary server
 - name: Configure odin
@@ -80,13 +54,39 @@
   vars_files:
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
+  pre_tasks:
+
+    - block:
+        - name: Disable proxmox enterprise repo
+          replace:
+            path: /etc/apt/sources.list.d/pve-enterprise.list
+            regexp: '^deb https://enterprise\.proxmox\.com/debian/pve bookworm pve-enterprise'
+            replace: '#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
+          notify: Update apt cache
+        - name: Disable proxmox enterprise ceph repo
+          replace:
+            path: /etc/apt/sources.list.d/ceph.list
+            regexp: '^deb https://enterprise\.proxmox\.com/debian/ceph-quincy bookworm enterprise'
+            replace: '#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise'
+          notify: Update apt cache
+        - name: Switch to proxmox community repo
+          apt_repository:
+            filename: /etc/apt/sources.list.d/pve-no-subscription
+            repo: 'deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription'
+            state: present
+          notify: Update apt cache
+      when: "'proxmox' in group_names"
+    
   roles:
+    - role: proxmox_nag_removal
+      when: "'proxmox' in group_names"
     - role: htop
     - role: ironicbadger.bash_aliases
     - role: ironicbadger.figurine
     - role: odin
       tags: tools, disks, file-sharing
     - role: tigattack.mergerfs
+      tags: disks
     - role: ironicbadger.snapraid
     - role: geerlingguy.nfs
     - role: prometheus.prometheus.node_exporter
@@ -98,23 +98,19 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
-# Configure caddy
-#- name: Configure caddy
-#  hosts: caddy
-#  
-#  vars_files:
-#    - 'vars/vault.yml'
-#    - 'vars/secrets_lookup.yml'
-#  
-#  roles:
-#    - role: ironicbadger.bash_aliases
-#    - role: ironicbadger.figurine
-#    - role: caddy
-#      tags: caddy
+### LXC/VMs/VPS
+- hosts: heimdall
+  vars_files:
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
+  roles:
+    - role: heimdall
+    - role: bash_alias
+    - role: ironicbadger.figurine
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
-# Configure thor     
-- name: Configure thor
-  hosts: thor
+- hosts: thor
   vars_files:
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
@@ -159,14 +155,3 @@
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
-
-- name: Configure DNS Servers
-  hosts: dns
-  vars_files:
-    - 'vars/vault.yml'
-    - 'vars/secrets_lookup.yml'
-  roles:
-    - role: ironicbadger.figurine
-    - role: ironicbadger.bash_aliases
-    - role: dnsmasq
-      tags: dns

@@ -25,3 +25,13 @@
     - "{{ snapraid_data_disks }}"
     - "{{ extra_mountpoints }}"
   when: item.path != '/mnt/storage'
+
+- name: Set ZFS ARC size
+  copy:
+    src: etc/modprobe.d/zfs.conf
+    dest: /etc/modprobe.d/zfs.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: 
+    - update initramfs

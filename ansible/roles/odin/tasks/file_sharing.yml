@@ -1,6 +1,6 @@
 ---
 
-- name: file_sharing | install samba
+- name: Install samba
   apt:
     update_cache: true
     pkg: samba
@@ -8,7 +8,7 @@
   notify: 
     - start samba service
 
-- name: file_sharing | install samba config
+- name: Install samba config
   copy:
     src: etc/samba/smb.conf
     dest: /etc/samba/smb.conf
@@ -18,7 +18,7 @@
   notify: 
     - restart samba service
 
-- name: file_sharing | create samba users
+- name: Create samba users
   shell: >
     set -e -o pipefail
     && (pdbedit --user={{ item.username }} 2>&1 > /dev/null)
@@ -31,7 +31,7 @@
   loop: "{{ samba_users }}"
   no_log: true
 
-- name: file_sharing | set samba passwords correctly
+- name: Set samba passwords correctly
   shell: >
     set -e -o pipefail
     && (smbclient -U {{ item.username }}%{{ item.password }} -L 127.0.0.1 2>&1 > /dev/null)
@@ -44,7 +44,7 @@
   loop: "{{ samba_users }}"
   no_log: true
 
-- name: file_sharing | install mdns daemon
+- name: Install mdns daemon
   apt:
     update_cache: yes
     pkg: avahi-daemon
