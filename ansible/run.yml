@@ -95,6 +95,8 @@
       tags: prom
     - role: traefik
       tags: compose
+    - role: vuetorrent
+      tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
 

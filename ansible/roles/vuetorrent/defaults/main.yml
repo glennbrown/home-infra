@@ -1,0 +1,4 @@
+---
+
+vuetorrent_force_install: false
+vuetorrent_install_location: /mnt/nvme1tb/appdata/qbittorrent/themes
