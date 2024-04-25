@@ -331,7 +331,7 @@ containers:
   ###
   - service_name: prowlarr
     active: true
-    image: lscr.io/linuxserver/prowlarr:1.13.3
+    image: lscr.io/linuxserver/prowlarr:1.16.2
     container_name: prowlarr
     include_global_env_vars: true
     volumes:
