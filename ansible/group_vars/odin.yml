@@ -570,7 +570,7 @@ containers:
   ###
   - service_name: librespeed
     active: true
-    image: lscr.io/linuxserver/librespeed:5.3.0
+    image: lscr.io/linuxserver/librespeed:5.3.1
     container_name: librespeed
     include_global_env_vars: true
     volumes:
