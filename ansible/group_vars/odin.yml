@@ -585,3 +585,28 @@ containers:
       - '"traefik.http.routers.librespeed.entrypoints=websecure"'
       - '"traefik.http.routers.librespeed.tls=true"'
       - '"traefik.http.routers.librespeed.tls.certresolver=default"'
+###
+  - service_name: netbootxyz
+    active: true
+    image: lscr.io/linuxserver/netbootxyz:0.7.1
+    container_name: netbootxyz
+    include_global_env_vars: true
+    environment:
+      - PORT_RANGE=30000:30010
+      - SUBFOLDER=/
+    volumes:
+      - "{{ appdata_path }}/netbootxyz:{{ container_config_path }}"
+      - /mnt/ssd-data/netboot-assets:/assets
+    networks:
+      - traefik
+      - default
+    ports:
+      - 69:69/udp
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.netbootxyz.rule=Host(`netbootxyz.{{ local_domain }}`)"'
+      - '"traefik.http.routers.netbootxyz.entrypoints=websecure"'
+      - '"traefik.http.routers.netbootxyz.tls=true"'
+      - '"traefik.http.routers.netbootxyz.tls.certresolver=default"'
+      - '"traefik.http.services.netbootxyz.loadbalancer.server.port=3000"'
