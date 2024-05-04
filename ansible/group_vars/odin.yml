@@ -289,7 +289,7 @@ containers:
   ###
   - service_name: sabnzbd
     active: true
-    image: lscr.io/linuxserver/sabnzbd:4.3.0
+    image: lscr.io/linuxserver/sabnzbd:4.3.1
     container_name: sabnzbd
     include_global_env_vars: true
     volumes:
