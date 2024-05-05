@@ -31,7 +31,7 @@ containers:
   ###
   - service_name: hass
     active: true
-    image: homeassistant/home-assistant:2024.4.3
+    image: homeassistant/home-assistant:2024.5.1
     container_name: hass
     include_global_env_vars: false
     environment:
