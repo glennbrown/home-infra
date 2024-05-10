@@ -15,7 +15,7 @@ server {
     include conf.d/docker-resolver.conf;
 
     location / {
-        proxy_pass http://$upstream;
+        proxy_pass $upstream;
 
         {%- if location_extra is defined +%}
         {{ location_extra }}

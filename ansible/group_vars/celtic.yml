@@ -63,7 +63,7 @@ containers:
   ###
   - service_name: traefik
     active: true
-    image: traefik:2.11.2
+    image: traefik:3.0.0
     container_name: traefik
     security_opt:
       - no-new-privileges:true
@@ -72,7 +72,9 @@ containers:
       - TZ={{ ntp_timezone }}
       - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
     volumes:
-      - "{{ appdata_path }}/traefik:/etc/traefik"
+      - /etc/localtime:/etc/localtime:ro
+      - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
@@ -83,14 +85,22 @@ containers:
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
-      - '"traefik.http.routers.dashboard.rule=Host(`traefik.{{ public_domain_1 }}`)"'
-      - '"traefik.http.routers.dashboard.entrypoints=websecure"'
-      - '"traefik.http.routers.dashboard.service=api@internal"'
-      - '"traefik.http.routers.dashboard.middlewares=auth"'
-      - '"traefik.http.routers.dashboard.tls.certresolver=default"'
-      - '"traefik.http.routers.dashboard.tls.domains[0].main={{ public_domain_1 }}"'
-      - '"traefik.http.routers.dashboard.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-      - '"traefik.http.middlewares.auth.basicauth.users={{ traefik_dashboard_auth }}"'
+      - '"traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.traefik.entrypoints=web"'
+      - '"traefik.http.middlewares.traefik-auth.basicauth.users={{ traefik_dashboard_auth }}"'
+      - '"traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"'
+      - '"traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"'
+      - '"traefik.http.routers.traefik.middlewares=traefik-https-redirect"'
+      - '"traefik.http.routers.traefik-secure.entrypoints=websecure"'
+      - '"traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.traefik-secure.middlewares=traefik-auth"'
+      - '"traefik.http.routers.traefik-secure.tls=true"'
+      - '"traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[1].main={{ public_domain_2 }}"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[1].sans=*.{{ public_domain_2 }}"'
+      - '"traefik.http.routers.traefik-secure.service=api@internal"'
   ###
   - service_name: overseerr
     active: true
@@ -110,7 +120,7 @@ containers:
       - '"traefik.enable=true"'
       - '"traefik.http.routers.overseerr.rule=Host(`requests.{{ public_domain_1 }}`)"'
       - '"traefik.http.routers.overseerr.entrypoints=websecure"'
-      - '"traefik.http.routers.overseerr.tls.certresolver=default"'
+      - '"traefik.http.routers.overseerr.tls.certresolver=cloudflare"'
       - '"traekik.http.routers.overseerr.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traekik.http.routers.overseerr.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   ###
@@ -133,6 +143,6 @@ containers:
       - '"traefik.enable=true"'
       - '"traefik.http.routers.freshrss.rule=Host(`freshrss.{{ public_domain_1 }}`)"'
       - '"traefik.http.routers.freshrss.entrypoints=websecure"'
-      - '"traefik.http.routers.freshrss.tls.certresolver=default"'
+      - '"traefik.http.routers.freshrss.tls.certresolver=cloudflare"'
       - '"traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'

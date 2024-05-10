@@ -80,9 +80,11 @@ package_update_cache: true
 # grog.authorized-key
 authorized_key_list:
   - name: "{{ main_username }}"
-    key: "{{ secret_gbrown_sshkey }}"
-  #- name: root
-  #  key: "{{ secret_root_sshkey }}"
+    authorized_keys:
+      - key: "{{ secret_gbrown_sshkey }}"
+  - name: root
+    authorized_keys:
+      - key: "{{ secret_root_sshkey }}"
 
 # geerlingguy.docker
 docker_install_compose: false

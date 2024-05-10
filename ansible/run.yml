@@ -17,9 +17,9 @@
       when: set_hostname is defined
     
   roles:
-    #- role: grog.group
-    #- role: grog.user
-    #- role: grog.authorized-key
+    - role: grog.group
+    - role: grog.user
+    - role: grog.authorized-key
     - role: apt-mirror
       when: ansible_os_family == 'Debian'
     - role: grog.package
@@ -135,12 +135,10 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-#    #- role: traefik
-#    #  tags: compose
-#    - role: coredns_docker_proxy
-#      tags: compose
-#    - role: ironicbadger.docker_compose_generator
-#      tags: compose
+    - role: traefik
+      tags: compose
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
 - name: Configure celtic
   hosts: celtic

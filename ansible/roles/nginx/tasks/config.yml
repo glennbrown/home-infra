@@ -19,7 +19,7 @@
 
 - name: Check if we already backed up stock config
   stat:
-    path: "{{ nginx_config_dir }}/nginx.conf"
+    path: "{{ nginx_config_dir }}/nginx.conf.org"
   register: debian_stock_config
   become: true
 
@@ -28,23 +28,23 @@
     src: "{{ nginx_config_dir }}/nginx.conf"
     dest: "{{ nginx_config_dir }}/nginx.conf.org"
     remote_src: true
-  when: debian_stock_config.stat.exists
+  when: not debian_stock_config.stat.exists
   become: true
 
-- name: Install Config
-  template:
-    src: files/nginx.conf
+- name: Install nginx base config
+  copy:
+    src: nginx.conf
     dest: "{{ nginx_config_dir }}/nginx.conf"
     mode: 0644
   become: true
   notify: reload nginx
 
-- name: Copy config files
+- name: Copy additional config files
   template:
     src: "{{ item }}"
     dest: "{{ nginx_config_dir }}/conf.d/{{ item | basename }}"
     mode: 0644
-  with_fileglob: files/conf.d/*.conf
+  with_fileglob: templates/conf.d/*.conf
   become: true
   notify: reload nginx
 
@@ -56,7 +56,7 @@
   notify: reload nginx
 
 - name: Install HTTPS Redirect
-  template:
+  copy:
     src: files/nginx-https-redirect.conf
     dest: "{{ nginx_config_dir }}/sites-enabled/nginx-https-redirect.conf"
     mode: 0644
@@ -65,9 +65,20 @@
 
 - name: Copy nginx config for docker proxied sites
   template:
-    src: files/nginx-docker.conf
+    src: nginx-docker.conf.j2
     dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}.conf"
     mode: 0644
   become: true
   notify: reload nginx
   loop: "{{ nginx_docker_sites }}"
+  when: nginx_docker_sites is defined
+
+- name: Copy nginx config for proxied sites
+  template:
+    src: nginx-proxy.conf.j2
+    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}.conf"
+    mode: 0644
+  become: true
+  notify: reload nginx
+  loop: "{{ nginx_proxy_sites }}"
+  when: nginx_proxy_sites is defined
