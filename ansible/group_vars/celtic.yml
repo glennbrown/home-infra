@@ -102,7 +102,7 @@ containers:
   ###
   - service_name: overseerr
     active: true
-    image: lscr.io/linuxserver/overseerr:1.33.2
+    image: lscr.io/linuxserver/overseerr:2021.12.12
     container_name: overseerr
     include_global_env_vars: true
     volumes:
