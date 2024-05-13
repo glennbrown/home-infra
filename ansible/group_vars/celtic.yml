@@ -79,9 +79,7 @@ containers:
     ports:
       - 80:80
       - 443:443
-    networks:
-      - default
-      - traefik
+    network_mode: bridge
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -104,17 +102,12 @@ containers:
   ###
   - service_name: overseerr
     active: true
-    image: sctx/overseerr:1.33.2
+    image: lscr.io/linuxserver/overseerr:1.33.2
     container_name: overseerr
-    include_global_env_vars: false
-    environment:
-      - TZ={{ ntp_timezone }}
-      - LOG_LEVEL=debug
+    include_global_env_vars: true
     volumes:
-      - "{{ appdata_path }}/overseerr:/app/config"
-    networks:
-      - default
-      - traefik
+      - "{{ appdata_path }}/overseerr:/config"
+    network_mode: bridge
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -135,9 +128,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/freshrss/data:/var/www/FreshRSS/data"
       - "{{ appdata_path }}/freshrss/extensions:/var/www/FreshRSS/extensions"
-    networks:
-      - default
-      - traefik
+    network_mode: bridge
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'

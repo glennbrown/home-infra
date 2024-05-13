@@ -31,14 +31,14 @@ containers:
   ###
   - service_name: hass
     active: true
-    image: homeassistant/home-assistant:2024.5.1
+    image: homeassistant/home-assistant:2024.5.2
     container_name: hass
     include_global_env_vars: false
     environment:
       - TZ={{ ntp_timezone }}
     volumes:
       - "{{ appdata_path }}/hass:/config"
-      - /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     network_mode: host
     restart: unless-stopped    
