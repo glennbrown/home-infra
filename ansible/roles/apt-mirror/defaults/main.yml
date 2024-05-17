@@ -1,13 +1,18 @@
 ---
 # defaults for apt mirrors
+# Global
+# legacy will use old sources.list style and is default, modern will use newer deb822 style sources.
+# https://repolib.readthedocs.io/en/latest/deb822-format.html
+apt_source_mode: legacy
 
 # Ubuntu 
 
-ubuntu_apt_mirror: 'https://mirrors.iu13.net'
+ubuntu_apt_mirror: 'http://us.archive.ubuntu.com'
 ubuntu_backports_enable: 'false'
+ubuntu_source_enable: 'false'
 
 # Debian
 
-debian_apt_mirror: 'https://mirrors.rit.edu'
+debian_apt_mirror: 'http://deb.debian.org'
 debian_backports_enable: 'false'
 debian_source_enable: 'false'

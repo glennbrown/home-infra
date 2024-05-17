@@ -1,49 +1,11 @@
 ---
 
-# Ubuntu Block
-- block:
+# Ubuntu
+- name: Configure Ubuntu apt sources
+  include_tasks: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
-    - name: Update sources.list on Ubuntu
-      become: true
-      template:
-        src: templates/sources.list.ubuntu.j2
-        dest: /etc/apt/sources.list
-        backup: yes
-      register: replace_ubuntu_apt_config
-
-    - name: Update apt cache
-      become: true
-      apt:
-        update_cache: yes
-      when: replace_ubuntu_apt_config.changed
-
-  when: ansible_distribution|lower == 'ubuntu'
-
-# Debian Block
-- block:
-
-    - name: Set Debian Components on Bookworm and newer
-      set_fact:
-        debian_components: 'main contrib non-free non-free-firmware'
-      when: ansible_distribution_major_version | int >= 12
-
-    - name: Set Debian Components on Bullseye and earlier
-      set_fact:
-        debian_components: 'main contrib non-free'
-      when: ansible_distribution_major_version | int <= 11
-
-    - name: Update sources.list on Debian
-      become: true
-      template:
-        src: templates/sources.list.debian.j2
-        dest: /etc/apt/sources.list
-        backup: yes
-      register: replace_debian_apt_config
-
-    - name: Update apt cache
-      become: true
-      apt:
-        update_cache: yes
-      when: replace_debian_apt_config.changed
-
-  when: ansible_distribution|lower == 'debian'
+# Debian 
+- name: Configure Debian apt sources
+  include_tasks: debian.yml
+  when: ansible_distribution == 'Debian'

@@ -1,0 +1,21 @@
+{% if debian_source_enable is defined and debian_source_enable | bool %}
+Types: deb deb-src
+{% else %}
+Types: deb
+{% endif %}
+URIs: {{ debian_apt_mirror }}/debian
+{% if debian_backports_enable is defined and debian_backports_enable | bool %}
+Suites: {{ ansible_distribution_release }} {{ ansible_distribution_release }}-updates {{ ansible_distribution_release }}-backports
+{% else %}
+Suites: {{ ansible_distribution_release }} {{ ansible_distribution_release }}-updates
+{% endif %}
+Components: {{ debian_components }}
+
+{% if debian_source_enable is defined and debian_source_enable | bool %}
+Types: deb deb-src
+{% else %}
+Types: deb
+{% endif %}
+URIs: http://security.debian.org
+Suites: {{ ansible_distribution_release }}-security
+Components: {{ debian_components }}
