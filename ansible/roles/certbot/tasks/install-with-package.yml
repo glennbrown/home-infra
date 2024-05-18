@@ -1,0 +1,12 @@
+---
+
+- name: Install Certbot.
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ certbot_package }}"
+
+- name: Set Certbot script variable.
+  set_fact:
+    certbot_script: '/usr/bin/certbot'
+    

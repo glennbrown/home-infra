@@ -1,0 +1,41 @@
+---
+
+- import_tasks: install-with-package.yml
+  when: certbot_install_method == 'package'
+
+- import_tasks: install-with-snap.yml
+  when: certbot_install_method == 'snap'
+
+- import_tasks: install-with-pip.yml
+  when: certbot_install_method == 'pip'
+
+- name: Create certbot folder
+  file:
+    path: /etc/letsencrypt
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  
+- name: Copy certbot cloudflare credential config
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0600
+  loop:
+    - { src: 'cloudflare.ini.j2', dest: '/etc/letsencrypt/cloudflare.ini' }
+
+- include_tasks: create-cert.yml
+  loop: "{{ certbot_certs }}"
+  when:
+    - certbot_create_if_missing
+  loop_control:
+    loop_var: cert_item
+
+# Debian Package and Snap package use sytemd timers by default for renewal.
+- import_tasks: renew-cron.yml
+  when: 
+    - certbot_auto_renew
+    - certbot_install_method == 'pip'
