@@ -1,13 +1,83 @@
 ---
 
-# traefik
-traefik_exposed_by_default: false
-traefik_docker_provider: true
-traefik_acme: true
-traefik_acme_staging: true
-traefik_domains:
-  - name: "{{ local_domain }}"
-    sans: "*.{{ local_domain }}"
+apt_source_mode: modern
+
+certbot_testmode: true
+certbot_hsts: true
+# Parameters used when creating new Certbot certs.
+# certbot_create_method: standalone
+# certbot_create_if_missing: true
+# certbot_install_method: 'snap'
+# certbot_create_standalone_stop_services:  
+#   - nginx
+# certbot_create_command: >-
+#   {{ certbot_script }} certonly --{{ certbot_create_method  }}
+#   {{ '--hsts' if certbot_hsts else '' }}
+#   {{ '--test-cert' if certbot_testmode else '' }}
+#   --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini --dns-cloudflare-propagation-seconds 60
+#   --noninteractive --agree-tos
+#   --email {{ cert_item.email | default(certbot_admin_email) }}
+#   {{ '--webroot-path ' if certbot_create_method == 'webroot'  else '' }}
+#   {{ cert_item.webroot | default(certbot_webroot) if certbot_create_method == 'webroot' else '' }}
+#   {{ certbot_create_extra_args }}
+#   -d {{ cert_item.domains | join(',') }}
+#   {{ '--pre-hook /etc/letsencrypt/renewal-hooks/pre/stop_services'
+#     if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'
+#   else '' }}
+#   {{ '--post-hook /etc/letsencrypt/renewal-hooks/post/start_services'
+#     if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'
+#   else '' }}
+
+#certbot_admin_email: "{{ cloudflare_account_email }}"
+#certbot_cloudlare_api_token: "{{ cloudflare_acme_api_token }}"
+#certbot_cloudflare_api_key: "{{ cloudflare_global_api_key }}"
+#certbot_cloudflare_email: "{{ cloudflare_account_email }}"
+#certbot_certs:
+#  - domains:
+#      - "{{ local_domain }}"
+#      - "*.{{ local_domain }}"
+#      - "*.o.{{ local_domain }}"
+#  - domains:
+#      - "{{ public_domain_1 }}"
+#      - "*.{{ public_domain_1 }}"
+#  - domains:
+#      - "{{ public_domain_2 }}"
+#      - "*.{{ public_domain_2 }}"
+
+lego_test_mode: true
+lego_admin_email: "{{ cloudflare_account_email }}"
+lego_cloudlare_api_token: "{{ cloudflare_lego_api_token }}"
+lego_certs:
+  - domains:
+      - "{{ local_domain }}"
+      - "*.{{ local_domain }}"
+  - domains:
+      - "*.{{ public_domain_1 }}"
+  - domains:
+      - "*.{{ public_domain_2 }}"
+
+# nginx
+nginx_docker_sites:
+  - server_name: "whoami.{{ local_domain }}"
+    upstream: "http://whoami.docker:80" 
+    ssl_certificate: "/etc/letsencrypt/certificates/{{ local_domain }}.crt"
+    ssl_key: "/etc/letsencrypt/certificates/{{ local_domain }}.key"
+    ssl_chain: "/etc/letsencrypt/certificates/{{ local_domain }}.issuer.crt"
+    filename: "whoami.conf"
+  - server_name: "nginxtest.{{ local_domain }}"
+    upstream: "http://nginxtest.docker:80"
+    ssl_certificate: "/etc/letsencrypt/certificates/{{ local_domain }}.crt"
+    ssl_key: "/etc/letsencrypt/certificates/{{ local_domain }}.key"
+    ssl_chain: "/etc/letsencrypt/certificates/{{ local_domain }}.issuer.crt"
+    filename: "nginxtest.conf"
+
+nginx_proxy_sites:
+  - server_name: "nginxhello.{{ local_domain }}"
+    upstream: "http://192.168.10.20:8080"
+    ssl_certificate: "/etc/letsencrypt/certificates/{{ local_domain }}.crt"
+    ssl_key: "/etc/letsencrypt/certificates/{{ local_domain }}.key"
+    ssl_chain: "/etc/letsencrypt/certificates/{{ local_domain }}.issuer.crt"
+    filename: "nginxhello.conf"
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -19,109 +89,41 @@ container_config_path: /config
 
 container_networks:
   ###
-  - network_name: traefik
+  - network_name: coredns
     active: true
     external: true
 
 containers:
-  ###
-  - service_name: traefik
-    active: true
-    image: traefik
-    container_name: traefik
-    security_opt:
-      - no-new-privileges:true
-    include_global_env_vars: false
-    environment:
-      - TZ={{ ntp_timezone }}
-      - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - traefik
-      - default
-    extra_hosts:
-      - '"host.docker.internal:172.17.0.1"'
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ local_domain }}`)"'
-      - '"traefik.http.routers.traefik.entrypoints=web"'
-      - '"traefik.http.middlewares.traefik-auth.basicauth.users={{ traefik_dashboard_auth }}"'
-      - '"traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"'
-      - '"traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"'
-      - '"traefik.http.routers.traefik.middlewares=traefik-https-redirect"'
-      - '"traefik.http.routers.traefik-secure.entrypoints=websecure"'
-      - '"traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.{{ local_domain }}`)"'
-      - '"traefik.http.routers.traefik-secure.middlewares=traefik-auth"'
-      - '"traefik.http.routers.traefik-secure.tls=true"'
-      - '"traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ local_domain }}"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[1].main={{ public_domain_1 }}"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[1].sans=*.{{ public_domain_1 }}"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[2].main={{ public_domain_2 }}"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[2].sans=*.{{ public_domain_2 }}"'
-      - '"traefik.http.routers.traefik-secure.service=api@internal"'
   ###
   - service_name: nginxhello
     active: true
     image: nginxdemos/nginx-hello
     container_name: nginxhello
     include_global_env_vars: false
+    ports:
+      - 8080:8080
     networks:
+      - coredns
       - default
-      - traefik
     restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.nginxhello.rule=Host(`nginxhello.{{ local_domain }}`)"'
-      - '"traefik.http.routers.nginxhello.entrypoints=websecure"'
-      - '"traefik.http.routers.nginxhello.tls=true"'
-      - '"traefik.http.routers.nginxhello.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.nginxhello.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.nginxhello.tls.domains[0].sans=*.{{ local_domain }}"'
-      - '"traefik.http.services.nginxhello.loadbalancer.server.port=8080"'
-
+  ###  
   - service_name: whoami
     active: true
     image: traefik/whoami
     container_name: whoami
     include_global_env_vars: false
     networks:
+      - coredns
       - default
-      - traefik
     restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.whoami.rule=Host(`whoami.{{ local_domain }}`)"'
-      - '"traefik.http.routers.whoami.entrypoints=websecure"'
-      - '"traefik.http.routers.whoami.tls=true"'
-      - '"traefik.http.routers.whoami.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.whoami.tls.domains[0].sans=*.{{ local_domain }}"'
-      - '"traefik.http.routers.whoami.tls.certresolver=cloudflare"'
-      
+  ###  
   - service_name: nginxtest
     active: true
     image: lscr.io/linuxserver/nginx
     container_name: nginxtest
     include_global_env_vars: false
     networks:
+      - coredns
       - default
-      - traefik
     restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.nginxtest.rule=Host(`nginxtest.{{ local_domain }}`)"'
-      - '"traefik.http.routers.nginxtest.entrypoints=websecure"'
-      - '"traefik.http.routers.nginxtest.tls=true"'
-      - '"traefik.http.routers.nginxtest.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.nginxtest.tls.domains[0].sans=*.{{ local_domain }}"'
-      - '"traefik.http.routers.nginxtest.tls.certresolver=cloudflare"'
-      
+    

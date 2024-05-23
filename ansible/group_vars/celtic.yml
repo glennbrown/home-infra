@@ -36,11 +36,6 @@ security_sudoers_passwordless:
 # traefik
 #traefik_debug_log: true
 traefik_acme: true
-traefik_domains: 
-  - name: "{{ public_domain_1 }}"
-    sans: "*.{{ public_domain_1 }}"
-  - name: "{{ public_domain_2 }}"
-    sans: "*.{{ public_domain_2 }}"
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
