@@ -1,12 +1,8 @@
 ---
 
-traefik_docker_provider: false
 traefik_file_providers: []
-traefik_exposed_by_default: false
-traefik_enable_proxmox: false
 traefik_debug_log: false
 traefik_acme: false
 traefik_acme_staging: false
-traefik_domains: []
 traefik_default_cert: []
 traefik_certs: []

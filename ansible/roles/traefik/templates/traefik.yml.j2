@@ -17,17 +17,13 @@ serversTransport:
   insecureSkipVerify: true
 ping: {}
 providers:
-{% if traefik_docker_provider %}
   docker:
     endpoint: unix:///var/run/docker.sock
     watch: true
-    exposedByDefault: {{ traefik_exposed_by_default | lower }}
-{% endif %}
-{% if traefik_file_providers %}
+    exposedByDefault: false
   file:
-    directory: /etc/traefik/rules
+    directory: /etc/traefik/config
     watch: true
-{% endif %}
 {% if traefik_debug_log %}
 log:
   level: debug
