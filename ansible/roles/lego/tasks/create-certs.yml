@@ -1,0 +1,14 @@
+---
+
+- name: Check if certificate already exists.
+  stat:
+    path: "{{ lego_cert_path }}/certificates/{{ cert_item.domains | first | replace('*.', '_.') }}.crt"
+  register: letsencrypt_cert
+
+- name: Generate new certificate if one doesn't exist.
+  command: "{{ lego_create_command }}"
+  when: not letsencrypt_cert.stat.exists
+  environment: 
+    CLOUDFLARE_DNS_API_TOKEN: "{{ lego_cloudlare_api_token }}"
+    CLOUDFLARE_PROPAGATION_TIMEOUT: 60
+    LEGO_DISABLE_CNAME_SUPPORT: true

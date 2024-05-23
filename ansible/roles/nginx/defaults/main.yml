@@ -1,4 +1,5 @@
 ---
 
 nginx_config_dir: /etc/nginx
+dhparams_pem_download: 'https://ssl-config.mozilla.org/ffdhe2048.txt'
 docker_resolver_address: "{{ ansible_lo.ipv4.address }}:5353"

@@ -1,0 +1,36 @@
+---
+# LXC Containers
+- hosts: lxc
+  remote_user: root
+  gather_facts: true
+  vars_files:
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
+
+  roles:
+    - role: grog.group
+    - role: grog.user
+    - role: grog.authorized-key
+    - role: apt-mirror
+      when: ansible_os_family == 'Debian'
+    - role: grog.package
+  
+  tasks:
+    - name: Set timezone
+      timezone:
+        name: 'America/New_York'
+    - name: Copy SSH config
+      copy:
+        src: sshd_config
+        dest: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: 0644
+  
+  post_tasks:
+    - name: Update apt cache to populate command-not-found
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+    - name: Reboot host
+      reboot:   

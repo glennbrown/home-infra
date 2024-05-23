@@ -35,9 +35,6 @@ security_sudoers_passwordless:
 
 # traefik
 #traefik_debug_log: true
-traefik_enable_dashboard: true
-traefik_docker_provider: true
-traefik_insecure_transport: true
 traefik_acme: true
 traefik_domains: 
   - name: "{{ public_domain_1 }}"
@@ -74,12 +71,14 @@ containers:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ appdata_path }}/traefik/config:/etc/traefik/config:ro"
       - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
       - 443:443
-    network_mode: bridge
+    networks:
+      - traefik
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
@@ -107,12 +106,14 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/overseerr:/config"
-    network_mode: bridge
+    networks:
+      - traefik
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
       - '"traefik.http.routers.overseerr.rule=Host(`requests.{{ public_domain_1 }}`)"'
       - '"traefik.http.routers.overseerr.entrypoints=websecure"'
+      - '"traefik.http.routers.overseerr.tls=true"'
       - '"traefik.http.routers.overseerr.tls.certresolver=cloudflare"'
       - '"traekik.http.routers.overseerr.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traekik.http.routers.overseerr.tls.domains[0].sans=*.{{ public_domain_1 }}"'
@@ -128,12 +129,14 @@ containers:
     volumes:
       - "{{ appdata_path }}/freshrss/data:/var/www/FreshRSS/data"
       - "{{ appdata_path }}/freshrss/extensions:/var/www/FreshRSS/extensions"
-    network_mode: bridge
+    networks:
+      - traefik
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
       - '"traefik.http.routers.freshrss.rule=Host(`freshrss.{{ public_domain_1 }}`)"'
       - '"traefik.http.routers.freshrss.entrypoints=websecure"'
+      - '"traefik.http.routers.freshrss.tls=true"'
       - '"traefik.http.routers.freshrss.tls.certresolver=cloudflare"'
       - '"traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'

@@ -30,9 +30,9 @@ Include /etc/ssh/sshd_config.d/*.conf
 # Authentication:
 
 #LoginGraceTime 2m
-PermitRootLogin no
+PermitRootLogin prohibit-password
 #StrictModes yes
-MaxAuthTries 5
+#MaxAuthTries 6
 #MaxSessions 10
 
 #PubkeyAuthentication yes
@@ -54,8 +54,8 @@ MaxAuthTries 5
 #IgnoreRhosts yes
 
 # To disable tunneled clear text passwords, change to no here!
-PasswordAuthentication no
-PermitEmptyPasswords no
+#PasswordAuthentication yes
+#PermitEmptyPasswords no
 
 # Change to yes to enable challenge-response passwords (beware issues with
 # some PAM modules and threads)
@@ -87,7 +87,7 @@ UsePAM yes
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
 #GatewayPorts no
-X11Forwarding yes
+X11Forwarding no
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes

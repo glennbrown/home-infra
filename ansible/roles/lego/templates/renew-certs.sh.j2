@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Renew SSL Certificates 
+
+export CLOUDFLARE_DNS_API_TOKEN="{{ lego_cloudlare_api_token }}"
+export CLOUDFLARE_PROPAGATION_TIMEOUT=60
+export LEGO_DISABLE_CNAME_SUPPORT=true
+
+{% for certs in lego_certs %}
+{{ lego_script }} --email "{{ certs.email | default(lego_admin_email) }}" --domains "{{ certs.domains | join(',') }}" --dns cloudflare --dns.resolvers "1.1.1.1:53" --dns.resolvers "1.0.0.1:53" {{ '--server "https://acme-staging-v02.api.letsencrypt.org/directory"' if lego_test_mode else '' }} --accept-tos --path {{ lego_cert_path }} renew {{ '--days ' + lego_renew_days if lego_renew_days else '' }}
+{% endfor %}

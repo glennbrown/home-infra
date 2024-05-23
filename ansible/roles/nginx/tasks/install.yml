@@ -1,16 +1,13 @@
 ---
 
 - name: Install nginx
-  import_role:
-    name: nginxinc.nginx_core.nginx
-  vars:
-    nginx_install_from: os_repository
-  become: true
-
-- name: Install nginx modules
-  package:
+  apt:
     name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
   loop:
+    - nginx-full
+    - nginx-extras
     - libnginx-mod-http-headers-more-filter
     - libnginx-mod-http-brotli-filter
     - libnginx-mod-stream

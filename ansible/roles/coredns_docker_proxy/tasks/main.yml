@@ -3,7 +3,6 @@
 - name: Create Docker network
   docker_network:
     name: coredns
-    internal: true
   become: true
 
 - name: Create configuration directory

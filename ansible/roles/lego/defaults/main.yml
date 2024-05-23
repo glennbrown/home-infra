@@ -1,0 +1,35 @@
+---
+
+lego_download_latest_ver: true  # Change to 'false' to pin to a specific version
+lego_pinned_ver: []  # Overriden by 'lego_download_latest_ver' variable
+
+lego_gh_url: https://github.com/go-acme/lego/releases/download
+lego_download_directory: "/tmp/lego"
+
+lego_test_mode: false
+
+lego_install_directory: /usr/local/bin
+lego_install_path: "{{ lego_install_directory }}/lego"
+lego_cert_path: /etc/letsencrypt
+
+lego_admin_email: []
+lego_cloudflare_api_key: []
+lego_cloudflare_api_token: []
+
+lego_renew_days: []
+
+lego_certs: []
+# - email: janedoe@example.com
+#   domains:
+#     - example1.com
+#     - *.example2.com
+# - domains:
+#     - example3.com
+
+lego_create_command: >-
+  {{ lego_script }} --email "{{ cert_item.email | default(lego_admin_email) }}"
+  --domains "{{ cert_item.domains | join(',') }}" --dns cloudflare 
+  --dns.resolvers "1.1.1.1:53" --dns.resolvers "1.0.0.1:53" 
+  {{ '--server "https://acme-staging-v02.api.letsencrypt.org/directory"' if lego_test_mode else '' }} 
+  --accept-tos --path {{ lego_cert_path }} run
+  

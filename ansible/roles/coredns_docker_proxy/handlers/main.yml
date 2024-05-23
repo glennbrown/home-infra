@@ -1,6 +1,7 @@
 ---
 
 - name: restart coredns
-  shell:
-    chdir: "{{ coredns_config_dir }}"
-    cmd: "{{ coredns_update_command }}"
+  community.docker.docker_compose_v2:
+    project_src: "{{ coredns_config_dir }}"
+    pull: missing
+  

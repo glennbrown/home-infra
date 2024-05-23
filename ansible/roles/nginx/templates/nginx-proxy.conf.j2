@@ -7,9 +7,10 @@ server {
     server_name {{ item.server_name }};
     set $upstream {{ item.upstream }};
 
-    ssl_certificate {{ item.ssl_cert_path }}/fullchain.pem;
-    ssl_certificate_key {{ item.ssl_cert_path }}/privkey.pem;
-    ssl_trusted_certificate {{ item.ssl_cert_path }}/chain.pem;
+    ssl_certificate {{ item.ssl_certificate }};
+    ssl_certificate_key {{ item.ssl_key }};
+    ssl_trusted_certificate {{ item.ssl_chain }};
+        
     include conf.d/ssl.conf;
 
     location / {

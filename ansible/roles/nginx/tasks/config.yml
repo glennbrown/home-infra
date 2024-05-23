@@ -1,9 +1,10 @@
 ---
 
-- name: Generate Diffie-Hellman Parameters
-  community.crypto.openssl_dhparam:
-    path: "{{ nginx_config_dir }}/dhparams.pem"
-    size: 4096
+- name: Download Diffie-Hellman Parameters
+  get_url:
+    url: "{{ dhparams_pem_download }}"
+    dest: "{{ nginx_config_dir }}/dhparams.pem"
+    mode: 0440
   become: true
 
 - name: Ensure config directories exist
@@ -19,14 +20,14 @@
 
 - name: Check if we already backed up stock config
   stat:
-    path: "{{ nginx_config_dir }}/nginx.conf.org"
+    path: "{{ nginx_config_dir }}/nginx.conf.orig"
   register: debian_stock_config
   become: true
 
 - name: Copy Debian stock config
   copy:
     src: "{{ nginx_config_dir }}/nginx.conf"
-    dest: "{{ nginx_config_dir }}/nginx.conf.org"
+    dest: "{{ nginx_config_dir }}/nginx.conf.orig"
     remote_src: true
   when: not debian_stock_config.stat.exists
   become: true
@@ -39,12 +40,22 @@
   become: true
   notify: reload nginx
 
+- name: Copy proxy parameters
+  copy:
+    src: proxy_params
+    dest: "{{ nginx_config_dir }}/proxy_params"
+    mode: 0644
+  become: true
+  notify: reload nginx
+
 - name: Copy additional config files
   template:
     src: "{{ item }}"
     dest: "{{ nginx_config_dir }}/conf.d/{{ item | basename }}"
     mode: 0644
-  with_fileglob: templates/conf.d/*.conf
+  loop:
+    - conf.d/docker-resolver.conf
+    - conf.d/ssl.conf
   become: true
   notify: reload nginx
 
@@ -57,7 +68,7 @@
 
 - name: Install HTTPS Redirect
   copy:
-    src: files/nginx-https-redirect.conf
+    src: nginx-https-redirect.conf
     dest: "{{ nginx_config_dir }}/sites-enabled/nginx-https-redirect.conf"
     mode: 0644
   become: true
@@ -66,7 +77,7 @@
 - name: Copy nginx config for docker proxied sites
   template:
     src: nginx-docker.conf.j2
-    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}.conf"
+    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}"
     mode: 0644
   become: true
   notify: reload nginx
@@ -76,7 +87,7 @@
 - name: Copy nginx config for proxied sites
   template:
     src: nginx-proxy.conf.j2
-    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}.conf"
+    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}"
     mode: 0644
   become: true
   notify: reload nginx
