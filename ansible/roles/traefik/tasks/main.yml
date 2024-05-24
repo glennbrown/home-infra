@@ -48,7 +48,7 @@
 - name: Copy traefik file provider rules
   template:
     src: "{{ item.name }}.j2"
-    dest: "{{ appdata_path }}/traefik/rules/{{ item.name }}"
+    dest: "{{ appdata_path }}/traefik/config/{{ item.name }}"
     owner: root
     group: root
     mode: 0644

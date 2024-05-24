@@ -133,10 +133,6 @@ mergerfs_mounts:
 nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
 
 # traefik
-traefik_enable_dashboard: true
-traefik_insecure_transport: true
-traefik_exposed_by_default: true
-traefik_docker_provider: true
 traefik_acme: true
 traefik_file_providers:
   - name: 'proxmox-rules.yml'
@@ -188,7 +184,7 @@ containers:
   ###
   - service_name: traefik
     active: true
-    image: traefik:2.11.2
+    image: traefik:3.0.1
     container_name: traefik
     security_opt:
       - no-new-privileges:true
@@ -197,7 +193,10 @@ containers:
       - TZ={{ ntp_timezone }}
       - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
     volumes:
-      - "{{ appdata_path }}/traefik:/etc/traefik"
+      - /etc/localtime:/etc/localtime:ro
+      - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ appdata_path }}/traefik/config:/etc/traefik/config:ro"
+      - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
@@ -209,13 +208,21 @@ containers:
       - '"host.docker.internal:172.17.0.1"'
     restart: unless-stopped
     labels:
-      - '"traefik.http.routers.dashboard.rule=Host(`traefik.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
-      - '"traefik.http.routers.dashboard.entrypoints=websecure"'
-      - '"traefik.http.routers.dashboard.service=api@internal"'
-      - '"traefik.http.routers.dashboard.middlewares=auth"'
-      - '"traefik.http.routers.dashboard.tls=true"'
-      - '"traefik.http.routers.dashboard.tls.certresolver=default"'
-      - '"traefik.http.middlewares.auth.basicauth.users={{ traefik_dashboard_auth }}"'
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.traefik.rule=Host(`traefik.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
+      - '"traefik.http.routers.traefik.entrypoints=web"'
+      - '"traefik.http.middlewares.traefik-auth.basicauth.users={{ traefik_dashboard_auth }}"'
+      - '"traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"'
+      - '"traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"'
+      - '"traefik.http.routers.traefik.middlewares=traefik-https-redirect"'
+      - '"traefik.http.routers.traefik-secure.entrypoints=websecure"'
+      - '"traefik.http.routers.traefik-secure.rule=Host(`traefik.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
+      - '"traefik.http.routers.traefik-secure.middlewares=traefik-auth"'
+      - '"traefik.http.routers.traefik-secure.tls=true"'
+      - '"traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
+      - '"traefik.http.routers.traefik-secure.service=api@internal"'
   ###
   - service_name: plex
     active: true
@@ -256,7 +263,9 @@ containers:
       - '"traefik.http.routers.tautulli.rule=Host(`tautulli.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.tautulli.entrypoints=websecure"'
       - '"traefik.http.routers.tautulli.tls=true"'
-      - '"traefik.http.routers.tautulli.tls.certresolver=default"'
+      - '"traefik.http.routers.tautulli.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.tautulli.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.tautulli.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: jellyfin
     active: false
@@ -284,7 +293,9 @@ containers:
       - '"traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.jellyfin.entrypoints=websecure"'
       - '"traefik.http.routers.jellyfin.tls=true"'
-      - '"traefik.http.routers.jellyfin.tls.certresolver=default"'
+      - '"traefik.http.routers.jellyfin.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.jellyfin.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.jellyfin.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.jellyfin.loadbalancer.server.port=8096"'
   ###
   - service_name: sabnzbd
@@ -304,7 +315,9 @@ containers:
       - '"traefik.http.routers.sabnzbd.rule=Host(`sabnzb.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.sabnzbd.entrypoints=websecure"'
       - '"traefik.http.routers.sabnzbd.tls=true"'
-      - '"traefik.http.routers.sabnzbd.tls.certresolver=default"'
+      - '"traefik.http.routers.sabnzbd.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.sabnzbd.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.sabnzbd.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: qbittorrent
     active: true
@@ -326,7 +339,9 @@ containers:
       - '"traefik.http.routers.qbittorrent.rule=Host(`qb.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.qbittorrent.entrypoints=websecure"'
       - '"traefik.http.routers.qbittorrent.tls=true"'
-      - '"traefik.http.routers.qbittorrent.tls.certresolver=default"'
+      - '"traefik.http.routers.qbittorrent.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.qbittorrent.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.qbittorrent.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.qbittorrent.loadbalancer.server.port=8080"'
   ###
   - service_name: prowlarr
@@ -345,7 +360,9 @@ containers:
       - '"traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.prowlarr.entrypoints=websecure"'
       - '"traefik.http.routers.prowlarr.tls=true"'
-      - '"traefik.http.routers.prowlarr.tls.certresolver=default"'
+      - '"traefik.http.routers.prowlarr.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.prowlarr.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.prowlarr.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: sonarr
     active: true
@@ -369,7 +386,9 @@ containers:
       - '"traefik.http.routers.sonarr.rule=Host(`sonarr.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.sonarr.entrypoints=websecure"'
       - '"traefik.http.routers.sonarr.tls=true"'
-      - '"traefik.http.routers.sonarr.tls.certresolver=default"'
+      - '"traefik.http.routers.sonarr.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.sonarr.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.sonarr.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: radarr
     active: true
@@ -393,7 +412,9 @@ containers:
       - '"traefik.http.routers.radarr.rule=Host(`radarr.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.radarr.entrypoints=websecure"'
       - '"traefik.http.routers.radarr.tls=true"'
-      - '"traefik.http.routers.radarr.tls.certresolver=default"'
+      - '"traefik.http.routers.radarr.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.radarr.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.radarr.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: speedtest-tracker
     active: true
@@ -411,7 +432,7 @@ containers:
       - '"traefik.http.routers.speedtest-tracker.rule=Host(`speedtest-tracker.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.speedtest-tracker.tls=true"'
       - '"traefik.http.routers.speedtest-tracker.entrypoints=websecure"'
-      - '"traefik.http.routers.speedtest-tracker.tls.certresolver=default"'
+      - '"traefik.http.routers.speedtest-tracker.tls.certresolver=cloudflare"'
   ###
   - service_name: prometheus
     active: true
@@ -437,7 +458,9 @@ containers:
       - '"traefik.http.routers.prometheus.rule=Host(`prometheus.{{ local_domain }}`)"'
       - '"traefik.http.routers.prometheus.entrypoints=websecure"'
       - '"traefik.http.routers.prometheus.tls=true"'
-      - '"traefik.http.routers.prometheus.tls.certresolver=default"'
+      - '"traefik.http.routers.prometheus.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.prometheus.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.prometheus.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: influxdb
     active: true
@@ -457,7 +480,9 @@ containers:
       - '"traefik.http.routers.influxdb.rule=Host(`influxdb.{{ local_domain }}`)"'
       - '"traefik.http.routers.influxdb.entrypoints=websecure"'
       - '"traefik.http.routers.influxdb.tls=true"'
-      - '"traefik.http.routers.influxdb.tls.certresolver=default"'
+      - '"traefik.http.routers.influxdb.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.influxdb.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.influxdb.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: telegraf
     active: true
@@ -550,11 +575,13 @@ containers:
       - '"traefik.http.routers.grafana.rule=Host(`grafana.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.grafana.tls=true"'
       - '"traefik.http.routers.grafana.entrypoints=websecure"'
-      - '"traefik.http.routers.grafana.tls.certresolver=default"'
+      - '"traefik.http.routers.grafana.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.grafana.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.grafana.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: py-kms
     active: true
-    image: ghcr.io/py-kms-organization/py-kms:latest
+    image: pykmsorg/py-kms
     container_name: py-kms
     include_global_env_vars: false
     environment:
@@ -584,7 +611,9 @@ containers:
       - '"traefik.http.routers.librespeed.rule=Host(`librespeed.o.{{ local_domain }}`)"'
       - '"traefik.http.routers.librespeed.entrypoints=websecure"'
       - '"traefik.http.routers.librespeed.tls=true"'
-      - '"traefik.http.routers.librespeed.tls.certresolver=default"'
+      - '"traefik.http.routers.librespeed.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.librespeed.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.librespeed.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
 ###
   - service_name: netbootxyz
     active: true
@@ -608,5 +637,7 @@ containers:
       - '"traefik.http.routers.netbootxyz.rule=Host(`netbootxyz.{{ local_domain }}`)"'
       - '"traefik.http.routers.netbootxyz.entrypoints=websecure"'
       - '"traefik.http.routers.netbootxyz.tls=true"'
-      - '"traefik.http.routers.netbootxyz.tls.certresolver=default"'
+      - '"traefik.http.routers.netbootxyz.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.netbookxyz.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.netbookxyz.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.netbootxyz.loadbalancer.server.port=3000"'
