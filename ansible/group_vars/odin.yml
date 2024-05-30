@@ -321,7 +321,7 @@ containers:
   ###
   - service_name: qbittorrent
     active: true
-    image: lscr.io/linuxserver/qbittorrent:4.6.4
+    image: lscr.io/linuxserver/qbittorrent:4.6.5
     container_name: qbittorrent
     include_global_env_vars: true
     volumes:
