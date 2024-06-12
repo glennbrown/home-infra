@@ -88,30 +88,30 @@ znc_users:
       - push
 
 - service_name: znc
-    active: true
-    image: znc
-    container_name: znc
-    user: "{{ main_uid }}:{{ main_gid }}"
-    include_global_env_vars: false
-    environment:
-      - TZ={{ ntp_timezone }}
-    volumes:
-      - "{{ appdata_path }}/znc:/znc-data"
-    network_mode: bridge
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.zncweb.rule=Host(`znc.{{ public_domain_1 }}`)"'
-      - '"traefik.http.routers.zncweb.entrypoints=websecure"'
-      - '"traefik.http.routers.zncweb.tls.certresolver=default"'
-      - '"traefik.http.routers.zncweb.tls.domains[0].main={{ public_domain_1 }}"'
-      - '"traefik.http.routers.zncweb.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-      - '"traefik.http.services.zncweb.loadbalancer.server.port=6501"'
-      - '"traefik.tcp.routers.zncirc.rule=HostSNI(`znc.{{ public_domain_1 }}`)"'
-      - '"traefik.tcp.routers.zncirc.entrypoints=irc"'
-      - '"traefik.tcp.routers.zncirc.tls=true"'
-      - '"traefik.tcp.routers.zncirc.tls.certresolver=default"'
-      - '"traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"'
-      - '"traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-      - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'
+  active: true
+  image: znc
+  container_name: znc
+  user: "{{ main_uid }}:{{ main_gid }}"
+  include_global_env_vars: false
+  environment:
+    - TZ={{ ntp_timezone }}
+  volumes:
+    - "{{ appdata_path }}/znc:/znc-data"
+  network_mode: bridge
+  restart: unless-stopped
+  labels:
+    - '"traefik.enable=true"'
+    - '"traefik.http.routers.zncweb.rule=Host(`znc.{{ public_domain_1 }}`)"'
+    - '"traefik.http.routers.zncweb.entrypoints=websecure"'
+    - '"traefik.http.routers.zncweb.tls.certresolver=default"'
+    - '"traefik.http.routers.zncweb.tls.domains[0].main={{ public_domain_1 }}"'
+    - '"traefik.http.routers.zncweb.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+    - '"traefik.http.services.zncweb.loadbalancer.server.port=6501"'
+    - '"traefik.tcp.routers.zncirc.rule=HostSNI(`znc.{{ public_domain_1 }}`)"'
+    - '"traefik.tcp.routers.zncirc.entrypoints=irc"'
+    - '"traefik.tcp.routers.zncirc.tls=true"'
+    - '"traefik.tcp.routers.zncirc.tls.certresolver=default"'
+    - '"traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"'
+    - '"traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+    - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'
   

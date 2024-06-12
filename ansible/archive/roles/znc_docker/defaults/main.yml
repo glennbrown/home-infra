@@ -1,0 +1,16 @@
+---
+
+# ZNC Install
+znc_user: ''
+znc_group: ''
+znc_config_root: ''
+znc_clientbuffer_repo: 'https://github.com/CyberShadow/znc-clientbuffer.git'
+znc_palaver_repo: 'https://github.com/cocodelabs/znc-palaver.git'
+znc_logsearch_repo: 'https://github.com/pR0Ps/znc-logsearch.git'
+
+# ZNC Config
+znc_max_buffer_size: 100000
+znc_web_port: 6501
+znc_irc_port: 6502
+znc_ssl_enable: false
+znc_ssl_certfile: "{{ znc_config_root }}/znc.pem"

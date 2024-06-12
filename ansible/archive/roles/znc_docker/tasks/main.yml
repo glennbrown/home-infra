@@ -1,62 +1,67 @@
 ---
 
-- name: check if ssl cert file is there
-  ansible.builtin.stat:
-    path: "{{ znc_ssl_certfile }}"
-  register: znc_sslcert_status
+- block:
+  - name: Check if ssl cert file is there
+    ansible.builtin.stat:
+      path: "{{ znc_ssl_certfile }}"
+    register: znc_sslcert_status
 
-- name: ensure znc config directory exists
+  # Create self signed cert
+  - name: Create self-signed cert
+    ansible.builtin.command: >-
+        docker run --rm --user "{{ main_uid }}:{{ main_gid }}" 
+        -v {{ znc_config_root }}:/znc-data znc --makepem
+    args:
+      creates: "{{ znc_config_root }}/znc.pem"
+    become: true
+    become_user: "{{ znc_user }}"
+    when: not znc_sslcert_status.stat.exists
+  when: znc_ssl_enable
+
+- name: Check if we already have a znc config
+  ansible.builtin.stat:
+    path: "{{ znc_config_root }}/configs/znc.conf"
+  register: znc_config_status
+
+- name: Ensure relevant ZNC config directories exist
   ansible.builtin.file:
-    path: "{{ znc_config_root }}/configs"
+    path: "{{ znc_config_root }}/{{ item }}"
     state: directory
     owner: "{{ znc_user }}"
     group: "{{ znc_group }}"
     mode: 0700
-
-# Create self signed cert
-- name: create self signed cert
-  ansible.builtin.command: docker run --rm --user "{{ main_uid }}:{{ main_gid }}" -v {{ znc_config_root }}:/znc-data znc:slim --makepem
-  args:
-    creates: "{{ znc_config_root }}/znc.pem"
-  become: true
-  become_user: "{{ znc_user }}"
-  when: not znc_sslcert_status.stat.exists
+  loop:
+    - configs
+    - modules
   
-- name: copy znc configuration file
+- name: Copy ZNC configuration file
   ansible.builtin.template:
     src: znc.conf.j2
     dest: "{{ znc_config_root }}/configs/znc.conf"
     owner: "{{ znc_user }}"
     group: "{{ znc_group }}"
     mode: 0600
+  when: not znc_config_status.stat.exists
 
-- name: ensure znc modules directory exists
-  ansible.builtin.file:
-    path: "{{ znc_config_root }}/modules"
-    state: directory
-    owner: "{{ znc_user }}"
-    group: "{{ znc_group }}"
-    mode: 0700
-
-- name: git clone znc-clientbuffer module
+- name: Git clone znc-clientbuffer module
   ansible.builtin.git:
     repo: "{{ znc_clientbuffer_repo }}"
     dest: /usr/local/src/znc-clientbuffer
     version: master
 
-- name: git clone znc-palaver module
+- name: Git clone znc-palaver module
   ansible.builtin.git:
     repo: "{{ znc_palaver_repo }}"
     dest: /usr/local/src/znc-palaver
     version: master
 
-- name: git clone znc-logsearch module
+- name: Git clone znc-logsearch module
   ansible.builtin.git:
     repo: "{{ znc_logsearch_repo }}"
     dest: /usr/local/src/znc-logsearch
     version: master
 
-- name: copy znc-clientbuffer module into znc modules directory
+- name: Copy znc-clientbuffer module into znc modules directory
   ansible.builtin.copy:
     src: /usr/local/src/znc-clientbuffer/clientbuffer.cpp
     dest: "{{ znc_config_root }}/modules"
@@ -64,7 +69,7 @@
     group: "{{ znc_group }}"
     remote_src: true
 
-- name: copy znc-palaver module into znc modules directory
+- name: Copy znc-palaver module into znc modules directory
   ansible.builtin.copy:
     src: /usr/local/src/znc-palaver/palaver.cpp
     dest: "{{ znc_config_root }}/modules"
@@ -72,7 +77,7 @@
     group: "{{ znc_group }}"
     remote_src: true
 
-- name: copy znc-logsearch module into znc modules directory
+- name: Copy znc-logsearch module into znc modules directory
   ansible.builtin.copy:
     src: /usr/local/src/znc-logsearch/logsearch.py
     dest: "{{ znc_config_root }}/modules"
