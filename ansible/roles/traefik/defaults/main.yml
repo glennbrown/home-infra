@@ -2,6 +2,7 @@
 
 traefik_file_providers: []
 traefik_debug_log: false
+traefik_access_log: false
 traefik_acme: false
 traefik_acme_staging: false
 traefik_default_cert: []

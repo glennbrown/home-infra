@@ -2,82 +2,19 @@
 
 apt_source_mode: modern
 
-certbot_testmode: true
-certbot_hsts: true
-# Parameters used when creating new Certbot certs.
-# certbot_create_method: standalone
-# certbot_create_if_missing: true
-# certbot_install_method: 'snap'
-# certbot_create_standalone_stop_services:  
-#   - nginx
-# certbot_create_command: >-
-#   {{ certbot_script }} certonly --{{ certbot_create_method  }}
-#   {{ '--hsts' if certbot_hsts else '' }}
-#   {{ '--test-cert' if certbot_testmode else '' }}
-#   --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini --dns-cloudflare-propagation-seconds 60
-#   --noninteractive --agree-tos
-#   --email {{ cert_item.email | default(certbot_admin_email) }}
-#   {{ '--webroot-path ' if certbot_create_method == 'webroot'  else '' }}
-#   {{ cert_item.webroot | default(certbot_webroot) if certbot_create_method == 'webroot' else '' }}
-#   {{ certbot_create_extra_args }}
-#   -d {{ cert_item.domains | join(',') }}
-#   {{ '--pre-hook /etc/letsencrypt/renewal-hooks/pre/stop_services'
-#     if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'
-#   else '' }}
-#   {{ '--post-hook /etc/letsencrypt/renewal-hooks/post/start_services'
-#     if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'
-#   else '' }}
+# traefik
+traefik_debug_log: true
+traefik_acme: true
+traefik_acme_staging: true
+traefik_access_log: true
+traefik_extra_entrypoints:
+  - name: irc
+    port: '7010'
 
-#certbot_admin_email: "{{ cloudflare_account_email }}"
-#certbot_cloudlare_api_token: "{{ cloudflare_acme_api_token }}"
-#certbot_cloudflare_api_key: "{{ cloudflare_global_api_key }}"
-#certbot_cloudflare_email: "{{ cloudflare_account_email }}"
-#certbot_certs:
-#  - domains:
-#      - "{{ local_domain }}"
-#      - "*.{{ local_domain }}"
-#      - "*.o.{{ local_domain }}"
-#  - domains:
-#      - "{{ public_domain_1 }}"
-#      - "*.{{ public_domain_1 }}"
-#  - domains:
-#      - "{{ public_domain_2 }}"
-#      - "*.{{ public_domain_2 }}"
-
-lego_test_mode: true
-lego_admin_email: "{{ cloudflare_account_email }}"
-lego_cloudlare_api_token: "{{ cloudflare_lego_api_token }}"
-lego_certs:
-  - domains:
-      - "{{ local_domain }}"
-      - "*.{{ local_domain }}"
-  - domains:
-      - "*.{{ public_domain_1 }}"
-  - domains:
-      - "*.{{ public_domain_2 }}"
-
-# nginx
-nginx_docker_sites:
-  - server_name: "whoami.{{ local_domain }}"
-    upstream: "http://whoami.docker:80" 
-    ssl_certificate: "/etc/letsencrypt/certificates/{{ local_domain }}.crt"
-    ssl_key: "/etc/letsencrypt/certificates/{{ local_domain }}.key"
-    ssl_chain: "/etc/letsencrypt/certificates/{{ local_domain }}.issuer.crt"
-    filename: "whoami.conf"
-  - server_name: "nginxtest.{{ local_domain }}"
-    upstream: "http://nginxtest.docker:80"
-    ssl_certificate: "/etc/letsencrypt/certificates/{{ local_domain }}.crt"
-    ssl_key: "/etc/letsencrypt/certificates/{{ local_domain }}.key"
-    ssl_chain: "/etc/letsencrypt/certificates/{{ local_domain }}.issuer.crt"
-    filename: "nginxtest.conf"
-
-nginx_proxy_sites:
-  - server_name: "nginxhello.{{ local_domain }}"
-    upstream: "http://192.168.10.20:8080"
-    ssl_certificate: "/etc/letsencrypt/certificates/{{ local_domain }}.crt"
-    ssl_key: "/etc/letsencrypt/certificates/{{ local_domain }}.key"
-    ssl_chain: "/etc/letsencrypt/certificates/{{ local_domain }}.issuer.crt"
-    filename: "nginxhello.conf"
+# ZNC
+znc_user: "{{ main_username }}"
+znc_group: "{{ main_groupname }}"
+znc_config_root: "{{ appdata_path }}/znc"
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -89,23 +26,66 @@ container_config_path: /config
 
 container_networks:
   ###
-  - network_name: coredns
+  - network_name: traefik
     active: true
     external: true
 
 containers:
+  ###
+  - service_name: traefik
+    active: true
+    image: traefik
+    container_name: traefik
+    security_opt:
+      - no-new-privileges:true
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ appdata_path }}/traefik/config:/etc/traefik/config:ro"
+      - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
+      - "{{ appdata_path }}/traefik/log:/var/log"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 80:80
+      - 443:443
+      - 7010:7010
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.traefik.rule=Host(`{{ ansible_hostname }}.{{ local_domain }}`)"'
+      - '"traefik.http.routers.traefik.entrypoints=web"'
+      - '"traefik.http.middlewares.traefik-auth.basicauth.users={{ traefik_dashboard_auth }}"'
+      - '"traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"'
+      - '"traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"'
+      - '"traefik.http.routers.traefik.middlewares=traefik-https-redirect"'
+      - '"traefik.http.routers.traefik-secure.entrypoints=websecure"'
+      - '"traefik.http.routers.traefik-secure.rule=Host(`{{ ansible_hostname }}.{{ local_domain }}`)"'
+      - '"traefik.http.routers.traefik-secure.middlewares=traefik-auth"'
+      - '"traefik.http.routers.traefik-secure.tls=true"'
+      - '"traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.traefik-secure.service=api@internal"'
   ###
   - service_name: nginxhello
     active: true
     image: nginxdemos/nginx-hello
     container_name: nginxhello
     include_global_env_vars: false
-    ports:
-      - 8080:8080
     networks:
-      - coredns
-      - default
+      - traefik
     restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.nginxhello.entrypoints=websecure"'
+      - '"traefik.http.routers.nginxhello.rule=Host(`nginxhello.{{ local_domain }}`)"'
+      - '"traefik.http.routers.nginxhello.tls=true"'
+      - '"traefik.http.routers.nginxhello.tls.certresolver=cloudflare"'
+      - '"traefik.http.services.nginxhello.loadbalancer.server.port=8080"'
   ###  
   - service_name: whoami
     active: true
@@ -113,9 +93,14 @@ containers:
     container_name: whoami
     include_global_env_vars: false
     networks:
-      - coredns
-      - default
+      - traefik
     restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.whoami.entrypoints=websecure"'
+      - '"traefik.http.routers.whoami.rule=Host(`whoami.{{ local_domain }}`)"'
+      - '"traefik.http.routers.whoami.tls=true"'
+      - '"traefik.http.routers.whoami.tls.certresolver=cloudflare"'
   ###  
   - service_name: nginxtest
     active: true
@@ -123,7 +108,41 @@ containers:
     container_name: nginxtest
     include_global_env_vars: false
     networks:
-      - coredns
-      - default
+      - traefik
+    volumes:
+      - "{{ appdata_path }}/nginxtest:{{ container_config_path }}"
     restart: unless-stopped
-    
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.nginxtest.entrypoints=websecure"'
+      - '"traefik.http.routers.nginxtest.rule=Host(`nginxtest.{{ local_domain }}`)"'
+      - '"traefik.http.routers.nginxtest.tls=true"'
+      - '"traefik.http.routers.nginxtest.tls.certresolver=cloudflare"'
+      - '"traefik.http.services.nginxtest.loadbalancer.server.port=443"'
+      - '"traefik.http.services.nginxtest.loadbalancer.server.scheme=https"'
+  ###
+  - service_name: znc
+    active: true
+    image: znc
+    container_name: znc
+    user: "{{ main_uid }}:{{ main_gid }}"
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - "{{ appdata_path }}/znc:/znc-data"
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.zncweb.rule=Host(`znc.{{ local_domain }}`)"'
+      - '"traefik.http.routers.zncweb.entrypoints=websecure"'
+      - '"traefik.http.routers.zncweb.tls=true"'
+      - '"traefik.http.routers.zncweb.tls.certresolver=cloudflare"'
+      - '"traefik.http.services.zncweb.loadbalancer.server.port=6501"'
+      - '"traefik.tcp.routers.zncirc.rule=HostSNI(`znc.{{ local_domain }}`)"'
+      - '"traefik.tcp.routers.zncirc.entrypoints=irc"'
+      - '"traefik.tcp.routers.zncirc.tls=true"'
+      - '"traefik.tcp.routers.zncirc.tls.certresolver=cloudflare"'
+      - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'

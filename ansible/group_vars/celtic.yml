@@ -3,6 +3,14 @@
 # Default ssh port to use
 ansible_ssh_port: "{{ cloud_ssh_port }}"
 
+# apt-mirror
+apt_source_mode: modern
+
+# Bash Aliases
+bash_docker: true
+bash_apt: true
+bash_systemctl: true
+
 # geerlingguy.ntp
 ntp_daemon: ntp
 ntp_package: ntp
@@ -11,17 +19,6 @@ ntp_timezone: "America/New_York"
 #Tailscale
 tailscale_args: "--accept-routes"
 tailscale_authkey: "{{ tailscale_oci_authkey }}"
-
-bash_aliases:
-  - { alias: "dtail", command: "docker logs -tf --tail='50' " }
-  - { alias: "dstop", command: "docker stop `docker ps -aq`" }
-  - { alias: "drm", command: "docker rm `docker ps -aq`" }
-  - { alias: "dcp", command: "docker compose -f ~/docker-compose.yml " }
-  - { alias: "dcporph", command: "docker compose -f ~/docker-compose.yml --remove-orphans " }
-  - { alias: "dprune", command: "docker image prune" }
-  - { alias: "dprunesys", command: "docker system prune --all"}
-  - { alias: "ctop", command: "docker run --name ctop  -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop " }
-
 
 # geerlingguy.security
 security_ssh_permit_root_login: "no"
@@ -36,6 +33,14 @@ security_sudoers_passwordless:
 # traefik
 #traefik_debug_log: true
 traefik_acme: true
+traefik_extra_entrypoints:
+  - name: irc
+    port: '7010'
+
+# ZNC
+znc_user: "{{ main_username }}"
+znc_group: "{{ main_groupname }}"
+znc_config_root: "{{ appdata_path }}/znc"
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -68,10 +73,12 @@ containers:
       - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
       - "{{ appdata_path }}/traefik/config:/etc/traefik/config:ro"
       - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
+      - "{{ appdata_path }}/traefik/log:/var/log"
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
       - 443:443
+      - 7010:7010
     networks:
       - traefik
     restart: unless-stopped
@@ -135,3 +142,32 @@ containers:
       - '"traefik.http.routers.freshrss.tls.certresolver=cloudflare"'
       - '"traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+  ###
+  - service_name: znc
+    active: true
+    image: znc:1.9.0
+    container_name: znc
+    user: "{{ main_uid }}:{{ main_gid }}"
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - "{{ appdata_path }}/znc:/znc-data"
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.zncweb.rule=Host(`znc.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.zncweb.entrypoints=websecure"'
+      - '"traefik.http.routers.zncweb.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.zncweb.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.http.routers.zncweb.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+      - '"traefik.http.services.zncweb.loadbalancer.server.port=6501"'
+      - '"traefik.tcp.routers.zncirc.rule=HostSNI(`znc.{{ public_domain_1 }}`)"'
+      - '"traefik.tcp.routers.zncirc.entrypoints=irc"'
+      - '"traefik.tcp.routers.zncirc.tls=true"'
+      - '"traefik.tcp.routers.zncirc.tls.certresolver=cloudflare"'
+      - '"traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"'
+      - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'

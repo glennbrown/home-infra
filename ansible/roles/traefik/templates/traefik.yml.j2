@@ -13,23 +13,39 @@ entryPoints:
           scheme: https
   websecure:
     address: :443
+{% if traefik_extra_entrypoints is defined  %}
+{% for entrypoint in traefik_extra_entrypoints %}
+  {{ entrypoint.name }}:
+    address: :{{ entrypoint.port }}
+{% endfor %}
+{% endif %}
 serversTransport:
   insecureSkipVerify: true
+tcpServersTransport:
+  tls:
+    insecureSkipVerify: true
 ping: {}
 providers:
   docker:
     endpoint: unix:///var/run/docker.sock
     watch: true
     exposedByDefault: false
+    network: traefik
   file:
     directory: /etc/traefik/config
     watch: true
 {% if traefik_debug_log %}
 log:
   level: debug
+  filepath: /var/log/traefik.log
 {% else %}
 log:
   level: info
+  filePath: /var/log/traefik.log
+{% endif %}
+{% if traefik_access_log %}
+accessLog:
+  filePath: /var/log/traefik-access.log
 {% endif %}
 {% if traefik_acme %}
 certificatesResolvers:

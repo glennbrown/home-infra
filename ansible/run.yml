@@ -108,7 +108,7 @@
     - 'vars/secrets_lookup.yml'
   roles:
     - role: heimdall
-    - role: bash_alias
+    - role: bash_aliases
     - role: ironicbadger.figurine
     - role: ironicbadger.docker_compose_generator
       tags: compose
@@ -136,11 +136,7 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-    - lego
-    #- role: certbot
-    - role: nginx
-      tags: compose
-    - role: coredns_docker_proxy
+    - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
@@ -153,7 +149,7 @@
   roles:
     - role: geerlingguy.security
     - role: artis3n.tailscale
-    - role: ironicbadger.bash_aliases
+    - role: bash_aliases
     - role: ironicbadger.figurine
     - role: ocagent
     - role: traefik
