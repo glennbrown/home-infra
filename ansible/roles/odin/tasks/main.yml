@@ -17,4 +17,3 @@
 - name: Setup lm_sensors
   include_tasks: sensors.yml
   
-  

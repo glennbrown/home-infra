@@ -5,28 +5,6 @@
 ###############################################################################
 #
 
-- name: Check if arc_summary already exists
-  ansible.builtin.stat:
-    path: /usr/local/bin/arc_summary3
-  register: arc_summary_installed
-
-# arc_summary report
-- name: Install arc_summary python script from zol github
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/ubuntu/zfs/master/cmd/arc_summary/arc_summary3
-    dest: /usr/local/bin/arc_summary3
-    mode: 0755
-    owner: root
-    group: root
-  when: not arc_summary_installed.stat.exists
-
-# New version with python3 support  
-#- name: Fix arc_summary script to reference python3
-#  ansible.builtin.lineinfile:
-#    path: /usr/local/bin/arc_summary
-#    regexp: '^#!/usr/bin/python$'
-#    line: '#!/usr/bin/python3'
-
 - name: Set mergerfs-tools binary location
   ansible.builtin.stat:
     path: /usr/local/bin/mergerfs.ctl
