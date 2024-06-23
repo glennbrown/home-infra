@@ -226,7 +226,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.40.2.8395-c67dce28e
+    image: plexinc/pms-docker:1.40.3.8555-fef15d30c
     container_name: plex
     include_global_env_vars: false
     environment:
@@ -485,7 +485,7 @@ containers:
       - '"traefik.http.routers.influxdb.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: telegraf
-    active: true
+    active: false
     image: telegraf:1.31.0-alpine
     container_name: telegraf
     cap_add:
@@ -528,7 +528,7 @@ containers:
     restart: unless-stopped
   ###
   - service_name: moto-exporter
-    active: true
+    active: false
     image: ghcr.io/jahkeup/prometheus-moto-exporter:main
     container_name: moto-exporter
     include_global_env_vars: false
