@@ -145,7 +145,7 @@ containers:
   ###
   - service_name: znc
     active: false
-    image: znc:1.9.0
+    image: znc:1.9.1
     container_name: znc
     user: "{{ main_uid }}:{{ main_gid }}"
     include_global_env_vars: false
