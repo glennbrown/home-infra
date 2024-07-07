@@ -418,9 +418,11 @@ containers:
   ###
   - service_name: speedtest-tracker
     active: true
-    image: ghcr.io/alexjustesen/speedtest-tracker:v0.19.0
+    image: lscr.io/linuxserver/speedtest-tracker:0.20.7
     container_name: speedtest-tracker
     include_global_env_vars: true
+    environment:
+      - "APP_KEY={{ speedtest_tracker_appkey }}"
     volumes:
       - "{{ appdata_path }}/speedtest-tracker:{{ container_config_path }}"
     networks:
