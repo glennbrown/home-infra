@@ -4,6 +4,9 @@
   "dependencyDashboard": true,
   "prConcurrentLimit": 0,
   "ansible": {
-    "fileMatch": ["^ansible/group_vars/.*\\.ya?ml$"]
+    "fileMatch": [
+      "^ansible/group_vars/.*\\.ya?ml$",
+      "^ansible/roles/coredns_docker_proxy/templates/docker-compose\\.yml\\.j2$"
+    ]
   }
 }

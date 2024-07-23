@@ -152,6 +152,8 @@
     - role: bash_aliases
     - role: ironicbadger.figurine
     - role: ocagent
+    - role: certbot
+      tags: certs
     - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator

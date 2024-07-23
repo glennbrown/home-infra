@@ -2,15 +2,15 @@
 
 services:
   coredns:
-    image: coredns/coredns:latest
+    image: coredns/coredns:1.11.1
     container_name: coredns
     volumes:
       - ./Corefile:/home/nonroot/Corefile:ro
     ports:
       - "{{ coredns_private_ip }}:5353:53/udp"
     networks:
-      - default
       - coredns
+    restart: always
 
 networks:
   coredns:

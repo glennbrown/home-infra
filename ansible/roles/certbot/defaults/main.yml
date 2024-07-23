@@ -16,6 +16,7 @@ certbot_admin_email: "cloudflare@example.com"
 
 # Cloudflare
 certbot_cloudflare_api_key: []
+certbot_cloudflare_email: []
 certbot_cloudflare_api_token: []
 
 cerbot_certs: []
