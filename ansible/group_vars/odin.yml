@@ -503,7 +503,7 @@ containers:
   ###
   - service_name: cadvisor
     active: true
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    image: gcr.io/cadvisor/cadvisor:v0.50.0
     container_name: cadvisor
     include_global_env_vars: false
     environment:
