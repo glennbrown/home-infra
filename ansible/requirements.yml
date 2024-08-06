@@ -37,7 +37,7 @@ roles:
 
   # MergerFS
   - src: tigattack.mergerfs
-    version: 1.2.0
+    version: 1.3.1
 
   # Tailscale
   - src: artis3n.tailscale
@@ -48,6 +48,6 @@ roles:
 
 collections:
   - name: prometheus.prometheus
-    version: 0.16.3
+    version: 0.17.0
   - name: nginxinc.nginx_core
     version: 0.8.0

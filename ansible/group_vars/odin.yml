@@ -7,15 +7,10 @@ set_hostname: odin
 ntp_daemon: chrony
 ntp_package: chrony
 
-bash_aliases:
-  - { alias: "dtail", command: "docker logs -tf --tail='50' " }
-  - { alias: "dstop", command: "docker stop `docker ps -aq`" }
-  - { alias: "drm", command: "docker rm `docker ps -aq`" }
-  - { alias: "dcp", command: "docker compose -f ~/docker-compose.yml " }
-  - { alias: "dcporph", command: "docker compose -f ~/docker-compose.yml --remove-orphans " }
-  - { alias: "dprune", command: "docker image prune" }
-  - { alias: "dprunesys", command: "docker system prune --all"}
-  - { alias: "ctop", command: "docker run --name ctop  -it --rm -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop " }
+# Bash Aliases
+bash_docker: true
+bash_apt: true
+bash_systemctl: true
   
 # grog.package
 package_list_group:
@@ -72,7 +67,6 @@ user_list_group:
     state: present
 
 # odin
-# TODO: change secret to 1password lookup
 odin_main_storage_path: /mnt/storage
 extra_mountpoints:
   - { path: /mnt/nvme1tb, diskbyid: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1, fs: ext4, opts: "defaults,discard" }
@@ -82,7 +76,7 @@ samba_users:
   - username: kbrown
     password: "{{ secret_samba_kbrown }}"
 
-# ironicbadger.snapraid + kgb-odin
+# ironicbadger.snapraid + odin
 snapraid_runner: true
 snapraid_install: true
 snapraid_install_mode: package_manager
@@ -226,7 +220,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.40.3.8555-fef15d30c
+    image: plexinc/pms-docker:1.40.4.8679-424562606
     container_name: plex
     include_global_env_vars: false
     environment:

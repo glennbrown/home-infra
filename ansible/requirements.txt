@@ -1,10 +1,10 @@
-ansible==10.0.1
-ansible-lint==24.6.0
+ansible==10.2.0
+ansible-lint==24.7.0
 yamllint==1.35.1
 jmespath==1.0.1
-pre-commit==3.7.1
-wheel==0.43.0
-passlib==1.7.4 ; sys_platform == 'darwin'
+pre-commit==3.8.0
+wheel==0.44.0
+passlib==1.7.4
 proxmoxer==2.0.1
 requests==2.32.3
 paramiko==3.4.0

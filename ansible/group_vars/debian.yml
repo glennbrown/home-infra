@@ -41,6 +41,7 @@ package_list:
   - name: htop
   - name: iotop
   - name: iftop
+  - name: inxi
   - name: jq
   - name: mc
   - name: ncdu

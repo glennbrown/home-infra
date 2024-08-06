@@ -1,0 +1,31 @@
+---
+hostname: thor
+
+# geerlingguy.ntp
+ntp_daemon: ntp
+ntp_package: ntp
+
+# Bash Aliases
+bash_docker: false
+bash_apt: true
+bash_systemctl: true
+
+# grog.package
+package_list_group:
+  - name: weechat
+  - name: weechat-plugins
+  - name: weechat-scripts
+  - name: weechat-python
+  - name: weechat-ruby
+  - name: weechat-perl
+  - name: weechat-lua
+  - name: weechat-php
+  - name: weechat-tcl
+
+# ironicbadger.docker_compose_generator
+global_env_vars:
+  - TZ={{ ntp_timezone }}
+  - PUID={{ main_uid }}
+  - PGID={{ main_gid }}
+appdata_path: "/home/{{ main_username }}/appdata"
+container_config_path: /config

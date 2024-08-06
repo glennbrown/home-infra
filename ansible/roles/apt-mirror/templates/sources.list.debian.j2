@@ -14,7 +14,6 @@ deb {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-backports 
 deb-src {{ debian_apt_mirror }}/debian {{ ansible_distribution_release }}-backports {{ debian_components }}
 {% endif %}
 {% endif %}
-
 deb http://security.debian.org {{ ansible_distribution_release }}-security {{ debian_components }}
 {% if debian_source_enable is defined and debian_source_enable | bool %}
 deb-src http://security.debian.org {{ ansible_distribution_release }}-security {{ debian_components }}

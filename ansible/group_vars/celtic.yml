@@ -153,8 +153,9 @@ containers:
   ###
   - service_name: soju
     active: false
-    image: ghcr.io/glennbrown/soju:v0.8.1
+    image: ghcr.io/glennbrown/soju:0.8.1
     container_name: soju
+    hostname: soju.{{ public_domain_1 }}
     include_global_env_vars: false
     environment:
       - TZ={{ ntp_timezone }}
@@ -163,8 +164,8 @@ containers:
       - ~/.config/soju:/var/lib/soju:Z
       - ~/.local/share/soju/logs:/var/lib/soju/logs:Z
       - ~/.local/share/soju/uploads:/home/soju/uploads:Z
-      - /etc/letsencrypt/live/mydomain.com/fullchain.pem:/etc/ssl/certs/soju/soju.crt:ro
-      - /etc/letsencrypt/live/mydomain.com/privkey.pem:/etc/ssl/certs/soju/soju.key:ro
+      - /etc/letsencrypt/live/{{ public_domain_1 }}/fullchain.pem:/etc/ssl/certs/soju/soju.crt:ro
+      - /etc/letsencrypt/live/{{ public_domain_1 }}/privkey.pem:/etc/ssl/certs/soju/soju.key:ro
     ports:
       - 46697:6697
     restart: unless-stopped

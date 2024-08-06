@@ -27,6 +27,9 @@
       when: "'lxc' not in group_names"
     - role: geerlingguy.docker
       when: "'docker' in group_names"
+    - role: ctop
+      when: "'docker' in group_names"
+    
 
   handlers:
     - name: Update hosts file
@@ -78,7 +81,7 @@
   roles:
     - role: proxmox_nag_removal
     - role: htop
-    - role: ironicbadger.bash_aliases
+    - role: bash_aliases
     - role: ironicbadger.figurine
     - role: odin
       tags: tools, disks, file-sharing
@@ -118,7 +121,7 @@
     - 'vars/vault.yml'
     - 'vars/secrets_lookup.yml'
   roles:
-    - role: ironicbadger.bash_aliases
+    - role: bash_aliases
     - role: ironicbadger.figurine
 
 # Configure Loki

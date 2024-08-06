@@ -1,5 +1,5 @@
 {
-    "ansible.python.interpreterPath": "/opt/homebrew/bin/python3",
+    "ansible.python.interpreterPath": "/Users/gbrown/venv/ansible/bin/python3",
     "yaml.schemas": {
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/vars.json": "file:///Users/gbrown/Development/home-infra/ansible/testing/vars_test.yml",
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook": "file:///Users/gbrown/Development/home-infra/ansible/bootstrap.yml"
