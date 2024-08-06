@@ -613,7 +613,7 @@ containers:
 ###
   - service_name: netbootxyz
     active: true
-    image: lscr.io/linuxserver/netbootxyz:0.7.1
+    image: lscr.io/linuxserver/netbootxyz:0.7.3
     container_name: netbootxyz
     include_global_env_vars: true
     environment:
