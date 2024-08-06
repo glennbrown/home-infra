@@ -412,7 +412,7 @@ containers:
   ###
   - service_name: speedtest-tracker
     active: true
-    image: lscr.io/linuxserver/speedtest-tracker:0.20.7
+    image: lscr.io/linuxserver/speedtest-tracker:0.20.9
     container_name: speedtest-tracker
     include_global_env_vars: true
     environment:
