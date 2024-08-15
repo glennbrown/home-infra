@@ -1,0 +1,23 @@
+---
+
+# Install UFW
+- name: Install UFW
+  apt:
+    name: ufw
+    update_cache: true
+
+# UFW Rules
+- name: Set UFW Rules
+  community.general.ufw:
+    rule: "{{ item.rule | default (omit) }}"
+    port: "{{ item.port | default (omit) }}"
+    proto: "{{ item.proto | default (omit) }}"
+    comment: "{{ item.comment | default (omit) }}"
+    interface: "{{ item.interface | default (omit) }}"
+    direction: "{{ item.direction | default (omit) }}"
+    route: "{{ item.route | default (omit) }}"
+  loop: "{{ ufw }}"
+
+- name: Reload UFW
+  community.general.ufw:
+    state: enabled

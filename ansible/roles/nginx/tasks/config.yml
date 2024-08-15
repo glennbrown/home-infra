@@ -74,15 +74,15 @@
   become: true
   notify: reload nginx
 
-- name: Copy nginx config for docker proxied sites
-  template:
-    src: nginx-docker.conf.j2
-    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}"
-    mode: 0644
-  become: true
-  notify: reload nginx
-  loop: "{{ nginx_docker_sites }}"
-  when: nginx_docker_sites is defined
+#- name: Copy nginx config for docker proxied sites
+#  template:
+#    src: nginx-docker.conf.j2
+#    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}"
+#    mode: 0644
+#  become: true
+#  notify: reload nginx
+#  loop: "{{ nginx_docker_sites }}"
+#  when: nginx_docker_sites is defined
 
 - name: Copy nginx config for proxied sites
   template:

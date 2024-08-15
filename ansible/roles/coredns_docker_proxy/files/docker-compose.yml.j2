@@ -9,10 +9,10 @@ services:
     ports:
       - "{{ coredns_private_ip }}:5353:53/udp"
     networks:
-      - coredns
+      - proxy
     restart: always
 
 networks:
-  coredns:
-    name: coredns
+  proxy:
+    name: proxy
     external: true

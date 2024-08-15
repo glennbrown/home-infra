@@ -2,7 +2,7 @@
 
 - name: Create Docker network
   docker_network:
-    name: coredns
+    name: proxy
   become: true
 
 - name: Create configuration directory
@@ -21,6 +21,7 @@
     owner: root
     group: users
     mode: 0664
+  notify: restart coredns
   become: true
 
 - name: Copy compose configuration file
