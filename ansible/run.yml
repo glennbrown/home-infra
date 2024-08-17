@@ -156,9 +156,7 @@
     - role: ironicbadger.figurine
     - role: ocagent
     - role: celtic
-    - role: certbot
-      tags: certs
-    - role: nginx
+    - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose

@@ -178,7 +178,7 @@ containers:
   ###
   - service_name: traefik
     active: true
-    image: traefik:v3.1.2
+    image: traefik:3.1.2
     container_name: traefik
     security_opt:
       - no-new-privileges:true
@@ -188,9 +188,10 @@ containers:
       - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - "{{ appdata_path }}/traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "{{ appdata_path }}/traefik/config:/etc/traefik/config:ro"
-      - "{{ appdata_path }}/traefik/acme.json:/etc/traefik/acme.json"
+      - /etc/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - /etc/traefik/config.d:/etc/traefik/config.d:ro
+      - /etc/traefik/acme.json:/etc/traefik/acme.json
+      - /var/log/traefik:/var/log/traefik
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
@@ -220,7 +221,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.40.4.8679-424562606
+    image: plexinc/pms-docker:1.40.5.8854-f36c552fd
     container_name: plex
     include_global_env_vars: false
     environment:
@@ -638,6 +639,6 @@ containers:
       - '"traefik.http.routers.netbootxyz.entrypoints=websecure"'
       - '"traefik.http.routers.netbootxyz.tls=true"'
       - '"traefik.http.routers.netbootxyz.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.netbookxyz.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.netbookxyz.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
+      - '"traefik.http.routers.netbootxyz.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.netbootxyz.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.netbootxyz.loadbalancer.server.port=3000"'

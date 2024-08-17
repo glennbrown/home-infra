@@ -6,24 +6,30 @@
 
 - name: Ensure config directories exist
   file:
-    dest: "{{ appdata_path }}/{{ item }}"
+    dest: "{{ traefik_config_path }}/{{ item }}"
     state: directory
     owner: root
     group: root
     mode: 0755
   loop:
-    - traefik
-    - traefik/config
-    - traefik/log
+    - config.d
+
+- name: Ensure log directories exist
+  file:
+    dest: "{{ traefik_log_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Check if acme file exists already
   stat:
-    path: "{{ appdata_path }}/traefik/acme.json"
+    path: "{{ traefik_config_path }}/acme.json"
   register: acme_json_file
 
 - name: Ensure acme file exists
   file:
-    dest: "{{ appdata_path }}/traefik/acme.json"
+    dest: "{{ traefik_config_path }}/acme.json"
     state: touch
     owner: root
     group: root
@@ -33,15 +39,15 @@
 - name: Copy traefik config file from template
   template:
     src: traefik.yml.j2
-    dest: "{{ appdata_path }}/traefik/traefik.yml"
+    dest: "{{ traefik_config_path }}/traefik.yml"
     owner: root
     group: root
-    mode: 0664
+    mode: 0644
 
 - name: Copy traefik tls config file
   template:
     src: tls-config.yml.j2
-    dest: "{{ appdata_path }}/traefik/config/tls-config.yml"
+    dest: "{{ traefik_config_path }}/config.d/tls-config.yml"
     owner: root
     group: root
     mode: 0644
@@ -49,7 +55,7 @@
 - name: Copy traefik file provider rules
   template:
     src: "{{ item.name }}.j2"
-    dest: "{{ appdata_path }}/traefik/config/{{ item.name }}"
+    dest: "{{ traefik_config_path }}/config.d/{{ item.name }}"
     owner: root
     group: root
     mode: 0644
