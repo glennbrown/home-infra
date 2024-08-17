@@ -4,7 +4,6 @@ main_username: gbrown
 main_groupname: "{{ main_username }}"
 main_uid: "1000"
 main_gid: "{{ main_uid }}"
-nginx_private_ip: '{{ ansible_lo.ipv4.address }}'
 
 # bash_aliases
 bash_aliases:
