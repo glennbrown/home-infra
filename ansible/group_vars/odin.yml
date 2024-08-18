@@ -557,7 +557,7 @@ containers:
   ###
   - service_name: grafana
     active: true
-    image: grafana/grafana-oss:10.4.6
+    image: grafana/grafana-oss:10.4.7
     container_name: grafana
     include_global_env_vars: false
     environment:
