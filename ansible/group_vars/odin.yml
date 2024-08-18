@@ -487,7 +487,7 @@ containers:
   ###
   - service_name: telegraf
     active: false
-    image: telegraf:1.31.2-alpine
+    image: telegraf:1.31.3-alpine
     container_name: telegraf
     cap_add:
       - NET_RAW
