@@ -210,7 +210,7 @@ containers:
   ###
   - service_name: freshrss
     active: true
-    image: freshrss/freshrss:1.24.1-alpine
+    image: freshrss/freshrss:1.24.2-alpine
     container_name: freshrss
     include_global_env_vars: false
     environment:
