@@ -145,7 +145,7 @@ containers:
   ###
   - service_name: glenn-blog
     active: true
-    image: ghost:5.89.3-alpine
+    image: ghost:5.90.0-alpine
     container_name: glenn-blog
     include_global_env_vars: false
     environment:
