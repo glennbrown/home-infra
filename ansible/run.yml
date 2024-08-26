@@ -156,6 +156,7 @@
     - role: ironicbadger.figurine
     - role: ocagent
     - role: celtic
+    - role: znc_docker
     - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator

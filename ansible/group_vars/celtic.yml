@@ -63,6 +63,9 @@ ufw:
 #traefik_debug_log: true
 traefik_acme: true
 traefik_cloudflare_proxy: true
+traefik_extra_entrypoints:
+  - name: irc
+    port: '46697'
 
 # certbot
 certbot_install_method: snap
@@ -79,7 +82,7 @@ certbot_certs:
 # ZNC
 znc_user: "{{ main_username }}"
 znc_group: "{{ main_groupname }}"
-znc_config_root: "{{ appdata_path }}/znc"
+znc_config_root: "/home/{{ main_username }}/.znc"
 
 # ironicbadger.docker_compose_generator
 global_env_vars:
@@ -117,6 +120,7 @@ containers:
     ports:
       - 80:80
       - 443:443
+      - 46697:46697
     networks:
       - traefik
     restart: unless-stopped
@@ -138,6 +142,52 @@ containers:
       - '"traefik.http.routers.traefik-secure.tls.domains[1].main={{ public_domain_2 }}"'
       - '"traefik.http.routers.traefik-secure.tls.domains[1].sans=*.{{ public_domain_2 }}"'
       - '"traefik.http.routers.traefik-secure.service=api@internal"'
+  ###
+  - service_name: glenn-blog
+    active: true
+    image: ghost:5.89.3-alpine
+    container_name: glenn-blog
+    include_global_env_vars: false
+    environment:
+      - "TZ=America/New_York"
+      - NODE_ENV=production
+      - database__client=mysql
+      - database__connection__host=glenn-blog-db
+      - "database__connection__user={{ glennblog_db_user }}"
+      - "database__connection__password={{ glennblog_db_pass }}"
+      - database__connection__database=ghost
+      - "url=https://www.{{ public_domain_2 }}"
+    volumes:
+      - "{{ appdata_path }}/glenn-blog/content:/var/lib/ghost/content"
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik
+      - default
+    depends_on:
+      - glenn-blog-db
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.glennblog.rule=Host(`www.{{ public_domain_2 }}`)"'
+      - '"traefik.http.routers.glennblog.entrypoints=websecure"'
+      - '"traefik.http.routers.glennblog.tls=true"'
+      - '"traefik.http.routers.glennblog.tls.certresolver=cloudflare"'
+      - '"traekik.http.routers.glennblog.tls.domains[0].main={{ public_domain_2 }}"'
+      - '"traekik.http.routers.glennblog.tls.domains[0].sans=*.{{ public_domain_2 }}"'
+  ###
+  - service_name: glenn-blog-db
+    active: true
+    image: mysql:8.0.39
+    container_name: glenn-blog-db
+    include_global_env_vars: false
+    environment:
+      - "TZ=America/New_York"
+      - "MYSQL_ROOT_PASSWORD={{ mysql_root_pass }}"
+    volumes:
+      - "{{ appdata_path }}/glenn-blog/db:/var/lib/mysql"
+    networks:
+      - default
+    restart: unless-stopped
   ###
   - service_name: overseerr
     active: true
@@ -182,7 +232,7 @@ containers:
       - '"traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"'
   ###
   - service_name: znc
-    active: false
+    active: true
     image: znc:1.9.1
     container_name: znc
     user: "{{ main_uid }}:{{ main_gid }}"
@@ -192,8 +242,6 @@ containers:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ~/.znc:/znc-data
-    ports:
-      - 46697:6502
     networks:
       - traefik
     restart: unless-stopped
@@ -204,11 +252,34 @@ containers:
       - '"traefik.http.routers.zncweb.tls.certresolver=cloudflare"'
       - '"traefik.http.routers.zncweb.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.http.routers.zncweb.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-      - '"traefik.http.services.zncweb.loadbalancer.server.port=6501"'
+      - '"traefik.http.services.zncweb.loadbalancer.server.port=8080"'
       - '"traefik.tcp.routers.zncirc.rule=HostSNI(`znc.{{ public_domain_1 }}`)"'
       - '"traefik.tcp.routers.zncirc.entrypoints=irc"'
       - '"traefik.tcp.routers.zncirc.tls=true"'
       - '"traefik.tcp.routers.zncirc.tls.certresolver=cloudflare"'
       - '"traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"'
       - '"traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"'
-      - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6502"'
+      - '"traefik.tcp.services.zncirc.loadbalancer.server.port=6697"'
+  ###
+  - service_name: gokapi
+    active: true
+    image: f0rc3/gokapi:v1.9.1
+    container_name: gokapi
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - "{{ appdata_path }}/gokapi/data:/app/data"
+      - "{{ appdata_path }}/gokapi/config:/app/config"
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.gokapi.rule=Host(`share.{{ public_domain_2 }}`)"'
+      - '"traefik.http.routers.gokapi.entrypoints=websecure"'
+      - '"traefik.http.routers.gokapi.tls=true"'
+      - '"traefik.http.routers.gokapi.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.gokapi.tls.domains[0].main={{ public_domain_2 }}"'
+      - '"traefik.http.routers.gokapi.tls.domains[0].sans=*.{{ public_domain_2 }}"'
+      - '"traefik.http.services.gokapi.loadbalancer.server.port=53842"'
