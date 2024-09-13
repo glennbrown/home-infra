@@ -18,22 +18,22 @@ ansible_dir := "ansible"
 
 # Docker Container Updates
 docker:
-    cd {{ansible_dir}} && ansible-playbook docker.yml 
+    ansible-playbook docker.yml 
 
 # just run HOST TAGS
 run HOST *TAGS:
-    cd {{ansible_dir}} && ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
+    ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
 
 # Roles and Collections Repos
 # optionally use --force to reinstall all requirements
 reqs *FORCE:
-    cd {{ansible_dir}} && ansible-galaxy install -r requirements.yml {{FORCE}}
+    ansible-galaxy install -r requirements.yml {{FORCE}}
 
 # Ansible Vault Decrypt
 decrypt:
-    cd {{ansible_dir}} && ansible-vault decrypt vars/vault.yml
+    ansible-vault decrypt vars/vault.yml
 
 # Ansible Vault Encrypt
 encrypt:
-    cd {{ansible_dir}} && ansible-vault encrypt vars/vault.yml
+    ansible-vault encrypt vars/vault.yml
 
