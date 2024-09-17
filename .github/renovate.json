@@ -6,7 +6,12 @@
   "ansible": {
     "fileMatch": [
       "^ansible/group_vars/.*\\.ya?ml$",
-      "^ansible/roles/coredns_docker_proxy/templates/docker-compose\\.yml\\.j2$"
+      "^requirements\\.ya?ml$"
+    ]
+  },
+  "pip_requirements": {
+    "fileMatch": [
+      "^requirements\\.txt$"
     ]
   }
 }
