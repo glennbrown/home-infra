@@ -5,7 +5,7 @@
   "prConcurrentLimit": 0,
   "ansible": {
     "fileMatch": [
-      "^ansible/group_vars/.*\\.ya?ml$",
+      "^group_vars/.*\\.ya?ml$",
       "^requirements\\.ya?ml$"
     ]
   },
