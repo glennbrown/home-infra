@@ -7,4 +7,4 @@ wheel==0.44.0
 passlib==1.7.4
 proxmoxer==2.0.1
 requests==2.32.3
-paramiko==3.4.0
+paramiko==3.5.0
