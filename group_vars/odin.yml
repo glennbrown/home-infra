@@ -178,7 +178,7 @@ containers:
   ###
   - service_name: traefik
     active: true
-    image: traefik:v3.1.3
+    image: traefik:3.1.4
     container_name: traefik
     security_opt:
       - no-new-privileges:true
@@ -221,7 +221,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.40.5.8921-836b34c27
+    image: plexinc/pms-docker:1.41.0.8992-8463ad060
     container_name: plex
     include_global_env_vars: false
     environment:
@@ -242,7 +242,7 @@ containers:
   ###
   - service_name: tautulli
     active: true
-    image: tautulli/tautulli:v2.14.4
+    image: tautulli/tautulli:v2.14.5
     container_name: tautulli
     include_global_env_vars: true
     volumes:
@@ -285,7 +285,7 @@ containers:
   ###
   - service_name: qbittorrent
     active: true
-    image: lscr.io/linuxserver/qbittorrent:4.6.6
+    image: lscr.io/linuxserver/qbittorrent:4.6.7
     container_name: qbittorrent
     include_global_env_vars: true
     volumes:
@@ -356,7 +356,7 @@ containers:
   ###
   - service_name: radarr
     active: true
-    image: lscr.io/linuxserver/radarr:5.9.1
+    image: lscr.io/linuxserver/radarr:5.10.4
     container_name: radarr
     include_global_env_vars: true
     volumes:
@@ -405,7 +405,7 @@ containers:
       - '"traefik.http.routers.speedtest-tracker.tls.certresolver=cloudflare"'
   ###
   - service_name: prometheus
-    active: true
+    active: false
     image: prom/prometheus:v2.54.1
     container_name: prometheus
     include_global_env_vars: false
@@ -433,7 +433,7 @@ containers:
       - '"traefik.http.routers.prometheus.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: influxdb
-    active: true
+    active: false
     image: influxdb:1.8.10-alpine
     container_name: influxdb
     include_global_env_vars: false
@@ -454,30 +454,9 @@ containers:
       - '"traefik.http.routers.influxdb.tls.domains[0].main={{ local_domain }}"'
       - '"traefik.http.routers.influxdb.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
-  - service_name: telegraf
-    active: false
-    image: telegraf:1.31.3-alpine
-    container_name: telegraf
-    cap_add:
-      - NET_RAW
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-      - HOST_MOUNT_PREFIX=/rootfs
-      - HOST_ETC=/rootfs/etc
-      - HOST_SYS=/rootfs/sys
-      - HOST_PROC=/rootfs/proc
-      - HOST_VAR=/rootfs/var
-      - HOST_RUN=/rootfs/run
-    volumes:
-      - "{{ appdata_path }}/telegraf:/etc/telegraf:ro"
-      - /:/rootfs:ro
-    network_mode: host
-    restart: unless-stopped
-  ###
   - service_name: cadvisor
-    active: true
-    image: gcr.io/cadvisor/cadvisor:v0.50.0
+    active: false
+    image: ghcr.io/cadvisor/cadvisor:v0.49.1
     container_name: cadvisor
     include_global_env_vars: false
     environment:
@@ -497,22 +476,8 @@ containers:
     command: '-port 9099'
     restart: unless-stopped
   ###
-  - service_name: moto-exporter
-    active: false
-    image: ghcr.io/jahkeup/prometheus-moto-exporter:main
-    container_name: moto-exporter
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-      - "MOTO_PASSWORD={{ modem_secret }}"
-    ports:
-      - 9731:9731
-    networks:
-      - default
-    restart: unless-stopped
-  ###
   - service_name: varken
-    active: true
+    active: false
     image: boerderij/varken:1.7.7
     container_name: varken
     include_global_env_vars: false
@@ -525,7 +490,7 @@ containers:
     restart: unless-stopped
   ###
   - service_name: grafana
-    active: true
+    active: false
     image: grafana/grafana-oss:10.4.8
     container_name: grafana
     include_global_env_vars: false
@@ -567,7 +532,7 @@ containers:
   ###
   - service_name: librespeed
     active: true
-    image: lscr.io/linuxserver/librespeed:5.4.20240804
+    image: lscr.io/linuxserver/librespeed:5.4.1
     container_name: librespeed
     include_global_env_vars: true
     volumes:

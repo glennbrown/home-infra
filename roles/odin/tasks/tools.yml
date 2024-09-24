@@ -25,3 +25,4 @@
     chdir: /tmp/mergerfs-tools
     cmd: make install
   when: not mergerfs_tools_installed
+  

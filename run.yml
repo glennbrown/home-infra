@@ -89,10 +89,10 @@
       tags: disks
     - role: ironicbadger.snapraid
     - role: geerlingguy.nfs
-    - role: prometheus.prometheus.node_exporter
-      tags: prom
-    - role: node_exporter_collectors
-      tags: prom
+    #- role: prometheus.prometheus.node_exporter
+    #  tags: prom
+    #- role: node_exporter_collectors
+    #  tags: prom
     - role: traefik
       tags: compose
     - role: vuetorrent
