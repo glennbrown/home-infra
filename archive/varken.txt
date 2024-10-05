@@ -1,0 +1,12 @@
+###
+  - service_name: varken
+    active: false
+    image: boerderij/varken:1.7.7
+    container_name: varken
+    include_global_env_vars: false
+    environment:
+      - "TZ={{ ntp_timezone }}"
+    volumes:
+      - "{{ appdata_path }}/varken:{{ container_config_path }}"
+    networks:
+      - default

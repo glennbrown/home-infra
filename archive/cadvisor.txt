@@ -1,0 +1,22 @@
+###
+  - service_name: cadvisor
+    active: false
+    image: ghcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    include_global_env_vars: false
+    environment:
+      - "TZ={{ ntp_timezone }}"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    ports:
+      - 9099:9099
+    networks:
+      - default
+    command: '-port 9099'
+    restart: unless-stopped

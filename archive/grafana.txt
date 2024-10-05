@@ -1,0 +1,25 @@
+###
+  - service_name: grafana
+    active: false
+    image: grafana/grafana-oss:10.4.9
+    container_name: grafana
+    include_global_env_vars: false
+    environment:
+      - "TZ={{ ntp_timezone }}"
+      - "GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-singlestat-panel,grafana-worldmap-panel,marcusolsson-json-datasource,dalvany-image-panel,grafana-clock-panel,grafana-simple-json-datasource"
+      - "GF_SECURITY_ADMIN_PASSWORD={{ grafana_secret }}"
+      - "GF_SERVER_ROOT_URL=https://grafana.o.{{ local_domain }}"
+    volumes:
+      - "{{ appdata_path }}/grafana:/var/lib/grafana"
+    networks:
+      - traefik
+      - default
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.grafana.rule=Host(`grafana.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
+      - '"traefik.http.routers.grafana.tls=true"'
+      - '"traefik.http.routers.grafana.entrypoints=websecure"'
+      - '"traefik.http.routers.grafana.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.grafana.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.grafana.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'

@@ -221,7 +221,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.41.0.8992-8463ad060
+    image: plexinc/pms-docker:1.41.0.8994-f2c27da23
     container_name: plex
     include_global_env_vars: false
     environment:
@@ -404,34 +404,6 @@ containers:
       - '"traefik.http.routers.speedtest-tracker.entrypoints=websecure"'
       - '"traefik.http.routers.speedtest-tracker.tls.certresolver=cloudflare"'
   ###
-  - service_name: prometheus
-    active: false
-    image: prom/prometheus:v2.54.1
-    container_name: prometheus
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-    volumes:
-      - "{{ appdata_path }}/prometheus/data:/prometheus"
-      - "{{ appdata_path }}/prometheus/etc:/etc/prometheus"
-    networks:
-      - traefik
-      - default
-    command:
-      - "'--storage.tsdb.retention.time=1y'"
-      - "'--config.file=/etc/prometheus/prometheus.yml'"
-      - "'--storage.tsdb.path=/prometheus'"
-      - "'--web.enable-admin-api'"
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.prometheus.rule=Host(`prometheus.{{ local_domain }}`)"'
-      - '"traefik.http.routers.prometheus.entrypoints=websecure"'
-      - '"traefik.http.routers.prometheus.tls=true"'
-      - '"traefik.http.routers.prometheus.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.prometheus.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.prometheus.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
-  ###
   - service_name: influxdb
     active: false
     image: influxdb:1.8.10-alpine
@@ -453,66 +425,7 @@ containers:
       - '"traefik.http.routers.influxdb.tls.certresolver=cloudflare"'
       - '"traefik.http.routers.influxdb.tls.domains[0].main={{ local_domain }}"'
       - '"traefik.http.routers.influxdb.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
-  ###
-  - service_name: cadvisor
-    active: false
-    image: ghcr.io/cadvisor/cadvisor:v0.49.1
-    container_name: cadvisor
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    devices:
-      - /dev/kmsg:/dev/kmsg
-    ports:
-      - 9099:9099
-    networks:
-      - default
-    command: '-port 9099'
     restart: unless-stopped
-  ###
-  - service_name: varken
-    active: false
-    image: boerderij/varken:1.7.7
-    container_name: varken
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-    volumes:
-      - "{{ appdata_path }}/varken:{{ container_config_path }}"
-    networks:
-      - default
-    restart: unless-stopped
-  ###
-  - service_name: grafana
-    active: false
-    image: grafana/grafana-oss:10.4.9
-    container_name: grafana
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-      - "GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-singlestat-panel,grafana-worldmap-panel,marcusolsson-json-datasource,dalvany-image-panel,grafana-clock-panel,grafana-simple-json-datasource"
-      - "GF_SECURITY_ADMIN_PASSWORD={{ grafana_secret }}"
-      - "GF_SERVER_ROOT_URL=https://grafana.o.{{ local_domain }}"
-    volumes:
-      - "{{ appdata_path }}/grafana:/var/lib/grafana"
-    networks:
-      - traefik
-      - default
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.grafana.rule=Host(`grafana.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
-      - '"traefik.http.routers.grafana.tls=true"'
-      - '"traefik.http.routers.grafana.entrypoints=websecure"'
-      - '"traefik.http.routers.grafana.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.grafana.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.grafana.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: py-kms
     active: true
