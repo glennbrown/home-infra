@@ -404,29 +404,6 @@ containers:
       - '"traefik.http.routers.speedtest-tracker.entrypoints=websecure"'
       - '"traefik.http.routers.speedtest-tracker.tls.certresolver=cloudflare"'
   ###
-  - service_name: influxdb
-    active: false
-    image: influxdb:1.8.10-alpine
-    container_name: influxdb
-    include_global_env_vars: false
-    environment:
-      - "TZ={{ ntp_timezone }}"
-    volumes:
-      - "{{ appdata_path }}/influxdb:/var/lib/influxdb"
-    networks:
-      - traefik
-      - default
-    restart: unless-stopped
-    labels:
-      - '"traefik.enable=true"'
-      - '"traefik.http.routers.influxdb.rule=Host(`influxdb.{{ local_domain }}`)"'
-      - '"traefik.http.routers.influxdb.entrypoints=websecure"'
-      - '"traefik.http.routers.influxdb.tls=true"'
-      - '"traefik.http.routers.influxdb.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.influxdb.tls.domains[0].main={{ local_domain }}"'
-      - '"traefik.http.routers.influxdb.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
-    restart: unless-stopped
-  ###
   - service_name: py-kms
     active: true
     image: pykmsorg/py-kms
@@ -462,7 +439,7 @@ containers:
       - '"traefik.http.routers.librespeed.tls.certresolver=cloudflare"'
       - '"traefik.http.routers.librespeed.tls.domains[0].main={{ local_domain }}"'
       - '"traefik.http.routers.librespeed.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
-###
+  ###
   - service_name: netbootxyz
     active: true
     image: lscr.io/linuxserver/netbootxyz:0.7.3
@@ -489,3 +466,75 @@ containers:
       - '"traefik.http.routers.netbootxyz.tls.domains[0].main={{ local_domain }}"'
       - '"traefik.http.routers.netbootxyz.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.netbootxyz.loadbalancer.server.port=3000"'
+  ###
+  - service_name: smokeping
+    active: true
+    image: lscr.io/linuxserver/smokeping:2.8.2-r3-ls110
+    container_name: smokeping
+    include_global_env_vars: true
+    volumes:
+      - "{{ appdata_path }}/smokeping/config:/config"
+      - "{{ appdata_path }}/smokeping/data:/data"
+    networks:
+      - traefik
+      - default
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.smokeping.rule=Host(`smokeping.{{ local_domain }}`)"'
+      - '"traefik.http.routers.smokeping.entrypoints=websecure"'
+      - '"traefik.http.routers.smokeping.tls=true"'
+      - '"traefik.http.routers.smokeping.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.smokeping.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.smokeping.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
+    ###
+  - service_name: changedetection
+    active: true
+    image: ghcr.io/dgtlmoon/changedetection.io:0.46.04
+    container_name: changedetection
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      # - WEBDRIVER_URL=http://playwright-chrome:4444/wd/hub
+      - PLAYWRIGHT_DRIVER_URL=ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true
+      - BASE_URL=https://changedetection.{{ local_domain }} # configure this for your own domain
+    volumes:
+      - "{{ appdata_path }}/changedetection:/datastore"
+    networks:
+      - traefik
+      - default
+    depends_on:
+      - playwright-chrome
+    restart: unless-stopped
+    labels:
+    - '"traefik.enable=true"'
+    - '"traefik.http.routers.changedetection.rule=Host(`changedetection.{{ local_domain }}`)"'
+    - '"traefik.http.routers.changedetection.entrypoints=websecure"'
+    - '"traefik.http.routers.changedetection.tls=true"'
+    - '"traefik.http.routers.changedetection.tls.certresolver=cloudflare"'
+    - '"traefik.http.routers.changedetection.tls.domains[0].main={{ local_domain }}"'
+    - '"traefik.http.routers.changedetection.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
+  ###
+  - service_name: playwright-chrome
+    active: true
+    image: browserless/chrome:1.61.1-chrome-stable
+    container_name: playwright-chrome
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1024
+      - SCREEN_DEPTH=16
+      - ENABLE_DEBUGGER=false
+      - PREBOOT_CHROME=true
+      - CONNECTION_TIMEOUT=300000
+      - MAX_CONCURRENT_SESSIONS=10
+      - CHROME_REFRESH_TIME=600000
+      - DEFAULT_BLOCK_ADS=true
+      - DEFAULT_STEALTH=true
+      - DEFAULT_IGNORE_HTTPS_ERRORS=true
+    volumes:
+      - "{{ appdata_path }}/changedetection:/datastore"
+    networks:
+      - default
+    restart: unless-stopped

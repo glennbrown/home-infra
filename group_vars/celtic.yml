@@ -283,3 +283,36 @@ containers:
       - '"traefik.http.routers.gokapi.tls.domains[0].main={{ public_domain_2 }}"'
       - '"traefik.http.routers.gokapi.tls.domains[0].sans=*.{{ public_domain_2 }}"'
       - '"traefik.http.services.gokapi.loadbalancer.server.port=53842"'
+  - service_name: ntfy
+    active: true
+    image: binwiederhier/ntfy:v2.11.0
+    container_name: ntfy
+    include_global_env_vars: false
+    environment:
+      - TZ={{ ntp_timezone }}
+      - NTFY_BASE_URL=https://ntfy.{{ public_domain_1 }}
+      - NTFY_CACHE_FILE=/var/lib/ntfy/cache.db
+      - NTFY_AUTH_FILE=/var/lib/ntfy/auth.db
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_BEHIND_PROXY=true
+      - NTFY_ATTACHMENT_CACHE_DIR=/var/lib/ntfy/attachments
+      - NTFY_ENABLE_LOGIN=true
+      - NTFY_UPSTREAM_BASE_URL=https://ntfy.sh
+      #- NTFY_WEB_PUSH_PUBLIC_KEY=<public_key>
+      #- NTFY_WEB_PUSH_PRIVATE_KEY=<private_key>
+      #- NTFY_WEB_PUSH_FILE=/var/lib/ntfy/webpush.db
+      #- NTFY_WEB_PUSH_EMAIL_ADDRESS=<email>
+    volumes:
+      - "{{ appdata_path }}/nfty:/var/lib/ntfy"
+    networks:
+      - traefik
+    command: serve
+    restart: unless-stopped
+    labels:
+      - '"traefik.enable=true"'
+      - '"traefik.http.routers.ntfy.rule=Host(`ntfy.{{ public_domain_1 }}`)"'
+      - '"traefik.http.routers.ntfy.entrypoints=websecure"'
+      - '"traefik.http.routers.ntfy.tls=true"'
+      - '"traefik.http.routers.ntfy.tls.certresolver=cloudflare"'
+      - '"traefik.http.routers.ntfy.tls.domains[0].main={{ public_domain_1 }}"'
+      - '"traefik.http.routers.ntfy.tls.domains[0].sans=*.{{ public_domain_1 }}"'
