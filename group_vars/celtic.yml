@@ -177,7 +177,7 @@ containers:
   ###
   - service_name: glenn-blog-db
     active: true
-    image: mysql:8.4.2
+    image: mysql:9.1.0
     container_name: glenn-blog-db
     include_global_env_vars: false
     environment:
