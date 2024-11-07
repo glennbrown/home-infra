@@ -490,7 +490,7 @@ containers:
     ###
   - service_name: changedetection
     active: true
-    image: ghcr.io/dgtlmoon/changedetection.io:0.47.03
+    image: ghcr.io/dgtlmoon/changedetection.io:0.47.06
     container_name: changedetection
     include_global_env_vars: false
     environment:
