@@ -223,7 +223,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.41.1.9057-af5eaea7a
+    image: plexinc/pms-docker:1.41.2.9200-c6bbc1b53
     container_name: plex
     include_global_env_vars: false
     environment:
