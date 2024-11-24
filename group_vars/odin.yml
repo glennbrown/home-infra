@@ -69,7 +69,9 @@ user_list_group:
 # odin
 odin_main_storage_path: /mnt/storage
 extra_mountpoints:
-  - { path: /mnt/nvme1tb, diskbyid: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1, fs: ext4, opts: "defaults,discard" }
+  - { path: /mnt/nvme1tb, id: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1, fs: ext4, opts: "defaults,discard" }
+network_mountpoints:
+  - { path: /mnt/media, id: //yggdrasil/Media, fs: cifs, opts: "credentials=/root/.smbcredentials,uid=99,gid=100,dir_mode=0777,file_mode=0777,_netdev" }
 samba_users:
   - username: "{{ main_username }}"
     password: "{{ secret_samba_gbrown }}"
@@ -77,54 +79,54 @@ samba_users:
     password: "{{ secret_samba_kbrown }}"
 
 # ironicbadger.snapraid + odin
-snapraid_runner: true
-snapraid_install: true
-snapraid_install_mode: package_manager
-snapraid_bin_path: /usr/bin/snapraid
-snapraid_parity_disks:
-  - { path: /mnt/parity1, diskbyid: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGZA3D-part1, fs: xfs, opts: defaults, content: false }
+# snapraid_runner: true
+# snapraid_install: true
+# snapraid_install_mode: package_manager
+# snapraid_bin_path: /usr/bin/snapraid
+# snapraid_parity_disks:
+#   - { path: /mnt/parity1, diskbyid: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGZA3D-part1, fs: xfs, opts: defaults, content: false }
 
-snapraid_data_disks:
-  - { path: /mnt/disk1, diskbyid: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGRG9D-part1, fs: xfs, opts: defaults, content: true }
-  - { path: /mnt/disk2, diskbyid: /dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEJUB8YZ-part1, fs: xfs, opts: defaults, content: false }
-  - { path: /mnt/disk3, diskbyid: /dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEK67U5N-part1, fs: xfs, opts: defaults, content: false }
-  - { path: /mnt/disk99, diskbyid: /dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1, fs: ext4, opts: defaults, content: false }
+# snapraid_data_disks:
+#   - { path: /mnt/disk1, id: /dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGRG9D-part1, fs: xfs, opts: defaults, content: true }
+#   - { path: /mnt/disk2, id: /dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEJUB8YZ-part1, fs: xfs, opts: defaults, content: false }
+#   - { path: /mnt/disk3, id: /dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEK67U5N-part1, fs: xfs, opts: defaults, content: false }
+#   - { path: /mnt/disk99, id: /dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1, fs: ext4, opts: defaults, content: false }
 
-snapraid_config_excludes:
-  - "*.unrecoverable"
-  - "/tmp/"
-  - "/lost+found/"
-  - "downloads/"
-  - "appdata/"
-  - "*.!sync"
-  - ".AppleDouble"
-  - "._AppleDouble"
-  - ".DS_Store"
-  - "._.DS_Store"
-  - ".Thumbs.db"
-  - ".fseventsd"
-  - ".Spotlight-V100"
-  - ".TemporaryItems"
-  - ".Trashes"
-  - ".AppleDB"
-  - ".nfo"
+# snapraid_config_excludes:
+#   - "*.unrecoverable"
+#   - "/tmp/"
+#   - "/lost+found/"
+#   - "downloads/"
+#   - "appdata/"
+#   - "*.!sync"
+#   - ".AppleDouble"
+#   - "._AppleDouble"
+#   - ".DS_Store"
+#   - "._.DS_Store"
+#   - ".Thumbs.db"
+#   - ".fseventsd"
+#   - ".Spotlight-V100"
+#   - ".TemporaryItems"
+#   - ".Trashes"
+#   - ".AppleDB"
+#   - ".nfo"
 
 # tigattack.mergerfs
-mergerfs_install_mode: github_releases
-mergerfs_version: 2.40.2
-mergerfs_mounts:
-  - path: /mnt/storage
-    branches: 
-      - /mnt/disk*
-      - /mnt/nvme1tb
-    options: "defaults,nonempty,allow_other,use_ino,moveonenospc=true,category.create=epmfs,dropcacheonclose=true,minfreespace=250G,fsname=mergerfs"
-  - path: /mnt/jbod
-    branches:
-      - /mnt/disk*
-    options: "defaults,nonempty,allow_other,use_ino,moveonenospc=true,category.create=epmfs,dropcacheonclose=true,minfreespace=250G,fsname=jbod"
+# mergerfs_install_mode: github_releases
+# mergerfs_version: 2.40.2
+# mergerfs_mounts:
+#   - path: /mnt/storage
+#     branches: 
+#       - /mnt/disk*
+#       - /mnt/nvme1tb
+#     options: "defaults,nonempty,allow_other,use_ino,moveonenospc=true,category.create=epmfs,dropcacheonclose=true,minfreespace=250G,fsname=mergerfs"
+#   - path: /mnt/jbod
+#     branches:
+#       - /mnt/disk*
+#     options: "defaults,nonempty,allow_other,use_ino,moveonenospc=true,category.create=epmfs,dropcacheonclose=true,minfreespace=250G,fsname=jbod"
 
 # geerlingguy.nfs
-nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
+# nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]
 
 # traefik
 traefik_acme: true

@@ -1,29 +1,31 @@
 ---
 
-- name: Create /mnt points
+- name: Create mount point paths
   file:
     dest: "{{ item.path }}"
     state: directory
     owner: dockeruser
     group: users
     mode: 0777
-  with_items: 
-    - "{{ snapraid_parity_disks }}"
-    - "{{ snapraid_data_disks }}"
+  loop: 
+    #- "{{ snapraid_parity_disks }}"
+    #- "{{ snapraid_data_disks }}"
     - "{{ extra_mountpoints }}"
+    - "{{ network_mountpoints }}"
 
 - name: Mount disks
   mount:
     name: "{{ item.path }}"
-    src: "{{ item.diskbyid }}"
+    src: "{{ item.id }}"
     fstype: "{{ item.fs }}"
     opts: "{{ item.opts }}"
     # change to 'mounted' to auto mount
     state: mounted
   with_items:
-    - "{{ snapraid_parity_disks }}"
-    - "{{ snapraid_data_disks }}"
+    #- "{{ snapraid_parity_disks }}"
+    #- "{{ snapraid_data_disks }}"
     - "{{ extra_mountpoints }}"
+    - "{{ network_mountpoints }}"
   when: item.path != '/mnt/storage'
 
 - name: Set ZFS ARC size

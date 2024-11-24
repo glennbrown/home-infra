@@ -85,10 +85,10 @@
     - role: ironicbadger.figurine
     - role: odin
       tags: tools, disks, file-sharing
-    - role: tigattack.mergerfs
-      tags: disks
-    - role: ironicbadger.snapraid
-    - role: geerlingguy.nfs
+    #- role: tigattack.mergerfs
+    #  tags: disks
+    #- role: ironicbadger.snapraid
+    #- role: geerlingguy.nfs
     #- role: prometheus.prometheus.node_exporter
     #  tags: prom
     #- role: node_exporter_collectors
