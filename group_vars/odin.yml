@@ -244,7 +244,7 @@ containers:
   ###
   - service_name: tautulli
     active: true
-    image: tautulli/tautulli:v2.14.6
+    image: tautulli/tautulli:v2.15.0
     container_name: tautulli
     include_global_env_vars: true
     volumes:
