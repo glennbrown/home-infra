@@ -166,8 +166,6 @@ plex_auth_token: !vault |
           
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nvme1tb/appdata
-storage_path: /mnt/storage
-download_path: "{{ storage_path }}/downloads"
 container_config_path: /config
 
 container_networks:
@@ -233,8 +231,8 @@ containers:
       - PLEX_GID=100
     volumes:
       - "{{ appdata_path }}/plexmediaserver:{{ container_config_path }}"
-      - "{{ storage_path }}/TV Shows:/tv:ro"
-      - "{{ storage_path }}/Movies:/movies:ro"
+      - /mnt/media/TV Shows:/tv:ro
+      - /mnt/media/Movies:/movies:ro
     tmpfs:
       - /transcode:size=32G,mode=0777
     devices:
@@ -271,7 +269,7 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/sabnzbd:{{ container_config_path }}"
-      - "{{ download_path }}:/downloads"
+      - /mnt/nvme1tb/downloads:/downloads
     networks:
       - traefik
       - default
@@ -287,12 +285,12 @@ containers:
   ###
   - service_name: qbittorrent
     active: true
-    image: lscr.io/linuxserver/qbittorrent:5.0.2
+    image: lscr.io/linuxserver/qbittorrent:4.6.7
     container_name: qbittorrent
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/qbittorrent:{{ container_config_path }}"
-      - "{{ download_path }}:/downloads"
+      - /mnt/nvme1tb/downloads:/downloads
     ports:
       - 6881:6881
       - 6881:6881/udp
@@ -337,8 +335,8 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/sonarr:{{ container_config_path }}"
-      - "{{ download_path }}:/downloads"
-      - "{{ storage_path }}/TV Shows:/tv"
+      - /mnt/nvme1tb/downloads:/downloads
+      - /mnt/media/TV Shows:/tv
     networks:
       - traefik
       - default
@@ -363,8 +361,8 @@ containers:
     include_global_env_vars: true
     volumes:
       - "{{ appdata_path }}/radarr:{{ container_config_path }}"
-      - "{{ download_path }}:/downloads"
-      - "{{ storage_path }}/Movies:/movies"
+      - /mnt/nvme1tb/downloads:/downloads
+      - /mnt/media/Movies:/movies
     networks:
       - traefik
       - default
