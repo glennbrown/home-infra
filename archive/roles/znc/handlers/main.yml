@@ -1,9 +1,0 @@
----
-
-- name: restart znc
-  listen: restart znc
-  ansible.builtin.systemd:
-    name: znc.service
-    daemon_reload: true
-    state: restarted
-    

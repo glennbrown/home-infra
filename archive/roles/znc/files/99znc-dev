@@ -1,4 +1,0 @@
-DPkg::Post-Invoke {
-    "/usr/local/bin/clientbuffer-build.sh";
-    "/usr/local/bin/palaver-build.sh";
-};

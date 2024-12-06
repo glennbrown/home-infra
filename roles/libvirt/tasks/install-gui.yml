@@ -1,9 +1,0 @@
----
-
-- name: Install GUI Tools
-  apt:
-    name: "{{ item.name }}"
-    state: present
-    update_cache: true
-  loop: "{{ libvirt_gui_packages }}"
-  notify: Start xrdp

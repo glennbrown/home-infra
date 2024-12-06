@@ -1,7 +1,0 @@
-# {{ ansible_managed }}
-# DNS CNAMES
-{% if pihole_dns_cnames is defined %}
-{% for record in pihole_dns_cnames %}
-cname={{ record.cname }},{{record.host }}
-{% endfor %}
-{% endif %}

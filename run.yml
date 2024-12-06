@@ -84,18 +84,7 @@
     - role: bash_aliases
     - role: ironicbadger.figurine
     - role: odin
-      tags: tools, disks, file-sharing
-    #- role: tigattack.mergerfs
-    #  tags: disks
-    #- role: ironicbadger.snapraid
-    #- role: geerlingguy.nfs
-    #- role: prometheus.prometheus.node_exporter
-    #  tags: prom
-    #- role: node_exporter_collectors
-    #  tags: prom
     - role: traefik
-      tags: compose
-    - role: vuetorrent
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
@@ -105,45 +94,6 @@
         update_cache: yes
 
 ### LXC/VMs/VPS
-- hosts: heimdall
-  vars_files:
-    - 'vars/vault.yml'
-    - 'vars/secrets_lookup.yml'
-  roles:
-    - role: heimdall
-    - role: bash_aliases
-    - role: ironicbadger.figurine
-    - role: ironicbadger.docker_compose_generator
-      tags: compose
-
-- hosts: thor
-  vars_files:
-    - 'vars/vault.yml'
-    - 'vars/secrets_lookup.yml'
-  roles:
-    - role: bash_aliases
-    - role: ironicbadger.figurine
-
-# Configure Loki
-#- name: Configure loki
-#  hosts: loki
-#  vars_files:
-#    - 'vars/vault.yml'
-#    - 'vars/secrets_lookup.yml'
-#  roles:
-
-# Debian Testing Server
-- name: Debian Testing Server
-  hosts: test
-  vars_files:
-    - 'vars/vault.yml'
-    - 'vars/secrets_lookup.yml'
-  roles:
-    - role: traefik
-      tags: compose
-    - role: ironicbadger.docker_compose_generator
-      tags: compose
-
 - name: Configure celtic
   hosts: celtic
   vars_files:
@@ -156,7 +106,7 @@
     - role: ironicbadger.figurine
     - role: ocagent
     - role: celtic
-    - role: znc_docker
+    #- role: znc_docker
     - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator

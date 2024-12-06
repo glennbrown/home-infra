@@ -1,7 +1,0 @@
----
-
-- name: install znc
-  ansible.builtin.include_tasks: install.yml
-
-- name: configure znc
-  ansible.builtin.include_tasks: config.yml

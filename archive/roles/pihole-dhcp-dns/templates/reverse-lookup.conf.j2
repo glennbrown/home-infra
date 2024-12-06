@@ -1,5 +1,0 @@
-# {{ ansible_managed }}
-# PTR DNS Records
-{% for client in pihole_dhcp_reservations %}
-ptr-record={{ client.ip.split('.') | reverse | join('.') }}.in-addr.arpa.,{{ client.hostname }}.{{ pihole_pihole_domain }}
-{% endfor %}

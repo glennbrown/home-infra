@@ -1,6 +1,0 @@
----
-
-# geerlingguy.ntp
-ntp_daemon: chrony
-ntp_package: chrony
-

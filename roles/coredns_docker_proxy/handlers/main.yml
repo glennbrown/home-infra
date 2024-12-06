@@ -1,9 +1,0 @@
----
-
-- name: restart coredns
-  community.docker.docker_compose_v2:
-    project_src: "{{ coredns_config_dir }}"
-    state: present
-    recreate: always
-    pull: missing
-  

@@ -15,13 +15,9 @@ roles:
     version: 7.2.0
   - src: geerlingguy.ntp
     version: 2.5.0
-  - src: geerlingguy.nfs
-    version: 2.0.0
   - src: geerlingguy.security
     version: 2.3.0
-  - src: geerlingguy.certbot
-    version: 5.1.0
-    
+
   # Grog Roles
   - src: grog.package
     version: v1.4.0
@@ -32,19 +28,6 @@ roles:
   - src: grog.authorized-key
     version: v1.1.5
 
-  # MergerFS
-  - src: tigattack.mergerfs
-    version: 1.3.1
-
   # Tailscale
   - src: artis3n.tailscale
     version: v4.5.0
-  
-  # Openwrt
-  - src: gekmihesg.openwrt
-
-collections:
-  - name: prometheus.prometheus
-    version: 0.17.0
-  - name: nginxinc.nginx_core
-    version: 0.8.0
