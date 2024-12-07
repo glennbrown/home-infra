@@ -2,7 +2,6 @@ ansible
 ansible-lint
 yamllint
 jmespath
-pre-commit
 wheel
 passlib
 proxmoxer
