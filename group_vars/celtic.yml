@@ -263,7 +263,7 @@ containers:
   ###
   - service_name: gokapi
     active: true
-    image: f0rc3/gokapi:v1.9.2
+    image: f0rc3/gokapi:v1.9.6
     container_name: gokapi
     include_global_env_vars: false
     environment:
