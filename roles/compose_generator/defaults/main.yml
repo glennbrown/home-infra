@@ -1,0 +1,5 @@
+---
+
+docker_compose_generator_output_path: '{{ ansible_user_dir }}'
+docker_compose_generator_uid: '{{ ansible_user_uid }}'
+docker_compose_generator_gid: '{{ ansible_user_gid }}'

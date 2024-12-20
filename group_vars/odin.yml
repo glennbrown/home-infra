@@ -71,12 +71,12 @@ odin_main_storage_path: /mnt/storage
 extra_mountpoints:
   - { path: /mnt/nvme1tb, id: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1, fs: ext4, opts: "defaults,discard" }
 network_mountpoints:
-  - { path: /mnt/media, id: //yggdrasil/Media, fs: cifs, opts: "credentials=/root/.smbcredentials,uid=99,gid=100,dir_mode=0777,file_mode=0777,_netdev" }
-samba_users:
-  - username: "{{ main_username }}"
-    password: "{{ secret_samba_gbrown }}"
-  - username: kbrown
-    password: "{{ secret_samba_kbrown }}"
+  - { path: /mnt/media, id: //yggdrasil/Media, fs: cifs, opts: "credentials=/root/.smbcredentials,uid=99,gid=100,dir_mode=0777,file_mode=0666,_netdev" }
+# samba_users:
+#   - username: "{{ main_username }}"
+#     password: "{{ secret_samba_gbrown }}"
+#   - username: kbrown
+#     password: "{{ secret_samba_kbrown }}"
 
 # ironicbadger.snapraid + odin
 # snapraid_runner: true
@@ -174,6 +174,24 @@ container_networks:
     active: true
     external: true
 
+container_volumes:
+  ###
+  - volume_name: tv-shows
+    active: true
+    driver: local
+    driver_opts:
+      type: cifs
+      o: 'username={{ main_username }},password={{ secret_synology_gbrown }},uid=99,gid=100,dir_mode=0777,file_mode=0666'
+      device: '//yggdrasil/Media/TV Shows'
+  ###
+  - volume_name: movies
+    active: true
+    driver: local
+    driver_opts:
+      type: cifs
+      o: 'username={{ main_username }},password={{ secret_synology_gbrown }},uid=99,gid=100,dir_mode=0777,file_mode=0666'
+      device: '//yggdrasil/Media/Movies'
+
 containers:
   ###
   - service_name: traefik
@@ -221,7 +239,7 @@ containers:
   ###
   - service_name: plex
     active: true
-    image: plexinc/pms-docker:1.41.2.9200-c6bbc1b53
+    image: plexinc/pms-docker:1.41.3.9314-a0bfb8370
     container_name: plex
     include_global_env_vars: false
     environment:
@@ -231,8 +249,8 @@ containers:
       - PLEX_GID=100
     volumes:
       - "{{ appdata_path }}/plexmediaserver:{{ container_config_path }}"
-      - /mnt/media/TV Shows:/tv:ro
-      - /mnt/media/Movies:/movies:ro
+      - tv-shows:/tv:ro
+      - movies:/movies:ro
     tmpfs:
       - /transcode:size=32G,mode=0777
     devices:

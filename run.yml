@@ -86,7 +86,7 @@
     - role: odin
     - role: traefik
       tags: compose
-    - role: ironicbadger.docker_compose_generator
+    - role: compose_generator
       tags: compose
   handlers:
     - name: Update apt cache
