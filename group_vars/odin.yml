@@ -303,7 +303,7 @@ containers:
   ###
   - service_name: qbittorrent
     active: true
-    image: lscr.io/linuxserver/qbittorrent:5.0.2
+    image: lscr.io/linuxserver/qbittorrent:5.0.3
     container_name: qbittorrent
     include_global_env_vars: true
     volumes:
