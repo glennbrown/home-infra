@@ -4,3 +4,6 @@
 [submodule "roles/ironicbadger.figurine"]
 	path = roles/ironicbadger.figurine
 	url = https://github.com/ironicbadger/ansible-role-figurine.git
+[submodule "roles/geerlingguy.docker"]
+	path = roles/geerlingguy.docker
+	url = https://github.com/geerlingguy/ansible-role-docker.git
