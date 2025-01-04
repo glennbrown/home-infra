@@ -1,15 +1,9 @@
 roles:
 
   # Grog Roles
-  - src: grog.package
-    version: v1.4.0
   - src: grog.user
     version: v1.3.1
   - src: grog.group
     version: v1.1.2
   - src: grog.authorized-key
     version: v1.1.5
-
-  # Tailscale
-  - src: artis3n.tailscale
-    version: v4.5.0
