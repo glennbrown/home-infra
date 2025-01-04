@@ -20,14 +20,14 @@
 
 - name: Check if we already backed up stock config
   stat:
-    path: "{{ nginx_config_dir }}/nginx.conf.orig"
+    path: "{{ nginx_config_dir }}/nginx.conf.org"
   register: debian_stock_config
   become: true
 
 - name: Copy Debian stock config
   copy:
     src: "{{ nginx_config_dir }}/nginx.conf"
-    dest: "{{ nginx_config_dir }}/nginx.conf.orig"
+    dest: "{{ nginx_config_dir }}/nginx.conf.org"
     remote_src: true
   when: not debian_stock_config.stat.exists
   become: true
@@ -54,7 +54,6 @@
     dest: "{{ nginx_config_dir }}/conf.d/{{ item | basename }}"
     mode: 0644
   loop:
-    - conf.d/docker-resolver.conf
     - conf.d/ssl.conf
   become: true
   notify: reload nginx

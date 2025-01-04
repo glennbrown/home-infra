@@ -1,0 +1,11 @@
+---
+
+# Bash Aliases
+bash_docker: true
+bash_apt: true
+bash_systemctl: true
+
+# geerlingguy.ntp
+ntp_daemon: ntp
+ntp_package: ntp
+ntp_timezone: "America/New_York"

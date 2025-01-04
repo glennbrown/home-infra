@@ -3,16 +3,16 @@
 - name: Install lego
   include_tasks: install.yml
 
-- name: Create certs
-  include_tasks: create-certs.yml
-  loop: "{{ lego_certs }}"
-  loop_control:
-    loop_var: cert_item
-
-- name: Create renewal script
-  template:
-    src: renew-certs.sh.j2
-    dest: /usr/local/bin/renew-certs.sh
-    mode: 0755
-    owner: root
-    group: root
+#- name: Create certs
+#  include_tasks: create-certs.yml
+#  loop: "{{ lego_certs }}"
+#  loop_control:
+#    loop_var: cert_item
+#
+#- name: Create renewal script
+#  template:
+#    src: renew-certs.sh.j2
+#    dest: /usr/local/bin/renew-certs.sh
+#    mode: 0755
+#    owner: root
+#    group: root

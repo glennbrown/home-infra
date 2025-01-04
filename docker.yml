@@ -14,7 +14,7 @@
       private: no
   
   roles:
-    - role: ironicbadger.docker_compose_generator
+    - role: compose_generator
 
   tasks:
     

@@ -106,8 +106,19 @@
     - role: ironicbadger.figurine
     - role: ocagent
     - role: celtic
-    #- role: znc_docker
     - role: traefik
       tags: compose
     - role: ironicbadger.docker_compose_generator
       tags: compose
+
+# Web server/Reverse Proxy 
+- name: Configure thor
+  hosts: thor
+  vars_files:
+    - 'vars/vault.yml'
+    - 'vars/secrets_lookup.yml'
+  roles:
+    - role: bash_aliases
+    - role: lego
+    - role: ironicbadger.figurine
+    - role: thor

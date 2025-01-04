@@ -233,7 +233,7 @@ containers:
       - '"traefik.http.routers.traefik-secure.middlewares=traefik-auth"'
       - '"traefik.http.routers.traefik-secure.tls=true"'
       - '"traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.traefik-secure.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.traefik-secure.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.routers.traefik-secure.service=api@internal"'
   ###
@@ -298,7 +298,7 @@ containers:
       - '"traefik.http.routers.sabnzbd.entrypoints=websecure"'
       - '"traefik.http.routers.sabnzbd.tls=true"'
       - '"traefik.http.routers.sabnzbd.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.sabnzbd.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.sabnzbd.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.sabnzbd.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: qbittorrent
@@ -318,11 +318,11 @@ containers:
     restart: unless-stopped
     labels:
       - '"traefik.enable=true"'
-      - '"traefik.http.routers.qbittorrent.rule=Host(`qb.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
+      - '"traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.{{ ansible_hostname[0] }}.{{ local_domain }}`)"'
       - '"traefik.http.routers.qbittorrent.entrypoints=websecure"'
       - '"traefik.http.routers.qbittorrent.tls=true"'
       - '"traefik.http.routers.qbittorrent.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.qbittorrent.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.qbittorrent.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.qbittorrent.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.qbittorrent.loadbalancer.server.port=8080"'
   ###
@@ -343,7 +343,7 @@ containers:
       - '"traefik.http.routers.prowlarr.entrypoints=websecure"'
       - '"traefik.http.routers.prowlarr.tls=true"'
       - '"traefik.http.routers.prowlarr.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.prowlarr.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.prowlarr.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.prowlarr.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: sonarr
@@ -354,7 +354,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/sonarr:{{ container_config_path }}"
       - /mnt/nvme1tb/downloads:/downloads
-      - /mnt/media/TV Shows:/tv
+      - tv-shows:/tv
     networks:
       - traefik
       - default
@@ -369,7 +369,7 @@ containers:
       - '"traefik.http.routers.sonarr.entrypoints=websecure"'
       - '"traefik.http.routers.sonarr.tls=true"'
       - '"traefik.http.routers.sonarr.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.sonarr.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.sonarr.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.sonarr.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: radarr
@@ -380,7 +380,7 @@ containers:
     volumes:
       - "{{ appdata_path }}/radarr:{{ container_config_path }}"
       - /mnt/nvme1tb/downloads:/downloads
-      - /mnt/media/Movies:/movies
+      - movies:/movies
     networks:
       - traefik
       - default
@@ -395,7 +395,7 @@ containers:
       - '"traefik.http.routers.radarr.entrypoints=websecure"'
       - '"traefik.http.routers.radarr.tls=true"'
       - '"traefik.http.routers.radarr.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.radarr.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.radarr.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.radarr.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: speedtest-tracker
@@ -455,7 +455,7 @@ containers:
       - '"traefik.http.routers.librespeed.entrypoints=websecure"'
       - '"traefik.http.routers.librespeed.tls=true"'
       - '"traefik.http.routers.librespeed.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.librespeed.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.librespeed.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.librespeed.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: netbootxyz
@@ -481,7 +481,7 @@ containers:
       - '"traefik.http.routers.netbootxyz.entrypoints=websecure"'
       - '"traefik.http.routers.netbootxyz.tls=true"'
       - '"traefik.http.routers.netbootxyz.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.netbootxyz.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.netbootxyz.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.netbootxyz.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
       - '"traefik.http.services.netbootxyz.loadbalancer.server.port=3000"'
   ###
@@ -503,7 +503,7 @@ containers:
       - '"traefik.http.routers.smokeping.entrypoints=websecure"'
       - '"traefik.http.routers.smokeping.tls=true"'
       - '"traefik.http.routers.smokeping.tls.certresolver=cloudflare"'
-      - '"traefik.http.routers.smokeping.tls.domains[0].main={{ local_domain }}"'
+      - '"traefik.http.routers.smokeping.tls.domains[0].main=*.{{ local_domain }}"'
       - '"traefik.http.routers.smokeping.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
     ###
   - service_name: changedetection
@@ -530,7 +530,7 @@ containers:
     - '"traefik.http.routers.changedetection.entrypoints=websecure"'
     - '"traefik.http.routers.changedetection.tls=true"'
     - '"traefik.http.routers.changedetection.tls.certresolver=cloudflare"'
-    - '"traefik.http.routers.changedetection.tls.domains[0].main={{ local_domain }}"'
+    - '"traefik.http.routers.changedetection.tls.domains[0].main=*.{{ local_domain }}"'
     - '"traefik.http.routers.changedetection.tls.domains[0].sans=*.{{ local_domain }},*.{{ ansible_hostname[0] }}.{{ local_domain }}"'
   ###
   - service_name: playwright-chrome
