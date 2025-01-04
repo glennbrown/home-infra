@@ -13,3 +13,6 @@
 [submodule "roles/geerlingguy.security"]
 	path = roles/geerlingguy.security
 	url = https://github.com/geerlingguy/ansible-role-security.git
+[submodule "roles/artis3n.tailscale"]
+	path = roles/artis3n.tailscale
+	url = https://github.com/artis3n/ansible-role-tailscale.git
