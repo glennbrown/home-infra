@@ -30,7 +30,6 @@
     - role: ctop
       when: "'docker' in group_names"
     
-
   handlers:
     - name: Update hosts file
       listen: Hostname has changed
@@ -82,6 +81,8 @@
     - role: proxmox_nag_removal
     - role: htop
     - role: bash_aliases
+    - role: geerlingguy.docker
+    - role: ctop
     - role: ironicbadger.figurine
     - role: odin
     - role: traefik
@@ -103,6 +104,8 @@
     - role: geerlingguy.security
     - role: artis3n.tailscale
     - role: bash_aliases
+    - role: geerlingguy.docker
+    - role: ctop
     - role: ironicbadger.figurine
     - role: ocagent
     - role: celtic

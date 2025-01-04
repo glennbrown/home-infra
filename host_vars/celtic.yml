@@ -3,6 +3,31 @@
 # Default ssh port to use
 ansible_ssh_port: "{{ cloud_ssh_port }}"
 
+# grog.group
+group_list:
+  - name: gbrown
+    gid: 1000
+
+# grog.user
+user_list:
+  - name: gbrown
+    uid: 1000
+    group: gbrown
+    groups:
+      - adm
+      - sudo
+      - users
+      - cdrom
+      - dip
+      - plugdev
+      - video
+    password: "{{ secret_gbrown_pass }}"
+    shell: /bin/bash
+    append: yes
+    move_home: yes
+    update_password: on_create
+    comment: "Glenn Brown"
+    
 # apt-mirror
 apt_source_mode: modern
 

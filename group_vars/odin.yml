@@ -35,12 +35,30 @@ package_list_group:
   - name: zfsutils-linux
 
 # grog.group
-group_list_group:
+group_list:
+  - { name: gbrown, gid: 1000, state: present }
   - { name: kbrown, gid: 1001, state: present }
   - { name: prometheus, gid: 180, state: present }
 
 # grog.user
-user_list_group:
+user_list:
+  - name: gbrown
+    uid: 1000
+    group: gbrown
+    groups:
+      - adm
+      - sudo
+      - users
+      - cdrom
+      - dip
+      - plugdev
+      - video
+    password: "{{ secret_gbrown_pass }}"
+    shell: /bin/bash
+    append: yes
+    move_home: yes
+    update_password: on_create
+    comment: "Glenn Brown"
   - name: kbrown
     uid: 1001
     group: kbrown
