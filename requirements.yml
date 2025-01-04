@@ -1,13 +1,7 @@
 roles:
   # IronicBadgers Roles
-  - src: https://github.com/glennbrown/ansible-role-docker-compose-generator.git
-    name: ironicbadger.docker_compose_generator
-    scm: git
   - src: https://github.com/ironicbadger/ansible-role-figurine.git
     name: ironicbadger.figurine
-    scm: git
-  - src: https://github.com/glennbrown/ansible-role-snapraid.git
-    name: ironicbadger.snapraid
     scm: git
 
   # Jeff Geerling's Roles
