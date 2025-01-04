@@ -16,3 +16,6 @@
 [submodule "roles/artis3n.tailscale"]
 	path = roles/artis3n.tailscale
 	url = https://github.com/artis3n/ansible-role-tailscale.git
+[submodule "roles/grog.package"]
+	path = roles/grog.package
+	url = https://github.com/GROG/ansible-role-package.git
