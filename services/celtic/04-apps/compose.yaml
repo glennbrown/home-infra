@@ -1,0 +1,46 @@
+services:
+  freshrss:
+    image: freshrss/freshrss:1.24.3-alpine
+    container_name: freshrss
+    environment:
+      - TZ={{ ntp_timezone }}
+      - CRON_MIN=1,31
+    volumes:
+      - "{{ appdata_path }}/freshrss/data:/var/www/FreshRSS/data"
+      - "{{ appdata_path }}/freshrss/extensions:/var/www/FreshRSS/extensions"
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.freshrss.rule=Host(`freshrss.{{ public_domain_1 }}`)
+      - traefik.http.routers.freshrss.entrypoints=websecure
+      - traefik.http.routers.freshrss.tls=true
+      - traefik.http.routers.freshrss.tls.certresolver=cloudflare
+      - traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}
+      - traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}
+  gokapi:
+    image: f0rc3/gokapi:v1.9.6
+    container_name: gokapi
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - "{{ appdata_path }}/gokapi/data:/app/data"
+      - "{{ appdata_path }}/gokapi/config:/app/config"
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gokapi.rule=Host(`share.{{ public_domain_2 }}`)
+      - traefik.http.routers.gokapi.entrypoints=websecure
+      - traefik.http.routers.gokapi.tls=true
+      - traefik.http.routers.gokapi.tls.certresolver=cloudflare
+      - traefik.http.routers.gokapi.tls.domains[0].main={{ public_domain_2 }}
+      - traefik.http.routers.gokapi.tls.domains[0].sans=*.{{ public_domain_2 }}
+      - traefik.http.services.gokapi.loadbalancer.server.port=53842
+
+networks:
+  traefik:
+    name: traefik
+    external: true

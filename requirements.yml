@@ -1,8 +1,4 @@
 roles:
-  # IronicBadgers Roles
-  - src: https://github.com/ironicbadger/ansible-role-figurine.git
-    name: ironicbadger.figurine
-    scm: git
 
   # Jeff Geerling's Roles
   - src: geerlingguy.docker

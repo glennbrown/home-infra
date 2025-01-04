@@ -1,7 +1,6 @@
 # Ansible
 *.retry
 galaxy_roles*
-galaxy_collections*
 testing*
 
 # MacOS

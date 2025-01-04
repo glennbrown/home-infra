@@ -108,7 +108,7 @@
     - role: celtic
     - role: traefik
       tags: compose
-    - role: ironicbadger.docker_compose_generator
+    - role: ironicbadger.docker-compose-generator
       tags: compose
 
 # Web server/Reverse Proxy 
