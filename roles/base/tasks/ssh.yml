@@ -1,0 +1,19 @@
+---
+
+- name: Install OpenSSH for Debian or Redhat
+  package:
+    name: openssh-server
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'Redhat'
+
+- name: Setup authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ me.username }}"
+    state: present
+    key: "{{ secret_gbrown_sshkey }}"
+
+- name: Setup Service
+  systemd_service:
+    name: sshd
+    daemon-reload: true
+    enabled: true
+    

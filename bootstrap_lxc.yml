@@ -8,29 +8,26 @@
     - 'vars/secrets_lookup.yml'
 
   roles:
-    - role: grog.group
-    - role: grog.user
-    - role: grog.authorized-key
     - role: apt-mirror
-      when: ansible_os_family == 'Debian'
-    - role: grog.package
-  
+    - role: base
+
   tasks:
     - name: Set timezone
       timezone:
         name: 'America/New_York'
-    - name: Copy SSH config
-      copy:
-        src: sshd_config
-        dest: /etc/ssh/sshd_config
-        owner: root
-        group: root
-        mode: 0644
-  
+
   post_tasks:
-    - name: Update apt cache to populate command-not-found
+    - name: Update Debian system
       apt:
+        name: '*'
         update_cache: yes
+        state: latest
       when: ansible_os_family == 'Debian'
+    - name: Update Redhat system
+      dnf:
+        name: '*'
+        update_cache: yes
+        state: latest
+      when: ansible_os_family == 'Redhat'
     - name: Reboot host
-      reboot:   
+      reboot:

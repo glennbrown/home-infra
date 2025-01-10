@@ -1,0 +1,11 @@
+---
+
+- name: Packages
+  include_tasks: packages.yml
+
+- name: Users
+  include_tasks: user.yml
+
+- name: SSH
+  include_tasks: ssh.yml
+  
