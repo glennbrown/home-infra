@@ -8,6 +8,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - /etc/traefik/.htpasswd:/etc/traefik/.htpasswd:ro
       - /etc/traefik/config.d:/etc/traefik/config.d:ro
       - /etc/traefik/acme.json:/etc/traefik/acme.json
       - /var/log/traefik:/var/log/traefik
@@ -25,7 +26,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ public_domain_1 }}`)
       - traefik.http.routers.traefik.entrypoints=web
-      - traefik.http.middlewares.traefik-auth.basicauth.users={{ traefik_dashboard_auth }}
+      - traefik.http.middlewares.traefik-auth.basicauth.usersfile=/etc/traefik/.htpasswd
       - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
       - traefik.http.routers.traefik.middlewares=traefik-https-redirect

@@ -1,5 +1,9 @@
 ---
 
+- name: Install python3-passlib
+  package:
+    name: python3-passlib
+    
 - name: Create Docker network
   docker_network:
     name: traefik
@@ -61,3 +65,10 @@
     mode: 0644
   loop: "{{ traefik_file_providers }}"
   when: traefik_file_providers is defined
+
+- name: Create Dashboard users
+  community.general.htpasswd:
+    path: "{{ traefik_config_path }}/.htpasswd"
+    name: kgbadmin
+    password: "{{ traefik_dashboard_password }}"
+    

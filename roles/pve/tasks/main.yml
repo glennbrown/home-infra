@@ -1,0 +1,33 @@
+---
+
+# Source: https://www.reddit.com/r/Proxmox/comments/118i6ct/tutorialguide_how_to_make_the_prelogin_banner/
+- name: Copy issue file to adjust displayer IP address
+  copy:
+    src: issue
+    dest: /etc/issue
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy additional grub configuration
+  copy:
+    src: nct6775.cfg
+    dest: /etc/default/grub.d/nct6775.cfg
+    owner: root
+    group: root
+    mode: 0644
+  notify: Apply grub update
+
+# Loading drivetemp and nct6775 module
+- name: Load modules
+  community.general.modprobe: 
+    name: "{{ item }}"
+    state: present
+    persistent: present
+  loop:
+    - drivetemp
+    - nct6775
+
+# Build Infrastructure
+- name: "Setup LXC's and VM's"
+  include_tasks: infrastructure.yml

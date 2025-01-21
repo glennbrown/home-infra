@@ -1,6 +1,4 @@
-#!/usr/bin/env -S just --justfile
-# ^ A shebang isn't required, but allows a justfile to be executed
-#   like a script, with `./justfile test`, for example.
+export PATH := justfile_directory() + "/env/bin:" + env_var("PATH")
 
 # Recipes
 @default:
@@ -14,7 +12,12 @@ log := "warn"
 
 export JUST_LOG := log
 
-ansible_dir := "ansible"
+### Run/Builds
+build_pve:
+	ansible-playbook -u root -b run.yml --limit pve --ask-pass
+
+build +HOST:
+	ansible-playbook -b run.yml --limit {{HOST}}
 
 # Docker Container Updates
 docker:
@@ -48,9 +51,15 @@ add-submodule URL *NAME:
 
 # Ansible Vault Decrypt
 decrypt:
-    ansible-vault decrypt vars/vault.yml
+    ansible-vault decrypt group_vars/all/vault.yml
 
 # Ansible Vault Encrypt
 encrypt:
-    ansible-vault encrypt vars/vault.yml
+    ansible-vault encrypt group_vars/all/vault.yml
 
+### Bootstrap/Setup
+bootstrap_lxc +HOST:
+	ansible-playbook -u root -b bootstrap.yml --limit {{HOST}}
+
+bootstrap +HOST:
+	ansible-playbook -b bootstrap.yml --limit {{HOST}}

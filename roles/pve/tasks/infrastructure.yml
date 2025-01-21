@@ -1,0 +1,117 @@
+---
+
+- name: Download LXC container templates
+  community.general.proxmox_template:
+    api_user: root@pam
+    api_password: "{{ secret_proxmox_password }}"
+    api_host: 192.168.10.10
+    node: pve
+    storage: local
+    content_type: vztmpl
+    template: "{{ item }}"
+    state: present
+  loop: "{{ lxc_templates }}"
+  delegate_to: localhost
+
+- name: Download ISO images
+  get_url:
+    url: "{{ item.url }}{{ item.image }}"
+    dest: "/var/lib/vz/template/iso/{{ item.image }}"
+    checksum: "{{ item.checksum }}"
+  loop:
+    - url: 'https://mirrors.rit.edu/ubuntu-releases/24.04.1/'
+      image: 'ubuntu-24.04.1-live-server-amd64.iso'
+      checksum: 'sha256:https://mirrors.rit.edu/ubuntu-releases/24.04.1/SHA256SUMS'
+    - url: 'https://mirrors.rit.edu/debian/debian-cd/12.9.0/amd64/iso-dvd/'
+      image: 'debian-12.9.0-amd64-DVD-1.iso'
+      checksum: 'sha256:https://mirrors.rit.edu/debian/debian-cd/12.9.0/amd64/iso-dvd/SHA256SUMS'
+
+- name: Create LXC Containers with mounts
+  community.general.proxmox:
+    vmid: "{{ item.vmid }}"
+    hostname: "{{ item.name }}"
+    description: "{{ item.description | default (omit) }}"
+    unprivileged: "{{ item.unprivileged }}"
+    onboot: "{{ item.onboot | default ('true') }}"
+    state: present
+    disk: "{{ item.disk | default ('local-lvm:10') }}"
+    cores: "{{ item.cores | default ('1') }}"
+    memory: "{{ item.memory | default ('1024') }}"
+    swap: "{{ item.swap | default ('1024') }}"
+    pubkey: "{{ secret_root_sshkey }}"
+    password: "{{ secret_proxmox_password }}"
+    netif: "{'net0':'name=eth0,gw={{ item.gw }},ip={{ item.ip }}/24,bridge=vmbr0'}"
+    ostemplate: "{{ item.template | default ('local:vztmpl/ubuntu-24.04-standard_24.04-2_amd64.tar.zst') }}"
+    mounts:
+      mp0: "/dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1,mp=/mnt/nvme1tb,backup=0" 
+      mp1: "/dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1,mp=/mnt/dvr,backup=0"
+    timezone: host
+    features:
+      - nesting={{ item.nesting | default ('0') }}
+      - fuse={{ item.fuse | default ('0') }}
+      - mount={{ item.fsmount | default (omit) }}
+    api_user: root@pam
+    api_password: "{{ secret_proxmox_password }}"
+    api_host: 192.168.10.10
+    node: pve
+  loop: "{{ lxc_mounts }}"
+  delegate_to: localhost
+
+- name: "Odin - Check if GPU passthrough config exists"
+  lineinfile:
+    path: /etc/pve/lxc/200.conf
+    line: "lxc.cgroup2.devices.allow: c 226:0 rwm"
+    state: absent
+  check_mode: yes
+  changed_when: false
+  register: check_config
+
+- name: "Odin - Add iGPU passthrough & disable apparmor"
+  copy:
+    content: |
+      lxc.cgroup2.devices.allow: c 226:0 rwm
+      lxc.cgroup2.devices.allow: c 226:128 rwm
+      lxc.cgroup2.devices.allow: c 29:0 rwm
+      lxc.mount.entry: /dev/dri dev/dri none bind,optional,create=dir
+      lxc.mount.entry: /dev/fb0 dev/fb0 none bind,optional,create=file
+      lxc.apparmor.profile: unconfined
+      lxc.cgroup2.devices.allow: a
+      lxc.cap.drop:
+    dest: /etc/pve/lxc/200.conf
+    mode: preserve
+    unsafe_writes: yes
+  when: check_config.found == 0
+      
+- name: Create VM's
+  proxmox_kvm:
+    agent: true
+    onboot: true
+    machine: q35
+    bios: ovmf
+    cores: "{{ item.cores | default('1') }}"
+    sockets: "{{ item.sockets | default('1') }}"
+    cpu: "{{ item.cpu_type | default('x86-64-v2-AES') }}"
+    description: "{{ item.description }}"
+    ide:
+      ide2: "local:iso/{{ item.image | default ('ubuntu-24.04.1-live-server-amd64.iso') }},media=cdrom"
+    efidisk0:
+      storage: local-lvm
+      format: raw
+      efitype: 4m
+      pre_enrolled_keys: 1
+    memory: "{{ item.memory | default('2048') }}"
+    name: "{{ item.name }}"
+    vmid: "{{ item.vmid }}"
+    net:
+      net0: 'virtio,bridge=vmbr0,firewall=1'
+    ostype: l26
+    scsihw: virtio-scsi-single
+    scsi:
+      scsi0: "{{ item.disk | default ('local-lvm:10') }},discard=on,ssd=1,iothread=1"
+    state: present
+    api_user: root@pam
+    api_password: "{{ secret_proxmox_password }}"
+    api_host: 192.168.10.10
+    node: pve
+  delegate_to: localhost
+  loop: "{{ vm_uefi }}"    

@@ -5,8 +5,8 @@
     name: azlux
     types: deb
     uris: "{{ azlux_apt_repo }}" 
-    suites: "{{ ansible_distribution_release }}"
-    components: "{{ azlux_apt_component }}"
+    suites: stable
+    components: main
     signed_by: "{{ azlux_apt_keyurl }}"
 
 - name: Install ctop

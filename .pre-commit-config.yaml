@@ -1,0 +1,8 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ansible-vault-encrypted
+        name: Ensure vault is encrypted
+        language: script
+        entry: .pre-commit/ansible-vault-encrypted.sh

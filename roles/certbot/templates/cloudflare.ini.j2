@@ -1,9 +1,3 @@
 {{ ansible_managed | comment }}
-{% if certbot_cloudlare_api_token is defined %}
 # Cloudflare API token used by Certbot
-dns_cloudflare_api_token={{ certbot_cloudlare_api_token }}
-{% elif certbot_cloudflare_api_key is defined and certbot_cloudflare_api_key is defined %}
-# Cloudflare API credentials used by Certbot
-dns_cloudflare_email={{ certbot_cloudflare_email }}
-dns_cloudflare_api_key={{ certbot_cloudflare_api_key }}
-{% endif %}
+dns_cloudflare_api_token={{ cloudflare_certbot_api_token }}

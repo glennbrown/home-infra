@@ -1,0 +1,31 @@
+services:
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:4.4.1
+    container_name: sabnzbd
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID=100
+    volumes:
+      - ~/.config/sabnzbd:/config
+      - /mnt/nvme1tb/downloads:/downloads
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.0.3
+    container_name: qbittorrent
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID=100
+      - WEBUI_PORT=8088
+      - TORRENTING_PORT=6881
+    volumes:
+      - ~/.config/qbittorrent:/config
+      - /mnt/nvme1tb/downloads:/downloads
+    ports:
+      - 8088:8088
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped

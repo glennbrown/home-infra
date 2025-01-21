@@ -1,8 +1,0 @@
----
-
-- name: reload caddy
-  listen: "reload caddy"
-  ansible.builtin.systemd: 
-    name: caddy
-    state: reloaded
-    daemon_reload: true

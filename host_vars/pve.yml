@@ -1,0 +1,53 @@
+---
+
+lxc_templates:
+  - debian-12-standard_12.7-1_amd64.tar.zst
+  - ubuntu-24.04-standard_24.04-2_amd64.tar.zst
+
+lxc_mounts:
+  # Debian Test
+  - name: odin
+    vmid: 200
+    description: 'Media distribution/collection'
+    unprivileged: false
+    cores: 8
+    memory: 16384
+    swap: 8192
+    ip: 192.168.10.11
+    gw: 192.168.10.1
+    disk: 'local-lvm:150'
+    nesting: 1
+    fuse: 1
+    fsmount: 'nfs;cifs'
+
+vm_uefi:
+  - name: thor
+    vmid: 201
+    description: 'Internal Web Server/Reverse Proxy'
+    cores: 4
+    memory: 4096
+    disk: 'local-lvm:50'
+
+# geerlingguy.ntp
+ntp_daemon: chrony
+ntp_package: chrony
+
+# Bash Aliases
+bash_apt: true
+bash_systemctl: true
+  
+# grog.package
+package_list_host:
+  - name: btrfs-progs
+  - name: diceware
+  - name: fio
+  - name: fwupd
+  - name: iperf3
+  - name: ffmpeg
+  - name: intel-gpu-tools
+  - name: intel-microcode
+  - name: lm-sensors
+  - name: nvme-cli
+  - name: nvtop
+  - name: smartmontools
+  - name: xfsprogs

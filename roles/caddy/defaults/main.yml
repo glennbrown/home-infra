@@ -1,8 +1,0 @@
----
-# defaults file for caddy
-
-caddy_config_path: /etc/caddy
-caddy_log_path: /var/log/caddy
-
-# Caddy Binary with cloudflare dns plugin
-caddy_amd64_linux_binary: 'https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com%2Fcaddy-dns%2Fcloudflare'

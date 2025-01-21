@@ -3,7 +3,7 @@
     name: "{{ me.username }}"
     gid: "{{ me.uid }}"
 
-- name: Create user account for Debian
+- name: Create user account
   user:
     name: "{{ me.username }}"
     uid: "{{ me.uid }}"
@@ -17,18 +17,3 @@
     append: true
     groups: adm,sudo,users,cdrom,dip,plugdev,video  
   when: ansible_os_family == 'Debian'
-
-- name: Create user account for Redhat
-  user:
-    name: "{{ me.username }}"
-    uid: "{{ me.uid }}"
-    group: "{{ me.username }}"
-    home: "{{ me.home }}"
-    comment: "{{ me.name }}"
-    shell: /bin/bash
-    password: "{{ secret_gbrown_pass }}"
-    system: true
-    update_password: on_create
-    append: true
-    groups: adm,wheel,users,cdrom,video
-  when: ansible_os_family == 'Redhat'

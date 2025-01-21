@@ -1,9 +1,0 @@
-roles:
-
-  # Grog Roles
-  - src: grog.user
-    version: v1.3.1
-  - src: grog.group
-    version: v1.1.2
-  - src: grog.authorized-key
-    version: v1.1.5

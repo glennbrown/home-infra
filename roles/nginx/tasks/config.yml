@@ -5,7 +5,6 @@
     url: "{{ dhparams_pem_download }}"
     dest: "{{ nginx_config_dir }}/dhparams.pem"
     mode: 0440
-  become: true
 
 - name: Ensure config directories exist
   file:
@@ -14,15 +13,11 @@
     mode: 0755
   loop:
     - sites-enabled
-    - streams-enabled
-    - conf.d
-  become: true
 
 - name: Check if we already backed up stock config
   stat:
     path: "{{ nginx_config_dir }}/nginx.conf.org"
   register: debian_stock_config
-  become: true
 
 - name: Copy Debian stock config
   copy:
@@ -30,14 +25,12 @@
     dest: "{{ nginx_config_dir }}/nginx.conf.org"
     remote_src: true
   when: not debian_stock_config.stat.exists
-  become: true
 
 - name: Install nginx base config
   copy:
     src: nginx.conf
     dest: "{{ nginx_config_dir }}/nginx.conf"
     mode: 0644
-  become: true
   notify: reload nginx
 
 - name: Copy proxy parameters
@@ -45,24 +38,21 @@
     src: proxy_params
     dest: "{{ nginx_config_dir }}/proxy_params"
     mode: 0644
-  become: true
   notify: reload nginx
 
 - name: Copy additional config files
-  template:
+  copy:
     src: "{{ item }}"
-    dest: "{{ nginx_config_dir }}/conf.d/{{ item | basename }}"
+    dest: "{{ nginx_config_dir }}/{{ item }}"
     mode: 0644
   loop:
-    - conf.d/ssl.conf
-  become: true
+    - ssl.conf
   notify: reload nginx
 
 - name: Disable default site
   file:
     path: "{{ nginx_config_dir }}/sites-enabled/default"
     state: absent
-  become: true
   notify: reload nginx
 
 - name: Install HTTPS Redirect
@@ -70,25 +60,11 @@
     src: nginx-https-redirect.conf
     dest: "{{ nginx_config_dir }}/sites-enabled/nginx-https-redirect.conf"
     mode: 0644
-  become: true
   notify: reload nginx
 
-#- name: Copy nginx config for docker proxied sites
-#  template:
-#    src: nginx-docker.conf.j2
-#    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}"
-#    mode: 0644
-#  become: true
-#  notify: reload nginx
-#  loop: "{{ nginx_docker_sites }}"
-#  when: nginx_docker_sites is defined
-
-- name: Copy nginx config for proxied sites
-  template:
-    src: nginx-proxy.conf.j2
-    dest: "{{ nginx_config_dir }}/sites-enabled/{{ item.filename | default(item.server_name.split(' ')[0] ~ '.conf') }}"
+- name: Copy nginx sites config
+  copy:
+    content: "{{ nginx_sites_config }}"
+    dest: "{{ nginx_config_dir }}/sites-enabled/sites.conf"
     mode: 0644
-  become: true
   notify: reload nginx
-  loop: "{{ nginx_proxy_sites }}"
-  when: nginx_proxy_sites is defined

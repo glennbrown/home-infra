@@ -1,19 +1,34 @@
 ---
-#
-###############################################################################
-# Setup main server odin
-###############################################################################
-#
 
-- name: Disk setup
-  include_tasks: disks.yml
+- name: Create Directories
+  file:
+    path: "/home/{{ me.username }}/{{ item }}"
+    state: directory
+    owner: "{{ me.username }}"
+    group: "{{ me.username }}"
+  loop:
+    - .config
+    - .local/share
 
-# - name: File sharing setup
-#   include_tasks: file_sharing.yml
+# render group in Ubuntu LXC does not match Proxmox host
+- name: Fix render group for iGPU passthough
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+    state: present
+  loop:
+    - name: ssl-cert
+      gid: 110
+    - name: render
+      gid: 103
 
-# - name: Tools install
-#   include_tasks: tools.yml
+# https://theorangeone.net/posts/docker-lxc-storage/
+- name: Set Docker Storage Driver
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+  notify: Restart Docker
 
-- name: Setup lm_sensors
-  include_tasks: sensors.yml
-  
+- name: Setup Network mountpoints
+  include_tasks: network_mounts.yml
+    

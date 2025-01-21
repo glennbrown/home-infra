@@ -1,0 +1,19 @@
+---
+#
+###############################################################################
+# Setup main server odin
+###############################################################################
+#
+
+- name: Disk setup
+  include_tasks: disks.yml
+
+# - name: File sharing setup
+#   include_tasks: file_sharing.yml
+
+# - name: Tools install
+#   include_tasks: tools.yml
+
+- name: Setup lm_sensors
+  include_tasks: sensors.yml
+  

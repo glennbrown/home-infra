@@ -1,8 +1,5 @@
 ---
 
-- import_tasks: install-with-package.yml
-  when: certbot_install_method == 'package'
-
 - import_tasks: install-with-snap.yml
   when: certbot_install_method == 'snap'
 
@@ -13,9 +10,40 @@
   file:
     path: /etc/letsencrypt
     state: directory
-    owner: root
-    group: root
     mode: 0755
+
+- name: Create certbot live and archive folder
+  file:
+    path: "/etc/letsencrypt/{{ item }}"
+    state: directory
+    mode: 0700
+  loop:
+    - live
+    - archive
+
+- block:
+    - name: Set default ACL for live and archive folders
+      acl:
+        path: "/etc/letsencrypt/{{ item }}"
+        entity: users
+        etype: group
+        permissions: rwx
+        default: yes
+        state: present
+      loop:
+        - live
+        - archive
+    - name: Set ACL for existing content
+      acl:
+        path: "/etc/letsencrypt/{{ item }}"
+        entity: users
+        etype: group
+        permissions: rwx
+        recursive: yes
+        state: present
+      loop:
+        - live
+        - archive
   
 - name: Copy certbot cloudflare credential config
   template:

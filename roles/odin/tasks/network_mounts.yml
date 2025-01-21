@@ -1,0 +1,17 @@
+---
+
+- name: Create mount point paths
+  file:
+    dest: "{{ item.path }}"
+    state: directory
+    mode: 0777
+  loop: "{{ network_mountpoints }}"
+
+- name: Mount disks
+  mount:
+    name: "{{ item.path }}"
+    src: "{{ item.id }}"
+    fstype: "{{ item.fs }}"
+    opts: "{{ item.opts }}"
+    state: "{{ item.state | default ('present') }}"
+  loop: "{{ network_mountpoints }}"

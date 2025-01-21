@@ -1,0 +1,20 @@
+services:
+  plex:
+    image: plexinc/pms-docker:1.41.3.9314-a0bfb8370
+    container_name: plex
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /mnt/nvme1tb/appdata/plexmediaserver:/config
+      - tv-shows:/tv:ro
+      - movies:/movies:ro
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PLEX_CLAIM={{ plex_claim_token }}
+      - PLEX_UID={{ me.uid }}
+      - PLEX_GID=100
+    tmpfs:
+      - /transcode:mode=0777
+    restart: unless-stopped
+    

@@ -11,4 +11,3 @@
     - libnginx-mod-http-headers-more-filter
     - libnginx-mod-http-brotli-filter
     - libnginx-mod-stream
-  become: true

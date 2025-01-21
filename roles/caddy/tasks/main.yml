@@ -1,7 +1,0 @@
----
-
-- name: caddy | install
-  ansible.builtin.include_tasks: install.yml
-  
-- name: caddy | configure caddy
-  ansible.builtin.include_tasks: configure.yml
