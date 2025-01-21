@@ -2,9 +2,6 @@
 
 - hosts: "{{ host }}"
   gather_facts: true
-  vars_files:
-    - 'vars/vault.yml'
-    - 'vars/secrets_lookup.yml'
   vars_prompt:
     - name: host
       prompt: "Host to update containers on?"
@@ -14,7 +11,7 @@
       private: no
   
   roles:
-    - role: compose_generator
+    - role: ironicbadger.docker-compose-generator
 
   tasks:
     
@@ -27,7 +24,7 @@
       loop: "{{ containers_to_update.split(',') }}"
 
     - name: Prune Docker Images
-      docker_prune:
+      community.docker.docker_prune:
         images: 'true'
         images_filters:
           dangling: false

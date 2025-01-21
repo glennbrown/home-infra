@@ -27,11 +27,6 @@ docker:
 run HOST *TAGS:
     ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
 
-# Roles and Collections Repos
-# optionally use --force to reinstall all requirements
-reqs *FORCE:
-    ansible-galaxy install -r requirements.yml {{FORCE}}
-
 # git submodule - repo URL + optional local folder name
 add-submodule URL *NAME:
     #!/usr/bin/env sh
