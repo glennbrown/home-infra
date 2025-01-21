@@ -39,7 +39,7 @@ Most of my servers are named after norse mythology characters or from the mnemon
 ### Ansible Vault
 
 * `just encrypt` - Encrypts the Ansible Vault
-* `just descrypt` - Decrypts the Ansible Vault
+* `just decrypt` - Decrypts the Ansible Vault
 
 ### Updates
 

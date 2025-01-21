@@ -16,16 +16,12 @@ export JUST_LOG := log
 build_pve:
 	ansible-playbook -u root -b run.yml --limit pve --ask-pass
 
-build +HOST:
-	ansible-playbook -b run.yml --limit {{HOST}}
+build HOST *TAGS:
+	ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
 
 # Docker Container Updates
 docker:
     ansible-playbook docker.yml 
-
-# just run HOST TAGS
-run HOST *TAGS:
-    ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
 
 # git submodule - repo URL + optional local folder name
 add-submodule URL *NAME:
