@@ -1,6 +1,5 @@
 # Ansible
 *.retry
-galaxy_roles*
 testing*
 
 # MacOS
