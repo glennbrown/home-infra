@@ -1,0 +1,20 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy:v2.11.0
+    container_name: ntfy
+    volumes:
+      - ~/.config/ntfy:/var/lib/ntfy
+    environment:
+      - TZ={{ ntp_timezone }}
+      - NTFY_BASE_URL=https://ntfy.{{ public_domain_1 }}
+      - NTFY_CACHE_FILE=/var/lib/ntfy/cache.db
+      - NTFY_AUTH_FILE=/var/lib/ntfy/auth.db
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_BEHIND_PROXY=true
+      - NTFY_ATTACHMENT_CACHE_DIR=/var/lib/ntfy/attachments
+      - NTFY_ENABLE_LOGIN=true
+      - NTFY_UPSTREAM_BASE_URL=https://ntfy.sh
+    command: serve
+    ports:
+      - 127.0.0.1:8088:80
+    restart: unless-stopped

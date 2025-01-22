@@ -14,10 +14,10 @@ export JUST_LOG := log
 
 ### Run/Builds
 build_pve:
-	ansible-playbook -u root -b run.yml --limit pve --ask-pass
+	ansible-playbook -u root run.yml --limit pve --ask-pass
 
 build HOST *TAGS:
-	ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
+	ansible-playbook run.yml --limit {{HOST}} {{TAGS}}
 
 # Docker Container Updates
 docker:
@@ -50,7 +50,7 @@ encrypt:
 
 ### Bootstrap/Setup
 bootstrap_lxc +HOST:
-	ansible-playbook -u root -b bootstrap.yml --limit {{HOST}}
+	ansible-playbook -u root bootstrap.yml --limit {{HOST}}
 
 bootstrap +HOST:
-	ansible-playbook -b bootstrap.yml --limit {{HOST}}
+	ansible-playbook bootstrap.yml --limit {{HOST}}

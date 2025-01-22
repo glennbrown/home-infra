@@ -4,8 +4,8 @@
   file:
     path: ~/{{ item }}
     state: directory
-  become: true
-  become_user: "{{ main_username }}"
+    owner: "{{ me.username }}"
+    group: "{{ me.username }}"
   loop:
     - .config
     - .local/share

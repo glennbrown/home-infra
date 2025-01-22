@@ -162,15 +162,18 @@
 - hosts: celtic
   become: true
   roles:
+    - role: grog.package
     - role: geerlingguy.security
     - role: artis3n.tailscale
     - role: bash_aliases
     - role: geerlingguy.docker
     - role: ctop
-    - role: ironicbadger.figurine
     - role: ocagent
     - role: celtic
-    - role: traefik
-      tags: compose
+    - role: certbot
+      tags: certs
+    - role: nginx
+      tags: web
     - role: ironicbadger.docker-compose-generator
       tags: compose
+    - role: ironicbadger.figurine
