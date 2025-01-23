@@ -1,0 +1,19 @@
+---
+
+- name: Create Directories
+  file:
+    path: "/home/{{ me.username }}/{{ item }}"
+    state: directory
+    owner: "{{ me.username }}"
+    group: "{{ me.username }}"
+  loop:
+    - .config
+    - .local/share
+
+# https://theorangeone.net/posts/docker-lxc-storage/
+- name: Set Docker Storage Driver
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+  notify: Restart Docker
+    

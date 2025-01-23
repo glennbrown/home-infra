@@ -16,14 +16,16 @@ This repo contains the code I use for deploying and managing servers mostly runn
 
 Most of my servers are named after norse mythology characters or from the mnemonic wordlist.
 
-| Name   | OS            | Description                       |
-| ------ | ------------- | --------------------------------- |
-| pve    | Proxmox       | Primary Proxmox Node              |
-| odin   | Ubuntu 24.04  | Media distrubution/collection     |
-| thor   | Ubuntu 24.04  | Internal web server/reverse proxy |
-| celtic | Debian 12     | Cloud VPS                         |
+| Name     | Type     | OS            | Description                       |
+| -------- | -------- | ------------- | --------------------------------- |
+| pve      | Physical | Proxmox       | Primary Proxmox Node              |
+| odin     | LXC      | Ubuntu 24.04  | Media Distribution/Collection     |
+| thor     | VM       | Ubuntu 24.04  | Internal web server/reverse proxy |
+| heimdall | VM       | Ubuntu 24.04  | Monitoring Server                 |
+| wayland  | VM       | Ubuntu 24.04  | Tools Server                      |
+| celtic   | VM       | Debian 12     | Cloud VPS                         |
 
-## just Usage
+## just usage
 
 ### Deployment
 

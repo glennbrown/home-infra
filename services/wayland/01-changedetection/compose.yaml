@@ -1,0 +1,34 @@
+services:
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io:0.49.0
+    container_name: changedetection
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PLAYWRIGHT_DRIVER_URL=ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      - BASE_URL=https://changedetection.{{ local_domain }}
+    volumes:
+      - ~/.config/changedetection:/datastore
+    ports:
+      - 5000:5000
+    depends_on:
+      - browserless-chrome
+    restart: unless-stopped
+  browserless-chrome:
+    image: ghcr.io/browserless/chrome:v2.24.2
+    container_name: browserless-chrome
+    environment:
+      - TZ={{ ntp_timezone }}
+      #- SCREEN_WIDTH=1920
+      #- SCREEN_HEIGHT=1024
+      #- SCREEN_DEPTH=16
+      - ENABLE_DEBUGGER=false
+      #- PREBOOT_CHROME=true
+      - TIMEOUT=300000
+      - MAX_CONCURRENT_SESSIONS=10
+      - CHROME_REFRESH_TIME=600000
+      #- DEFAULT_BLOCK_ADS=true
+      #- DEFAULT_STEALTH=true
+      #- DEFAULT_IGNORE_HTTPS_ERRORS=true
+    volumes:
+      - ~/.config/changedetection:/datastore
+    restart: unless-stopped

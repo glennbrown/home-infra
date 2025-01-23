@@ -1,0 +1,12 @@
+---
+# apt-mirror
+apt_source_mode: modern
+
+# grog.package
+package_list_host:
+  - name: fuse-overlayfs
+
+# Bash Aliases
+bash_apt: true
+bash_docker: true
+bash_systemctl: true

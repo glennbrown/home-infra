@@ -18,6 +18,7 @@
         - 91-contract-ua-esm-status
       when: ansible_distribution == 'Ubuntu'
 
+# Proxmox
 - hosts: pve
   become: true
   pre_tasks:
@@ -56,76 +57,6 @@
       apt:
         update_cache: yes
 
-# Basic Server setup
-#- name: Basic server setup
-#  hosts: all
-#  tags: [setup, init]
-#  pre_tasks:
-#    - name: Change hostname
-#      ansible.builtin.hostname:
-#        name: "{{ set_hostname }}"
-#      notify:
-#        - Hostname has changed
-#      when: set_hostname is defined 
-#  roles:
-#    - role: apt-mirror
-#      when: ansible_os_family == 'Debian'
-#    - role: grog.package
-#    - role: geerlingguy.ntp
-#      when: "'lxc' not in group_names"
-#  handlers:
-#    - name: Update hosts file
-#      listen: Hostname has changed
-#      ansible.builtin.lineinfile:
-#        path: /etc/hosts
-#        insertafter: '^127.0.0.1 localhost$'
-#        line: '{{ ansible_default_ipv4.address }} {{ set_hostname }}.{{ local_domain }} {{ set_hostname }}'
-#        owner: root
-#        group: root
-#        mode: 0644
-#    - name: Reboot
-#      listen: Hostname has changed
-#      ansible.builtin.reboot:
-#        msg: Reboot initiated by Ansible due to hostname change
-#        connect_timeout: 5
-#        reboot_timeout: 300
-#        pre_reboot_delay: 2
-#        post_reboot_delay: 30
-#        test_command: uptime
-  
-## Configure primary server
-#- name: Configure odin
-#  hosts: odin
-#  pre_tasks:
-#    - name: Disable proxmox enterprise repo
-#      replace:
-#        path: /etc/apt/sources.list.d/pve-enterprise.list
-#        regexp: '^deb https://enterprise\.proxmox\.com/debian/pve bookworm pve-enterprise'
-#        replace: '#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
-#      notify: Update apt cache
-#    - name: Disable proxmox enterprise ceph repo
-#      replace:
-#        path: /etc/apt/sources.list.d/ceph.list
-#        regexp: '^deb https://enterprise\.proxmox\.com/debian/ceph-quincy bookworm enterprise'
-#        replace: '#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise'
-#      notify: Update apt cache
-#    - name: Switch to proxmox community repo
-#      apt_repository:
-#        filename: /etc/apt/sources.list.d/pve-no-subscription
-#        repo: 'deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription'
-#        state: present
-#      notify: Update apt cache
-#    - name: Force apt cache update
-#      meta: flush_handlers
-#  roles:
-#    - role: proxmox_nag_removal
-#    - role: bash_aliases
-#    - role: odin
-#  handlers:
-#    - name: Update apt cache
-#      apt:
-#        update_cache: yes
-
 ### LXC/VMs/VPS
 - hosts: odin
   become: true
@@ -158,6 +89,46 @@
     - role: nginx
       tags: web
     - role: ironicbadger.figurine
+
+- hosts: heimdall
+  become: true
+  pre_tasks:
+    - name: Use legacy iptables
+      community.general.alternatives:
+        name: "{{ item.name }}"
+        path: "{{ item.path }}"
+      loop:
+        - { name: iptables, path: '/usr/sbin/iptables-legacy' }
+        - { name: ip6tables, path: '/usr/sbin/ip6tables-legacy' }
+  roles:
+    - role: grog.package
+    - role: geerlingguy.docker
+    - role: bash_aliases
+    - role: heimdall
+    - role: ctop
+    - role: ironicbadger.figurine
+    - role: ironicbadger.docker-compose-generator
+      tags: compose
+
+- hosts: wayland
+  become: true
+  pre_tasks:
+    - name: Use legacy iptables
+      community.general.alternatives:
+        name: "{{ item.name }}"
+        path: "{{ item.path }}"
+      loop:
+        - { name: iptables, path: '/usr/sbin/iptables-legacy' }
+        - { name: ip6tables, path: '/usr/sbin/ip6tables-legacy' }
+  roles:
+    - role: grog.package
+    - role: geerlingguy.docker
+    - role: bash_aliases
+    - role: wayland
+    - role: ctop
+    - role: ironicbadger.figurine
+    - role: ironicbadger.docker-compose-generator
+      tags: compose
 
 - hosts: celtic
   become: true

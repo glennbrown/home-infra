@@ -27,6 +27,18 @@ vm_uefi:
     cores: 4
     memory: 4096
     disk: 'local-lvm:50'
+  - name: heimdall
+    vmid: 202
+    description: 'Monitoring Server'
+    cores: 4
+    memory: 4096
+    disk: 'local-lvm:50'
+  - name: wayland
+    vmid: 203
+    description: 'Tools Server'
+    cores: 4
+    memory: 4096
+    disk: 'local-lvm:50'
 
 # geerlingguy.ntp
 ntp_daemon: chrony
