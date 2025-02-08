@@ -63,6 +63,12 @@ ufw:
     proto: 'any'
     route: 'no'
 
+# traefik
+traefik_cloudflare_proxy: true
+traefik_extra_entrypoints:
+  - name: irc
+    port: '46697'
+
 # certbot
 certbot_install_method: snap
 certbot_certs:

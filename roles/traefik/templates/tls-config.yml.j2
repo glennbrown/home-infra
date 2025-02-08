@@ -1,28 +1,14 @@
 {{ ansible_managed | comment }}
 ---
 tls:
-{% if traefik_certs %}
-  stores:
-{% if traefik_default_cert %}
-    default:
-      defaultCertificate:
-        certFile: /etc/letsencrypt/live/{{ traefik_default_cert }}/fullchain.pem
-        keyFile: /etc/letsencrypt/live/{{ traefik_default_cert }}/privkey.pem
-{% else %}
-    default: {}
-{% endif %}
-  certificates:
-{% for cert in traefik_certs %}
-    - certFile: /etc/letsencrypt/live/{{ cert.domain }}/fullchain.pem
-      keyFile: /etc/letsencrypt/live/{{ cert.domain }}/privkey.pem
-      stores: 
-        - default
-{% endfor %}
-{% endif %}
 # Traefik TLS Options as recommended by Mozilla SSL Configurator for Intermediate
   options:
     default:
       minVersion: VersionTLS12
+      curvePreferences:
+        - X25519
+        - CurveP256
+        - CurveP384
       cipherSuites:
         - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
         - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256

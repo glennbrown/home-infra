@@ -4,8 +4,4 @@ traefik_config_path: '/etc/traefik'
 traefik_log_path: '/var/log/traefik'
 traefik_cloudflare_proxy: false
 traefik_file_providers: []
-traefik_debug_log: false
-traefik_acme: false
 traefik_acme_staging: false
-traefik_default_cert: []
-traefik_certs: []

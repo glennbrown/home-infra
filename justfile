@@ -12,16 +12,26 @@ log := "warn"
 
 export JUST_LOG := log
 
-### Run/Builds
+# pre-commit install
+install:
+    pre-commit install
+
+# Run/Builds
 build_pve:
 	ansible-playbook -u root run.yml --limit pve --ask-pass
 
 build HOST *TAGS:
 	ansible-playbook run.yml --limit {{HOST}} {{TAGS}}
 
-# Docker Container Updates
+# Updates
 docker:
     ansible-playbook docker.yml 
+
+update:
+    ansible-playbook update.yml --limit odin,thor,wayland,heimdall
+
+update_pve:
+    ansible-playbook update.yml --limit pve
 
 # git submodule - repo URL + optional local folder name
 add-submodule URL *NAME:
@@ -48,9 +58,10 @@ decrypt:
 encrypt:
     ansible-vault encrypt group_vars/all/vault.yml
 
-### Bootstrap/Setup
+# Bootstrap/Setup
 bootstrap_lxc +HOST:
 	ansible-playbook -u root bootstrap.yml --limit {{HOST}}
 
 bootstrap +HOST:
 	ansible-playbook bootstrap.yml --limit {{HOST}}
+

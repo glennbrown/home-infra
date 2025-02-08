@@ -3,10 +3,6 @@
 - name: Install python3-passlib
   package:
     name: python3-passlib
-    
-- name: Create Docker network
-  docker_network:
-    name: traefik
 
 - name: Ensure config directories exist
   file:

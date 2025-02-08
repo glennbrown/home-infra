@@ -5,6 +5,7 @@ debian_package_list:
   - aptitude
   - bash-completion
   - bc
+  - debian-goodies
   - bind9-dnsutils
   - btop
   - command-not-found
@@ -21,6 +22,7 @@ debian_package_list:
   - jq
   - mc
   - nano
+  - needrestart
   - net-tools
   - nmap
   - pv
@@ -37,6 +39,7 @@ debian_package_list:
   - tree
   - wget
   - vim
+  - update-notifier-common
   - unzip
   - zip
   

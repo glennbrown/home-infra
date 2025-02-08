@@ -2,7 +2,7 @@
 ---
 api:
   dashboard: true
-  debug: true
+  insecure: false
 entryPoints:
   web:
     address: :80
@@ -55,31 +55,19 @@ tcpServersTransport:
 ping: {}
 providers:
   docker:
-    endpoint: unix:///var/run/docker.sock
-    watch: true
     exposedByDefault: false
     network: traefik
   file:
     directory: /etc/traefik/config.d
     watch: true
-{% if traefik_debug_log %}
-log:
-  level: debug
-  filepath: /var/log/traefik/traefik.log
-  compress: true
-  maxSize: 5
-  maxAge: 7
-{% else %}
 log:
   level: info
   filePath: /var/log/traefik/traefik.log
   compress: true
   maxSize: 5
   maxAge: 7
-{% endif %}
 accessLog:
   filePath: /var/log/traefik/access.log
-{% if traefik_acme %}
 certificatesResolvers:
   cloudflare:
     acme:
@@ -93,4 +81,3 @@ certificatesResolvers:
         resolvers:
           - 1.1.1.1:53
           - 1.0.0.1:53
-{% endif %}

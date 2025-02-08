@@ -1,0 +1,38 @@
+---
+
+- name: Install on Debian based systems
+  block:
+    - name: Apt Update
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Apt Dependencies
+      ansible.builtin.apt:
+        name: "{{ apt_dependencies }}"
+        state: present
+
+    - name: Add Tailscale Signing Key
+      ansible.builtin.apt_key:
+        url: "{{ apt_signkey }}"
+        keyring: /usr/share/keyrings/tailscale-archive-keyring.gpg
+        state: present
+
+    - name: Add Tailscale Deb
+      ansible.builtin.apt_repository:
+        repo: "{{ apt_deb }}"
+        state: present
+
+    - name: Install Tailscale
+      ansible.builtin.apt:
+        name: "{{ tailscale_package }}"
+        state: present
+        update_cache: true
+  when: ansible_os_family == 'Debian'
+
+- name: Install on MacOS using homebrew
+  community.general.homebrew_cask:
+    name: "{{ tailscale_package }}"
+    state: present
+    update_homebrew: true
+  when: ansible_os_family == 'Darwin'
+    

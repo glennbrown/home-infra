@@ -105,6 +105,7 @@
     - role: geerlingguy.docker
     - role: bash_aliases
     - role: heimdall
+    - role: tailscale
     - role: ctop
     - role: ironicbadger.figurine
     - role: ironicbadger.docker-compose-generator
@@ -135,16 +136,13 @@
   roles:
     - role: grog.package
     - role: geerlingguy.security
-    - role: artis3n.tailscale
+    - role: tailscale
     - role: bash_aliases
     - role: geerlingguy.docker
     - role: ctop
     - role: ocagent
     - role: celtic
-    - role: certbot
-      tags: certs
-    - role: nginx
-      tags: web
+    - role: traefik
+    - role: ironicbadger.figurine
     - role: ironicbadger.docker-compose-generator
       tags: compose
-    - role: ironicbadger.figurine
