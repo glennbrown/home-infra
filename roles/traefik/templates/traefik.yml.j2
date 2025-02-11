@@ -63,11 +63,15 @@ providers:
 log:
   level: info
   filePath: /var/log/traefik/traefik.log
-  compress: true
-  maxSize: 5
-  maxAge: 7
 accessLog:
   filePath: /var/log/traefik/access.log
+  format: common
+  fields:
+    defaultMode: keep
+    names:
+      ClientUsername: drop
+    headers:
+      defaultMode: keep
 certificatesResolvers:
   cloudflare:
     acme:

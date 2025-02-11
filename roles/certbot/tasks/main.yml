@@ -16,7 +16,7 @@
   file:
     path: "/etc/letsencrypt/{{ item }}"
     state: directory
-    mode: 0700
+    mode: 0755
   loop:
     - live
     - archive

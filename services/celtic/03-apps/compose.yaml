@@ -64,7 +64,7 @@ services:
       - "traefik.tcp.routers.zncirc.tls.certresolver=cloudflare"
       - "traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"
       - "traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"
-      - "traefik.tcp.services.zncirc.loadbalancer.server.port=6697"
+      - "traefik.tcp.services.zncirc.loadbalancer.server.port=46697"
 
 networks:
   traefik:

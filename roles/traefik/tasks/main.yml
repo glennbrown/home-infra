@@ -8,9 +8,6 @@
   file:
     dest: "{{ traefik_config_path }}/{{ item }}"
     state: directory
-    owner: root
-    group: root
-    mode: 0755
   loop:
     - config.d
 
@@ -18,9 +15,6 @@
   file:
     dest: "{{ traefik_log_path }}"
     state: directory
-    owner: root
-    group: root
-    mode: 0755
 
 - name: Check if acme file exists already
   stat:
@@ -31,8 +25,6 @@
   file:
     dest: "{{ traefik_config_path }}/acme.json"
     state: touch
-    owner: root
-    group: root
     mode: 0600
   when: not acme_json_file.stat.exists
 
@@ -40,25 +32,16 @@
   template:
     src: traefik.yml.j2
     dest: "{{ traefik_config_path }}/traefik.yml"
-    owner: root
-    group: root
-    mode: 0644
 
 - name: Copy traefik tls config file
   template:
     src: tls-config.yml.j2
     dest: "{{ traefik_config_path }}/config.d/tls-config.yml"
-    owner: root
-    group: root
-    mode: 0644
 
 - name: Copy traefik file provider rules
   template:
     src: "{{ item.name }}.j2"
     dest: "{{ traefik_config_path }}/config.d/{{ item.name }}"
-    owner: root
-    group: root
-    mode: 0644
   loop: "{{ traefik_file_providers }}"
   when: traefik_file_providers is defined
 
@@ -67,4 +50,10 @@
     path: "{{ traefik_config_path }}/.htpasswd"
     name: kgbadmin
     password: "{{ traefik_dashboard_password }}"
+
+- name: Copy logrotate config
+  template:
+    src: logrotate.conf.j2
+    dest: /etc/logrotate.d/traefik
+  
     
