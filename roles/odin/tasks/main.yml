@@ -11,18 +11,23 @@
     - .local/share
 
 # render group in Ubuntu LXC does not match Proxmox host
-- name: Fix render group for iGPU passthough
-  group:
-    name: "{{ item.name }}"
-    gid: "{{ item.gid }}"
-    state: present
-  loop:
-    - name: ssl-cert
-      gid: 110
-    - name: render
-      gid: 103
+# - name: Fix render group for iGPU passthough
+#   group:
+#     name: "{{ item.name }}"
+#     gid: "{{ item.gid }}"
+#     state: present
+#   loop:
+#     - name: ssl-cert
+#       gid: 110
+#     - name: render
+#       gid: 103
 
 # https://theorangeone.net/posts/docker-lxc-storage/
+- name: Install fuse-overlayfs
+  apt:
+    name: fuse-overlayfs
+    state: present 
+    
 - name: Set Docker Storage Driver
   copy:
     src: daemon.json

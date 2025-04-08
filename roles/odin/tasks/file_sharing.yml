@@ -1,0 +1,71 @@
+---
+
+- name: Install samba
+  apt:
+    update_cache: true
+    pkg: samba
+    state: present
+  notify: 
+    - start samba service
+
+- name: Install samba config
+  copy:
+    src: etc/samba/smb.conf
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    backup: yes
+  notify: 
+    - restart samba service
+
+- name: Create samba users
+  shell: >
+    set -e -o pipefail
+    && (pdbedit --user={{ item.username }} 2>&1 > /dev/null)
+    || (echo '{{ item.password }}'; echo '{{ item.password }}')
+    | smbpasswd -s -a {{ item.username }}
+  args:
+    executable: /bin/bash
+  register: samba_create_users
+  changed_when: "'Added user' in samba_create_users.stdout"
+  loop: "{{ samba_users }}"
+  no_log: true
+
+- name: Set samba passwords correctly
+  shell: >
+    set -e -o pipefail
+    && (smbclient -U {{ item.username }}%{{ item.password }} -L 127.0.0.1 2>&1 > /dev/null)
+    || (echo '{{ item.password }}'; echo '{{ item.password }}')
+    | smbpasswd {{ item.username }}
+  args:
+    executable: /bin/bash
+  register: samba_verify_users
+  changed_when: "'New SMB password' in samba_verify_users.stdout"
+  loop: "{{ samba_users }}"
+  no_log: true
+
+- name: Install mdns daemon
+  apt:
+    update_cache: yes
+    pkg: avahi-daemon
+    state: present
+  notify:
+    - start avahi-daemon service
+
+- name: Check weather wsdd2 is installed
+  shell: "dpkg-query -W {{ wsdd2_apt_package_name }}"
+  ignore_errors: true
+  register: is_installed
+  changed_when: "is_installed.rc != 0"
+
+- name: Setting fact of weather to install wsdd2
+  set_fact:
+    install_wsdd2: "{{ wsdd2_force_install == true or is_installed.failed == true }}"
+
+- name: Install wsdd2
+  apt:
+    name: wsdd2
+    state: present
+    update_cache: yes
+  when: install_wsdd2
+  notify: start wsdd2 service

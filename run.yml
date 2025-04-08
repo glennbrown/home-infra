@@ -19,7 +19,7 @@
       when: ansible_distribution == 'Ubuntu'
 
 # Proxmox
-- hosts: pve
+- hosts: pve-01
   become: true
   pre_tasks:
     - name: Disable proxmox enterprise repo
@@ -49,9 +49,9 @@
     - role: grog.package
     - role: geerlingguy.ntp
     - role: bash_aliases
+    - role: ironicbadger.figurine
     - role: pve
       tags: provision
-    - role: ironicbadger.figurine
   handlers:
     - name: Update apt cache
       apt:
@@ -60,14 +60,6 @@
 ### LXC/VMs/VPS
 - hosts: odin
   become: true
-  pre_tasks:
-    - name: Use legacy iptables
-      community.general.alternatives:
-        name: "{{ item.name }}"
-        path: "{{ item.path }}"
-      loop:
-        - { name: iptables, path: '/usr/sbin/iptables-legacy' }
-        - { name: ip6tables, path: '/usr/sbin/ip6tables-legacy' }
   roles:
     - role: grog.package
     - role: geerlingguy.docker

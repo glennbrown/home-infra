@@ -5,7 +5,7 @@
     api_user: root@pam
     api_password: "{{ secret_proxmox_password }}"
     api_host: 192.168.10.10
-    node: pve
+    node: pve-01
     storage: local
     content_type: vztmpl
     template: "{{ item }}"
@@ -19,9 +19,9 @@
     dest: "/var/lib/vz/template/iso/{{ item.image }}"
     checksum: "{{ item.checksum }}"
   loop:
-    - url: 'https://mirrors.rit.edu/ubuntu-releases/24.04.1/'
-      image: 'ubuntu-24.04.1-live-server-amd64.iso'
-      checksum: 'sha256:https://mirrors.rit.edu/ubuntu-releases/24.04.1/SHA256SUMS'
+    - url: 'https://mirrors.rit.edu/ubuntu-releases/24.04/'
+      image: 'ubuntu-24.04.2-live-server-amd64.iso'
+      checksum: 'sha256:https://mirrors.rit.edu/ubuntu-releases/24.04/SHA256SUMS'
     - url: 'https://mirrors.rit.edu/debian/debian-cd/12.9.0/amd64/iso-dvd/'
       image: 'debian-12.9.0-amd64-DVD-1.iso'
       checksum: 'sha256:https://mirrors.rit.edu/debian/debian-cd/12.9.0/amd64/iso-dvd/SHA256SUMS'
@@ -43,8 +43,8 @@
     netif: "{'net0':'name=eth0,gw={{ item.gw }},ip={{ item.ip }}/24,bridge=vmbr0'}"
     ostemplate: "{{ item.template | default ('local:vztmpl/ubuntu-24.04-standard_24.04-2_amd64.tar.zst') }}"
     mounts:
-      mp0: "/dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1,mp=/mnt/nvme1tb,backup=0" 
-      mp1: "/dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1,mp=/mnt/dvr,backup=0"
+      mp0: "nvme-data-lvm:120,mp=/srv/appdata,backup=0" 
+      mp1: "/dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1,mp=/srv/scratch,backup=0"
     timezone: host
     features:
       - nesting={{ item.nesting | default ('0') }}
@@ -53,7 +53,7 @@
     api_user: root@pam
     api_password: "{{ secret_proxmox_password }}"
     api_host: 192.168.10.10
-    node: pve
+    node: pve-01
   loop: "{{ lxc_mounts }}"
   delegate_to: localhost
 
@@ -67,8 +67,8 @@
   register: check_config
 
 - name: "Odin - Add iGPU passthrough & disable apparmor"
-  copy:
-    content: |
+  lineinfile:
+    line: |
       lxc.cgroup2.devices.allow: c 226:0 rwm
       lxc.cgroup2.devices.allow: c 226:128 rwm
       lxc.cgroup2.devices.allow: c 29:0 rwm
@@ -77,8 +77,8 @@
       lxc.apparmor.profile: unconfined
       lxc.cgroup2.devices.allow: a
       lxc.cap.drop:
+    insertafter: EOF
     dest: /etc/pve/lxc/200.conf
-    mode: preserve
     unsafe_writes: yes
   when: check_config.found == 0
       
@@ -112,6 +112,6 @@
     api_user: root@pam
     api_password: "{{ secret_proxmox_password }}"
     api_host: 192.168.10.10
-    node: pve
+    node: pve-01
   delegate_to: localhost
   loop: "{{ vm_uefi }}"    

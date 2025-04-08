@@ -7,13 +7,14 @@ services:
       - PUID={{ me.uid }}
       - PGID=100
     volumes:
-      - ~/.config/sabnzbd:/config
-      - /mnt/nvme1tb/downloads:/downloads
+      - /srv/appdata/sabnzbd:/config
+      - /srv/scratch/downloads:/downloads
     ports:
       - 8080:8080
     restart: unless-stopped
+      
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:5.0.3
+    image: lscr.io/linuxserver/qbittorrent:5.0.4
     container_name: qbittorrent
     environment:
       - TZ={{ ntp_timezone }}
@@ -22,8 +23,8 @@ services:
       - WEBUI_PORT=8088
       - TORRENTING_PORT=6881
     volumes:
-      - ~/.config/qbittorrent:/config
-      - /mnt/nvme1tb/downloads:/downloads
+      - /srv/appdata/qbittorrent:/config
+      - /srv/scratch/downloads:/downloads
     ports:
       - 8088:8088
       - 6881:6881

@@ -39,7 +39,7 @@ debian_package_list:
   - tree
   - wget
   - vim
-  - update-notifier-common
+  #- update-notifier-common
   - unzip
   - zip
   
