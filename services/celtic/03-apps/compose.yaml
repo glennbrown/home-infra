@@ -1,6 +1,6 @@
 services:
   freshrss:
-    image: freshrss/freshrss:1.25.0-alpine
+    image: freshrss/freshrss:1.26.1-alpine
     container_name: freshrss
     environment:
       - TZ={{ ntp_timezone }}
