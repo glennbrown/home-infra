@@ -1,6 +1,6 @@
 services: 
   ghost:
-    image: ghost:5.109.2
+    image: ghost:5.116.1
     container_name: ghost
     environment:
       - TZ={{ ntp_timezone }}
