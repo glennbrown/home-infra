@@ -44,7 +44,7 @@ services:
       - prowlarr
     restart: unless-stopped
   radarr:
-    image: lscr.io/linuxserver/radarr:5.19.3
+    image: lscr.io/linuxserver/radarr:5.21.1
     container_name: radarr
     environment:
       - TZ={{ ntp_timezone }}
