@@ -1,6 +1,6 @@
 services:
   tautulli:
-    image: tautulli/tautulli:v2.15.1
+    image: tautulli/tautulli:v2.15.2
     container_name: tautulli
     environment:
       - TZ={{ ntp_timezone }}
