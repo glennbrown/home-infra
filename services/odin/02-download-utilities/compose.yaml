@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
       
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:5.0.4
+    image: lscr.io/linuxserver/qbittorrent:5.1.0
     container_name: qbittorrent
     environment:
       - TZ={{ ntp_timezone }}
