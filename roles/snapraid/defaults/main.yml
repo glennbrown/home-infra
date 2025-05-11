@@ -1,0 +1,7 @@
+---
+
+snapraid_package_name: snapraid
+snapraid_bin_path: /usr/bin/snapraid
+
+snapraid_btrfs_healthcheck_io_uuid: ""
+snapraid_healthcheck_io_host: https://hc-ping.com

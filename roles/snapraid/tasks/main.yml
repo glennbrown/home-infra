@@ -1,0 +1,7 @@
+---
+
+- name: Install and configure snapraid
+  include_tasks: snapraid-setup.yml
+
+- name: Install and configure snapraid-btrfs
+  include_tasks: snapraid-btrfs.yml
