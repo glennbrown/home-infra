@@ -61,19 +61,3 @@ services:
       - prowlarr
       - qbittorrent
     restart: unless-stopped
-
-volumes:
-  tv-shows:
-    name: tv-shows
-    driver: local
-    driver_opts:
-      type: cifs
-      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666
-      device: //yggdrasil/Media/TV Shows
-  movies:
-    name: movies
-    driver: local
-    driver_opts:
-      type: cifs
-      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=99,gid=100,dir_mode=0777,file_mode=0666
-      device: //yggdrasil/Media/Movies

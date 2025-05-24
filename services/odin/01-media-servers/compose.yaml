@@ -1,6 +1,6 @@
 services:
   plex:
-    image: plexinc/pms-docker:1.41.6.9685-d301f511a
+    image: plexinc/pms-docker:1.41.7.9799-5bce000f7
     container_name: plex
     network_mode: host
     devices:
@@ -17,3 +17,23 @@ services:
     tmpfs:
       - /transcode:mode=0777
     restart: unless-stopped
+  
+  jellyfin:
+    image: jellyfin/jellyfin:10.10.7
+    container_name: jellyfin
+    user: {{ me.uid }}:100
+    group_add:
+      - 104 #render
+      - 44 #video
+    hostname: us-ny-amh-jf
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /srv/appdata/jellyfin/config:/config
+      - /srv/appdata/jellyfin/cache:/cache
+      - media:/media:ro
+    environment:
+      - TZ={{ ntp_timezone }}
+    restart: unless-stopped
+
