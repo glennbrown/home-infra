@@ -1,14 +1,14 @@
 services:
   plex:
-    image: plexinc/pms-docker:1.41.7.9799-5bce000f7
+    image: plexinc/pms-docker:1.41.7.9823-59f304c16
     container_name: plex
     network_mode: host
     devices:
       - /dev/dri:/dev/dri
     volumes:
       - /srv/appdata/plexmediaserver:/config
-      - tv-shows:/tv:ro
-      - movies:/movies:ro
+      - /mnt/storage/Media/TV Shows:/tv:ro
+      - /mnt/storage/Media/Movies:/movies:ro
     environment:
       - TZ={{ ntp_timezone }}
       - PLEX_CLAIM={{ plex_claim_token }}
@@ -32,8 +32,7 @@ services:
     volumes:
       - /srv/appdata/jellyfin/config:/config
       - /srv/appdata/jellyfin/cache:/cache
-      - media:/media:ro
+      - /mnt/storage/Media:/media:ro
     environment:
       - TZ={{ ntp_timezone }}
     restart: unless-stopped
-

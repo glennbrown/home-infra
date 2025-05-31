@@ -8,7 +8,7 @@ services:
       - PGID=100
     volumes:
       - /srv/appdata/sabnzbd:/config
-      - /srv/scratch/downloads:/downloads
+      - /mnt/scratch/downloads:/downloads
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -24,9 +24,10 @@ services:
       - TORRENTING_PORT=6881
     volumes:
       - /srv/appdata/qbittorrent:/config
-      - /srv/scratch/downloads:/downloads
+      - /mnt/scratch/downloads:/downloads
     ports:
       - 8088:8088
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
+    

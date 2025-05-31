@@ -19,43 +19,43 @@
       when: ansible_distribution == 'Ubuntu'
 
 # Proxmox
-- hosts: pve-01
-  become: true
-  pre_tasks:
-    - name: Disable proxmox enterprise repo
-      replace:
-        path: /etc/apt/sources.list.d/pve-enterprise.list
-        regexp: '^deb https://enterprise\.proxmox\.com/debian/pve bookworm pve-enterprise'
-        replace: '#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
-      notify: Update apt cache
-    - name: Disable proxmox enterprise ceph repo
-      replace:
-        path: /etc/apt/sources.list.d/ceph.list
-        regexp: '^deb https://enterprise\.proxmox\.com/debian/ceph-quincy bookworm enterprise'
-        replace: '#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise'
-      notify: Update apt cache
-    - name: Switch to proxmox community repo
-      apt_repository:
-        filename: /etc/apt/sources.list.d/pve-no-subscription
-        repo: 'deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription'
-        state: present
-      notify: Update apt cache
-    - name: Force apt cache update
-      meta: flush_handlers
-  roles:
-    - role: apt-mirror
-    - role: base
-    - role: proxmox_nag_removal
-    - role: grog.package
-    - role: geerlingguy.ntp
-    - role: bash_aliases
-    - role: ironicbadger.figurine
-    - role: pve
-      tags: provision
-  handlers:
-    - name: Update apt cache
-      apt:
-        update_cache: yes
+#- hosts: pve-01
+#  become: true
+#  pre_tasks:
+#    - name: Disable proxmox enterprise repo
+#      replace:
+#        path: /etc/apt/sources.list.d/pve-enterprise.list
+#        regexp: '^deb https://enterprise\.proxmox\.com/debian/pve bookworm pve-enterprise'
+#        replace: '#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
+#      notify: Update apt cache
+#    - name: Disable proxmox enterprise ceph repo
+#      replace:
+#        path: /etc/apt/sources.list.d/ceph.list
+#        regexp: '^deb https://enterprise\.proxmox\.com/debian/ceph-quincy bookworm enterprise'
+#        replace: '#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise'
+#      notify: Update apt cache
+#    - name: Switch to proxmox community repo
+#      apt_repository:
+#        filename: /etc/apt/sources.list.d/pve-no-subscription
+#        repo: 'deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription'
+#        state: present
+#      notify: Update apt cache
+#    - name: Force apt cache update
+#      meta: flush_handlers
+#  roles:
+#    - role: apt-mirror
+#    - role: base
+#    - role: proxmox_nag_removal
+#    - role: grog.package
+#    - role: geerlingguy.ntp
+#    - role: bash_aliases
+#    - role: ironicbadger.figurine
+#    - role: pve
+#      tags: provision
+#  handlers:
+#    - name: Update apt cache
+#      apt:
+#        update_cache: yes
 
 ### LXC/VMs/VPS
 - hosts: odin
