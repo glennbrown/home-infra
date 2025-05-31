@@ -20,8 +20,6 @@ Most of my servers are named after norse mythology characters or from the mnemon
 | -------- | -------- | ------------- | --------------------------------- |
 | odin     | Physical | Proxmox       | Primary Server                    |
 | thor     | VM       | Ubuntu 24.04  | Internal web server/reverse proxy |
-| heimdall | VM       | Ubuntu 24.04  | Monitoring Server                 |
-| wayland  | VM       | Ubuntu 24.04  | Tools Server                      |
 | celtic   | VM       | Debian 12     | Cloud VPS                         |
 
 ## just usage
