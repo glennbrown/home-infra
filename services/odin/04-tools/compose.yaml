@@ -57,3 +57,28 @@ services:
       - plex
       - jellyfin
     restart: unless-stopped
+
+  kms:
+    image: ghcr.io/py-kms-organization/py-kms:latest
+    container_name: kms
+    hostname: kms
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - /srv/appdata/py-kms/db:/home/py-kms/db
+    ports:
+      - 1688:1688
+    restart: unless-stopped
+  
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:5.4.20240804
+    container_name: librespeed
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID=100
+    volumes:
+      - /srv/appdata/librespeed:/config
+    ports:
+      - 8081:80
+    restart: unless-stopped

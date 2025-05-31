@@ -113,7 +113,7 @@ server {
     listen [::]:443 ssl http2;
 
     server_name smokeping.{{ local_domain }};
-    set $upstream 192.168.10.13:8080;
+    set $upstream 192.168.10.10:8082;
 
     ssl_certificate /etc/letsencrypt/live/{{ local_domain }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ local_domain }}/privkey.pem;
@@ -131,7 +131,7 @@ server {
     listen [::]:443 ssl http2;
 
     server_name changedetection.{{ local_domain }};
-    set $upstream 192.168.10.14:5000;
+    set $upstream 192.168.10.10:5000;
 
     ssl_certificate /etc/letsencrypt/live/{{ local_domain }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ local_domain }}/privkey.pem;
@@ -149,7 +149,7 @@ server {
     listen [::]:443 ssl http2;
 
     server_name librespeed.{{ local_domain }};
-    set $upstream 192.168.10.14:8080;
+    set $upstream 192.168.10.10:8081;
 
     ssl_certificate /etc/letsencrypt/live/{{ local_domain }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ local_domain }}/privkey.pem;

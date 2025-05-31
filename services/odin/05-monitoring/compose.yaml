@@ -1,0 +1,15 @@
+services:
+  smokeping:
+    image: lscr.io/linuxserver/smokeping:2.8.2
+    container_name: smokeping
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID=100
+    volumes:
+      - /srv/appdata/smokeping/config:/config
+      - /srv/appdata/smokeping/data:/data
+    ports:
+      - 8082:80
+    restart: unless-stopped
+    
