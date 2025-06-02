@@ -8,12 +8,15 @@ services:
       - PLAYWRIGHT_DRIVER_URL=ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
       - BASE_URL=https://changedetection.{{ local_domain }}
     volumes:
-      - /srv/appdata/changedetection:/datastore
-    ports:
-      - 5000:5000
+      - {{ appdata_path }}/changedetection:/datastore
     depends_on:
       - browserless-chrome
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.changedetection.rule=Host(`changedetection.{{ local_domain }}`)"
+      - "traefik.http.routers.changedetection.tls=true"
+      - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
 
   browserless-chrome:
     image: ghcr.io/browserless/chrome:v2.29.0
@@ -25,5 +28,5 @@ services:
       - MAX_CONCURRENT_SESSIONS=10
       - CHROME_REFRESH_TIME=600000
     volumes:
-      - /srv/appdata/changedetection:/datastore
+      - {{ appdata_path }}/changedetection:/datastore
     restart: unless-stopped

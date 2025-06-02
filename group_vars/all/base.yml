@@ -7,3 +7,8 @@ package_update_cache: true
 
 # GitHub
 github_api_user: 'glennbrown'
+
+# Domains
+local_domain: 'home.ikgb.me'
+public_domain_1: 'ikgb.me'
+public_domain_2: 'glennbrown.org'

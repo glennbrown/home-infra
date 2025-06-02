@@ -67,6 +67,8 @@
     - role: odin
     - role: ctop
     - role: ironicbadger.figurine
+    - role: traefik_new
+      tags: web
     - role: ironicbadger.docker-compose-generator
       tags: compose
 
@@ -81,47 +83,6 @@
     - role: nginx
       tags: web
     - role: ironicbadger.figurine
-
-- hosts: heimdall
-  become: true
-  pre_tasks:
-    - name: Use legacy iptables
-      community.general.alternatives:
-        name: "{{ item.name }}"
-        path: "{{ item.path }}"
-      loop:
-        - { name: iptables, path: '/usr/sbin/iptables-legacy' }
-        - { name: ip6tables, path: '/usr/sbin/ip6tables-legacy' }
-  roles:
-    - role: grog.package
-    - role: geerlingguy.docker
-    - role: bash_aliases
-    - role: heimdall
-    - role: tailscale
-    - role: ctop
-    - role: ironicbadger.figurine
-    - role: ironicbadger.docker-compose-generator
-      tags: compose
-
-- hosts: wayland
-  become: true
-  pre_tasks:
-    - name: Use legacy iptables
-      community.general.alternatives:
-        name: "{{ item.name }}"
-        path: "{{ item.path }}"
-      loop:
-        - { name: iptables, path: '/usr/sbin/iptables-legacy' }
-        - { name: ip6tables, path: '/usr/sbin/ip6tables-legacy' }
-  roles:
-    - role: grog.package
-    - role: geerlingguy.docker
-    - role: bash_aliases
-    - role: wayland
-    - role: ctop
-    - role: ironicbadger.figurine
-    - role: ironicbadger.docker-compose-generator
-      tags: compose
 
 - hosts: celtic
   become: true

@@ -1,0 +1,4 @@
+---
+
+traefik_data_path: '/srv/appdata/traefik'
+traefik_log_rotate: false

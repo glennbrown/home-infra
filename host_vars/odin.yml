@@ -1,4 +1,8 @@
 ---
+# Paths
+appdata_path: '/srv/appdata'
+media_path: '/mnt/storage/Media'
+scratch_path: '/mnt/scratch'
 
 # Bash Aliases
 bash_docker: true

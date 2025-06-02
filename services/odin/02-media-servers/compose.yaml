@@ -1,4 +1,5 @@
 services:
+    
   plex:
     image: plexinc/pms-docker:1.41.7.9823-59f304c16
     container_name: plex
@@ -6,9 +7,9 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - /srv/appdata/plexmediaserver:/config
-      - /mnt/storage/Media/TV Shows:/tv:ro
-      - /mnt/storage/Media/Movies:/movies:ro
+      - {{ appdata_path }}/plexmediaserver:/config
+      - {{ media_path }}/TV Shows:/tv:ro
+      - {{ media_path }}/Movies:/movies:ro
     environment:
       - TZ={{ ntp_timezone }}
       - PLEX_CLAIM={{ plex_claim_token }}
@@ -21,7 +22,7 @@ services:
   jellyfin:
     image: jellyfin/jellyfin:10.10.7
     container_name: jellyfin
-    user: {{ me.uid }}:100
+    user: "{{ me.uid }}:100"
     group_add:
       - 104 #render
       - 44 #video
@@ -30,9 +31,16 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - /srv/appdata/jellyfin/config:/config
-      - /srv/appdata/jellyfin/cache:/cache
-      - /mnt/storage/Media:/media:ro
+      - {{ appdata_path }}/jellyfin/config:/config
+      - {{ appdata_path }}/jellyfin/cache:/cache
+      - {{ media_path }}:/media:ro
     environment:
       - TZ={{ ntp_timezone }}
+      - JELLYFIN_PublishedServerUrl=jf.{{ public_domain_1 }}
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jf.{{ public_domain_1 }}`)"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.http.routers.jellyfin.tls=true"
+      - "traefik.http.routers.jellyfin.tls.certresolver=cloudflare"
