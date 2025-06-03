@@ -1,6 +1,6 @@
 services:
   smokeping:
-    image: lscr.io/linuxserver/smokeping:2.8.2
+    image: lscr.io/linuxserver/smokeping:2.9.0
     container_name: smokeping
     hostname: odin
     environment:
