@@ -20,7 +20,7 @@ services:
       - "traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"
       - "traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"
   gokapi:
-    image: f0rc3/gokapi:v1.9.6
+    image: f0rc3/gokapi:v2.0.1
     container_name: gokapi
     environment:
       - TZ={{ ntp_timezone }}
