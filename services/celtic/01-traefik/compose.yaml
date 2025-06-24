@@ -1,10 +1,10 @@
 services:
   traefik:
-    image: traefik:v3.4.0
+    image: traefik:latest
     container_name: traefik
     environment:
-      - TZ={{ ntp_timezone }}
-      - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
+      TZ: {{ ntp_timezone }}
+      CF_DNS_API_TOKEN: {{ cloudflare_traefik_api_token }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/traefik:/etc/traefik:ro

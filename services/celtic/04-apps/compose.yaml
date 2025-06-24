@@ -1,16 +1,16 @@
 services:
   freshrss:
-    image: freshrss/freshrss:1.26.2-alpine
+    image: freshrss/freshrss:latest
     container_name: freshrss
     environment:
-      - TZ={{ ntp_timezone }}
-      - CRON_MIN=1,31
+      TZ: {{ ntp_timezone }}
+      CRON_MIN: 1,31
     volumes:
       - ~/.config/freshrss/data:/var/www/FreshRSS/data
       - ~/.config/freshrss/extensions:/var/www/FreshRSS/extensions
     networks:
       - traefik
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.freshrss.rule=Host(`freshrss.{{ public_domain_1 }}`)"
@@ -19,17 +19,18 @@ services:
       - "traefik.http.routers.freshrss.tls.certresolver=cloudflare"
       - "traefik.http.routers.freshrss.tls.domains[0].main={{ public_domain_1 }}"
       - "traefik.http.routers.freshrss.tls.domains[0].sans=*.{{ public_domain_1 }}"
+
   gokapi:
-    image: f0rc3/gokapi:v1.9.6
+    image: f0rc3/gokapi:latest
     container_name: gokapi
     environment:
-      - TZ={{ ntp_timezone }}
+      TZ: {{ ntp_timezone }}
     volumes:
       - ~/.local/share/gokapi/data:/app/data
       - ~/.config/gokapi/config:/app/config
     networks:
       - traefik
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gokapi.rule=Host(`share.{{ public_domain_2 }}`)"
@@ -39,17 +40,18 @@ services:
       - "traefik.http.routers.gokapi.tls.domains[0].main={{ public_domain_2 }}"
       - "traefik.http.routers.gokapi.tls.domains[0].sans=*.{{ public_domain_2 }}"
       - "traefik.http.services.gokapi.loadbalancer.server.port=53842"
+
   znc:
-    image: znc:1.9.1
+    image: znc:latest
     container_name: znc
     user: 1000:1000
     environment:
-      - TZ={{ ntp_timezone }}
+      TZ: {{ ntp_timezone }}
     volumes:
       - ~/.znc:/znc-data
     networks:
       - traefik
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zncweb.rule=Host(`znc.{{ public_domain_1 }}`)"
@@ -65,6 +67,20 @@ services:
       - "traefik.tcp.routers.zncirc.tls.domains[0].main={{ public_domain_1 }}"
       - "traefik.tcp.routers.zncirc.tls.domains[0].sans=*.{{ public_domain_1 }}"
       - "traefik.tcp.services.zncirc.loadbalancer.server.port=46697"
+  
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    hostname: celtic
+    environment:
+      TZ: {{ ntp_timezone }}
+      WATCHTOWER_SCHEDULE: 0 0 2 * * 0 
+      WATCHTOWER_ROLLING_RESTART: true
+      WATCHTOWER_NOTIFICATION_URL: ntfy://{{ ntfy_user }}:{{ ntfy_pass }}@ntfy.{{ public_domain_1 }}/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
 
 networks:
   traefik:

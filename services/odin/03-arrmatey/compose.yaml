@@ -1,7 +1,7 @@
 services:
   
   sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:4.5.1
+    image: lscr.io/linuxserver/sabnzbd
     container_name: sabnzbd
     environment:
       - TZ={{ ntp_timezone }}
@@ -10,7 +10,7 @@ services:
     volumes:
       - {{ appdata_path }}/sabnzbd:/config
       - {{ scratch_path }}/downloads:/downloads
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sabnzbd.rule=Host(`sabnzb.o.{{ local_domain }}`)"
@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.sabnzbd.tls.certresolver=cloudflare"
       
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:5.1.0
+    image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
     environment:
       - TZ={{ ntp_timezone }}
@@ -31,7 +31,7 @@ services:
     ports:
       - 6881:6881
       - 6881:6881/udp
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.o.{{ local_domain }}`)"
@@ -40,7 +40,7 @@ services:
       - "traefik.http.routers.qbittorrent.tls.certresolver=cloudflare"
     
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:1.36.3
+    image: lscr.io/linuxserver/prowlarr
     container_name: prowlarr
     environment:
       - TZ={{ ntp_timezone }}
@@ -48,7 +48,7 @@ services:
       - PGID=100
     volumes:
       - {{ appdata_path }}/prowlarr:/config
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.o.{{ local_domain }}`)"
@@ -56,7 +56,7 @@ services:
       - "traefik.http.routers.prowlarr.tls.certresolver=cloudflare"
 
   sonarr:
-    image: lscr.io/linuxserver/sonarr:4.0.14
+    image: lscr.io/linuxserver/sonarr
     container_name: sonarr
     environment:
       - TZ={{ ntp_timezone }}
@@ -65,12 +65,12 @@ services:
     volumes:
       - {{ appdata_path }}/sonarr:/config
       - {{ scratch_path }}/downloads:/downloads
-      - {{ media_path }}/TV Shows:/tv
+      - tv-shows:/tv
     depends_on:
       - sabnzbd
       - qbittorrent
       - prowlarr
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.o.{{ local_domain }}`)"
@@ -78,7 +78,7 @@ services:
       - "traefik.http.routers.sonarr.tls.certresolver=cloudflare"
 
   radarr:
-    image: lscr.io/linuxserver/radarr:5.25.0
+    image: lscr.io/linuxserver/radarr
     container_name: radarr
     environment:
       - TZ={{ ntp_timezone }}
@@ -87,12 +87,12 @@ services:
     volumes:
       - {{ appdata_path }}/radarr:/config
       - {{ scratch_path }}/downloads:/downloads
-      - {{ media_path }}/Movies:/movies
+      - movies:/movies
     depends_on:
       - sabnzbd
       - prowlarr
       - qbittorrent
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radarr.rule=Host(`radarr.o.{{ local_domain }}`)"

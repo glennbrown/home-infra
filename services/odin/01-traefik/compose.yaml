@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.4.1
+    image: traefik
     container_name: traefik
     environment:
       - TZ={{ ntp_timezone }}
@@ -36,7 +36,7 @@ services:
       - host.docker.internal:172.17.0.1
     security_opt:
       - no-new-privileges:true
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.o.{{ local_domain }}`)"

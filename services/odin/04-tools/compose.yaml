@@ -1,7 +1,7 @@
 services:
   
   tautulli:
-    image: tautulli/tautulli:v2.15.2
+    image: tautulli/tautulli
     container_name: tautulli
     hostname: tautulli
     environment:
@@ -12,7 +12,7 @@ services:
       - {{ appdata_path }}/tautulli:/config
     depends_on:
       - plex
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tautulli.rule=Host(`tautulli.o.{{ local_domain }}`)"
@@ -20,7 +20,7 @@ services:
       - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
 
   jellystat-db:
-    image: postgres:15.13-alpine
+    image: postgres:15-alpine
     container_name: jellystat-db
     environment:
       - TZ={{ ntp_timezone }}
@@ -29,10 +29,10 @@ services:
       - POSTGRES_DB=jfstat
     volumes:
       - {{ appdata_path }}/jellystat/postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: always
 
   jellystat:
-    image: cyfershepard/jellystat:1.1.6
+    image: cyfershepard/jellystat
     container_name: jellystat
     environment:
       - TZ={{ ntp_timezone }}
@@ -46,6 +46,7 @@ services:
       - {{ appdata_path }}/jellystat/backup-data:/app/backend/backup-data
     depends_on:
       - jellystat-db
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jellystat.rule=Host(`jellystat.o.{{ local_domain }}`)"
@@ -53,7 +54,7 @@ services:
       - "traefik.http.routers.jellystat.tls.certresolver=cloudflare"
 
   jellyplex-watched:
-    image: ghcr.io/luigi311/jellyplex-watched:7.0.4
+    image: ghcr.io/luigi311/jellyplex-watched
     container_name: jellyplex-watched
     hostname: jellyplex-watched
     environment:
@@ -63,10 +64,10 @@ services:
     depends_on:
       - plex
       - jellyfin
-    restart: unless-stopped
+    restart: always
 
   kms:
-    image: ghcr.io/py-kms-organization/py-kms:latest
+    image: ghcr.io/py-kms-organization/py-kms
     container_name: kms
     hostname: kms
     environment:
@@ -75,10 +76,10 @@ services:
       - {{ appdata_path }}/py-kms/db:/home/py-kms/db
     ports:
       - 1688:1688
-    restart: unless-stopped
+    restart: always
   
   librespeed:
-    image: lscr.io/linuxserver/librespeed:5.4.20240804
+    image: lscr.io/linuxserver/librespeed
     container_name: librespeed
     environment:
       - TZ={{ ntp_timezone }}
@@ -86,7 +87,7 @@ services:
       - PGID=100
     volumes:
       - {{ appdata_path }}/librespeed:/config
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.librespeed.rule=Host(`librespeed.o.{{ local_domain }}`)"

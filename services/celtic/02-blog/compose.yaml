@@ -1,16 +1,16 @@
 services: 
   ghost:
-    image: ghost:5.119.2
+    image: ghost:latest
     container_name: ghost
     environment:
-      - TZ={{ ntp_timezone }}
-      - NODE_ENV=production
-      - database__client=mysql
-      - database__connection__host=ghostdb
-      - database__connection__user={{ glennblog_db_user }}
-      - database__connection__password={{ glennblog_db_pass }}
-      - database__connection__database=ghost
-      - url=https://www.{{ public_domain_2 }}
+      TZ: {{ ntp_timezone }}
+      NODE_ENV: production
+      database__client: mysql
+      database__connection__host: ghostdb
+      database__connection__user: {{ glennblog_db_user }}
+      database__connection__password: {{ glennblog_db_pass }}
+      database__connection__database: ghost
+      url: https://www.{{ public_domain_2 }}
     volumes:
       - ~/.config/ghost/content:/var/lib/ghost/content
       - /etc/localtime:/etc/localtime:ro
@@ -29,11 +29,11 @@ services:
       - "traekik.http.routers.ghost.tls.domains[0].main={{ public_domain_2 }}"
       - "traekik.http.routers.ghost.tls.domains[0].sans=*.{{ public_domain_2 }}"
   ghostdb:
-    image: mysql:8.4.5
+    image: mysql:8.4
     container_name: ghostdb
     environment:
-      - TZ={{ ntp_timezone }}
-      - MYSQL_ROOT_PASSWORD={{ mysql_root_pass }}
+      TZ: {{ ntp_timezone }}
+      MYSQL_ROOT_PASSWORD: {{ mysql_root_pass }}
     volumes:
       - ~/.local/share/ghostdb:/var/lib/mysql
     restart: unless-stopped

@@ -1,7 +1,7 @@
 services:
 
   changedetection:
-    image: ghcr.io/dgtlmoon/changedetection.io:0.49.18
+    image: ghcr.io/dgtlmoon/changedetection.io
     container_name: changedetection
     environment:
       - TZ={{ ntp_timezone }}
@@ -11,7 +11,7 @@ services:
       - {{ appdata_path }}/changedetection:/datastore
     depends_on:
       - browserless-chrome
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.changedetection.rule=Host(`changedetection.{{ local_domain }}`)"
@@ -19,7 +19,7 @@ services:
       - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
 
   browserless-chrome:
-    image: ghcr.io/browserless/chrome:v2.29.0
+    image: ghcr.io/browserless/chrome
     container_name: browserless-chrome
     environment:
       - TZ={{ ntp_timezone }}
@@ -29,4 +29,40 @@ services:
       - CHROME_REFRESH_TIME=600000
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
-    restart: unless-stopped
+    restart: always
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    hostname: odin
+    environment:
+      TZ: {{ ntp_timezone }}
+      WATCHTOWER_SCHEDULE: 0 0 2 * * 6 
+      WATCHTOWER_ROLLING_RESTART: true
+      WATCHTOWER_NOTIFICATION_URL: ntfy://{{ ntfy_user }}:{{ ntfy_pass }}@ntfy.{{ public_domain_1 }}/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+volumes:
+  tv-shows:
+    name: tv-shows
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid={{ me.uid }},gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media/TV Shows
+  movies:
+    name: movies
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid={{ me.uid }},gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media/Movies
+  media:
+    name: media
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid={{ me.uid }},gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media

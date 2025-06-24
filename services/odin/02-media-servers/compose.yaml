@@ -1,15 +1,15 @@
 services:
     
   plex:
-    image: plexinc/pms-docker:1.41.7.9823-59f304c16
+    image: plexinc/pms-docker
     container_name: plex
     network_mode: host
     devices:
       - /dev/dri:/dev/dri
     volumes:
       - {{ appdata_path }}/plexmediaserver:/config
-      - {{ media_path }}/TV Shows:/tv:ro
-      - {{ media_path }}/Movies:/movies:ro
+      - tv-shows:/tv:ro
+      - movies:/movies:ro
     environment:
       - TZ={{ ntp_timezone }}
       - PLEX_CLAIM={{ plex_claim_token }}
@@ -17,27 +17,27 @@ services:
       - PLEX_GID=100
     tmpfs:
       - /transcode:mode=0777
-    restart: unless-stopped
+    restart: always
   
   jellyfin:
-    image: jellyfin/jellyfin:10.10.7
+    image: jellyfin/jellyfin
     container_name: jellyfin
     user: "{{ me.uid }}:100"
     group_add:
       - 104 #render
       - 44 #video
-    hostname: us-ny-amh-jf
+    hostname: ikgb-jf
     network_mode: host
     devices:
       - /dev/dri:/dev/dri
     volumes:
       - {{ appdata_path }}/jellyfin/config:/config
       - {{ appdata_path }}/jellyfin/cache:/cache
-      - {{ media_path }}:/media:ro
+      - media:/media:ro
     environment:
       - TZ={{ ntp_timezone }}
       - JELLYFIN_PublishedServerUrl=jf.{{ public_domain_1 }}
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.rule=Host(`jf.{{ public_domain_1 }}`)"
