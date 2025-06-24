@@ -20,7 +20,7 @@ services:
       - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
 
   jellystat-db:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: jellystat-db
     environment:
       - TZ={{ ntp_timezone }}
