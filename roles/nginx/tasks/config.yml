@@ -13,6 +13,7 @@
     mode: 0755
   loop:
     - sites-enabled
+    - conf.d
 
 - name: Check if we already backed up stock config
   stat:
@@ -62,9 +63,22 @@
     mode: 0644
   notify: reload nginx
 
-- name: Copy nginx sites config
-  copy:
-    content: "{{ nginx_sites_config }}"
-    dest: "{{ nginx_config_dir }}/sites-enabled/sites.conf"
+- name: Add managed vhost config files.
+  template:
+    src: "{{ item.template|default(nginx_vhost_template) }}"
+    dest: "{{ nginx_vhost_path }}/{{ item.filename|default(item.server_name.split(' ')[0] ~ '.conf') }}"
+    force: true
+    owner: root
+    group: root
     mode: 0644
+  when: item.state|default('present') != 'absent'
+  with_items: "{{ nginx_vhosts }}"
+  notify: reload nginx
+
+- name: Remove managed vhost config files.
+  file:
+    path: "{{ nginx_vhost_path }}/{{ item.filename|default(item.server_name.split(' ')[0] ~ '.conf') }}"
+    state: absent
+  when: item.state|default('present') == 'absent'
+  with_items: "{{ nginx_vhosts }}"
   notify: reload nginx

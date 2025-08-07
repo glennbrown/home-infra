@@ -1,0 +1,43 @@
+services:
+  freshrss:
+    image: freshrss/freshrss
+    container_name: freshrss
+    environment:
+      TZ: {{ ntp_timezone }}
+      CRON_MIN: 1,31
+    volumes:
+      - ~/.config/freshrss/data:/var/www/FreshRSS/data
+      - ~/.config/freshrss/extensions:/var/www/FreshRSS/extensions
+    ports:
+      - 8081:80
+    restart: always
+  
+  gokapi:
+    image: f0rc3/gokapi
+    container_name: gokapi
+    environment:
+      TZ: {{ ntp_timezone }}
+    volumes:
+      - ~/.local/share/gokapi/data:/app/data
+      - ~/.config/gokapi/config:/app/config
+    ports:
+      - 53842:53842
+    restart: always
+  
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    hostname: celtic
+    environment:
+      TZ: {{ ntp_timezone }}
+      WATCHTOWER_SCHEDULE: 0 0 2 * * 0 
+      WATCHTOWER_ROLLING_RESTART: true
+      WATCHTOWER_NOTIFICATION_URL: ntfy://{{ ntfy_user }}:{{ ntfy_pass }}@ntfy.{{ public_domain_1 }}/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+networks:
+  traefik:
+    name: traefik
+    

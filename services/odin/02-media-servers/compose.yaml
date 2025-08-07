@@ -10,6 +10,7 @@ services:
       - {{ appdata_path }}/plexmediaserver:/config
       - tv-shows:/tv:ro
       - movies:/movies:ro
+      - media:/Volumes/Media:ro
     environment:
       - TZ={{ ntp_timezone }}
       - PLEX_CLAIM={{ plex_claim_token }}

@@ -72,18 +72,6 @@
     - role: ironicbadger.docker-compose-generator
       tags: compose
 
-- hosts: thor
-  become: true
-  roles:
-    - role: grog.package
-    - role: bash_aliases
-    - role: thor
-    - role: certbot
-      tags: certs
-    - role: nginx
-      tags: web
-    - role: ironicbadger.figurine
-
 - hosts: celtic
   become: true
   roles:
@@ -95,7 +83,8 @@
     - role: ctop
     - role: ocagent
     - role: celtic
-    - role: traefik
     - role: ironicbadger.figurine
+    - role: nginx
+      tags: web
     - role: ironicbadger.docker-compose-generator
       tags: compose

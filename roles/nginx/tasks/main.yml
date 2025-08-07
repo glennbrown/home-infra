@@ -1,5 +1,15 @@
 ---
 
-- include_tasks: install.yml
+- name: Install nginx
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  loop:
+    - nginx-full
+    - nginx-extras
+    - libnginx-mod-http-headers-more-filter
+    - libnginx-mod-http-brotli-filter
+    - libnginx-mod-stream
 
 - include_tasks: config.yml

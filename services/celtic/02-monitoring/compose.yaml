@@ -1,6 +1,6 @@
 services:
   ntfy:
-    image: binwiederhier/ntfy:latest
+    image: binwiederhier/ntfy
     container_name: ntfy
     volumes:
       - ~/.config/ntfy:/var/lib/ntfy
@@ -14,15 +14,8 @@ services:
       NTFY_ATTACHMENT_CACHE_DIR: /var/lib/ntfy/attachments
       NTFY_ENABLE_LOGIN: true
       NTFY_UPSTREAM_BASE_URL: https://ntfy.sh
+    ports:
+      - 8080:80
     command: serve
-    networks:
-      - traefik
     restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.ntfy.rule=Host(`ntfy.{{ public_domain_1 }}`)"
-      - "traefik.http.routers.ntfy.entrypoints=websecure"
-      - "traefik.http.routers.ntfy.tls=true"
-      - "traefik.http.routers.ntfy.tls.certresolver=cloudflare"
-      - "traefik.http.routers.ntfy.tls.domains[0].main={{ public_domain_1 }}"
-      - "traefik.http.routers.ntfy.tls.domains[0].sans=*.{{ public_domain_1 }}"
+    

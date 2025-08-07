@@ -51,23 +51,12 @@ ufw:
     port: '443'
     proto: 'tcp'
     route: 'no'
-  - comment: 'IRC Bouncer'
-    rule: 'allow'
-    port: '46697'
-    proto: 'tcp'
-    route: 'no'
   - comment: 'tailscale adapter'
     rule: 'allow'
     interface: tailscale0
     direction: in
     proto: 'any'
     route: 'no'
-
-# traefik
-traefik_cloudflare_proxy: true
-traefik_extra_entrypoints:
-  - name: irc
-    port: '46697'
 
 # certbot
 certbot_install_method: snap
@@ -79,4 +68,66 @@ certbot_certs:
       - "{{ public_domain_2 }}"
       - "*.{{ public_domain_2 }}"
 
-nginx_sites_config: "{{ lookup('template', 'roles/celtic/templates/sites.conf.j2') }}"
+nginx_vhosts:
+  - listen: "443 ssl default_server http2"
+    server_name: "www.{{ public_domain_2 }}"
+    server_redirect:
+      - "{{ public_domain_2 }}"
+      - "blog.{{ public_domain_2 }}"
+    error_log: "/var/log/nginx/ghost.error.log"
+    access_log: "/var/log/nginx/ghost.access.log main"
+    state: present
+    filename: ghost.conf
+    extra_parameters: |
+      set $upstream http://127.0.0.1:2368;
+      location / {
+        proxy_pass $upstream;
+      }
+      ssl_certificate /etc/letsencrypt/live/{{ public_domain_2 }}/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_2 }}/privkey.pem;
+      ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_2 }}/chain.pem;
+      add_header Strict-Transport-Security "max-age=63072000" always;
+  - server_name: "share.{{ public_domain_2 }}"
+    error_log: "/var/log/nginx/gokapi.error.log"
+    access_log: "/var/log/nginx/gokapi.access.log main"
+    state: present
+    filename: gokapi.conf
+    extra_parameters: |
+      set $upstream http://127.0.0.1:53842;
+      location / {
+        proxy_pass $upstream;
+      }
+      ssl_certificate /etc/letsencrypt/live/{{ public_domain_2 }}/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_2 }}/privkey.pem;
+      ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_2 }}/chain.pem;
+      add_header Strict-Transport-Security "max-age=63072000" always;
+  - server_name: "freshrss.{{ public_domain_1 }}"
+    error_log: "/var/log/nginx/freshrss.error.log"
+    access_log: "/var/log/nginx/freshrss.access.log main"
+    state: present
+    filename: freshrss.conf
+    extra_parameters: |
+      set $upstream http://127.0.0.1:8081;
+      location / {
+        proxy_pass $upstream;
+      }
+      ssl_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_1 }}/privkey.pem;
+      ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/chain.pem;
+      add_header Strict-Transport-Security "max-age=63072000" always;
+  - server_name: "ntfy.{{ public_domain_1 }}"
+    error_log: "/var/log/nginx/ntfy.error.log"
+    access_log: "/var/log/nginx/ntfy.access.log main"
+    state: present
+    filename: ntfy.conf
+    extra_parameters: |
+      set $upstream http://127.0.0.1:8080;
+      location / {
+        proxy_pass $upstream;
+      }
+      ssl_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_1 }}/privkey.pem;
+      ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/chain.pem;
+      add_header Strict-Transport-Security "max-age=63072000" always;
+
+#nginx_sites_config: "{{ lookup('template', 'roles/celtic/templates/sites.conf.j2') }}"
