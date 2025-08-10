@@ -1,5 +1,0 @@
-{{ ansible_managed | comment }}
-host-record={{ dnsmasq_domain }},{{ dnsmasq_gateway }}
-{% for client in dnsmasq_dns_records %}
-host-record={{ client.hostname }}.{{ dnsmasq_domain }},{{ client.ip }}
-{% endfor %}

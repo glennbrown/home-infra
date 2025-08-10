@@ -1,9 +1,0 @@
-# {{ ansible_managed }}
-dhcp-authoritative
-dhcp-range={{ dnsmasq_dhcp_start }},{{ dnsmasq_dhcp_end }},{{ dnsmasq_dhcp_leasetime }}
-dhcp-option=option:router,{{ dnsmasq_dhcp_router }}
-dhcp-leasefile=/var/lib/misc/dnsmasq.leases
-#quiet-dhcp
-
-domain={{ dnsmasq_domain }}
-local=/{{ dnsmasq_domain }}/
