@@ -82,7 +82,7 @@
     - role: geerlingguy.docker
     - role: ctop
     - role: ocagent
-    - role: celtic
+    - role: glennbrown.firewall
     - role: ironicbadger.figurine
     - role: nginx
       tags: web

@@ -35,7 +35,7 @@ security_sudoers_passwordless:
  - "{{ me.username }}"
 
 # firewall rules
-ufw:
+ufw_firewall_rules:
   - comment: 'SSH VPS Port'
     rule: 'allow'
     port: '{{ cloud_ssh_port }}'
@@ -129,5 +129,3 @@ nginx_vhosts:
       ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_1 }}/privkey.pem;
       ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/chain.pem;
       add_header Strict-Transport-Security "max-age=63072000" always;
-
-#nginx_sites_config: "{{ lookup('template', 'roles/celtic/templates/sites.conf.j2') }}"
