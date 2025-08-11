@@ -1,5 +1,0 @@
----
-- name: Updating grub
-  command: update-grub
-  listen: Apply grub update
-  

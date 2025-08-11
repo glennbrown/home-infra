@@ -67,7 +67,7 @@
     - role: odin
     - role: ctop
     - role: ironicbadger.figurine
-    - role: traefik_new
+    - role: glennbrown.traefik
       tags: web
     - role: ironicbadger.docker-compose-generator
       tags: compose
