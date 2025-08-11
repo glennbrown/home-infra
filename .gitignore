@@ -2,6 +2,8 @@
 .ansible
 *.retry
 testing*
+galaxy/roles
+galaxy/collections
 
 # MacOS
 .DS_Store
@@ -22,5 +24,5 @@ __pycache__/
 *$py.class
 
 # Visual Studio Code
-.vscode/*
+.vscode/settings.json
 .history/
