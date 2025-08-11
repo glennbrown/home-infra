@@ -1,7 +1,0 @@
----
-
-traefik_config_path: '/etc/traefik'
-traefik_log_path: '/var/log/traefik'
-traefik_cloudflare_proxy: false
-traefik_file_providers: []
-traefik_acme_staging: false
