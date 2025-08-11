@@ -16,6 +16,10 @@ export JUST_LOG := log
 install:
     pre-commit install
 
+# Ansible Galaxy Roles/Collections
+ansible-galaxy-install:
+    ansible-galaxy install -r galaxy-requirements.yml --force
+
 # Run/Builds
 build_pve:
 	ansible-playbook -u root run.yml --limit pve --ask-pass
