@@ -1,3 +1,6 @@
 [submodule "roles/glennbrown.traefik"]
 	path = roles/glennbrown.traefik
 	url = git@github.com:glennbrown/ansible-role-traefik.git
+[submodule "roles/glennbrown.firewall"]
+	path = roles/glennbrown.firewall
+	url = git@github.com:glennbrown/ansible-role-firewall.git
