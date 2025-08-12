@@ -1,6 +1,0 @@
----
-
-nginx_config_dir: /etc/nginx
-nginx_vhost_path: /etc/nginx/sites-enabled
-nginx_vhost_template: "vhost.j2"
-dhparams_pem_download: 'https://ssl-config.mozilla.org/ffdhe2048.txt'
