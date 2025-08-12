@@ -81,7 +81,7 @@
     - role: bash_aliases
     - role: geerlingguy.docker
     - role: ctop
-    - role: ocagent
+    - role: glennbrown.oracle-cloud-agent
     - role: glennbrown.firewall
     - role: ironicbadger.figurine
     - role: nginx
