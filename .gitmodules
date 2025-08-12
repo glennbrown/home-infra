@@ -13,3 +13,6 @@
 [submodule "roles/glennbrown.certbot"]
 	path = roles/glennbrown.certbot
 	url = git@github.com:glennbrown/ansible-role-certbot.git
+[submodule "roles/glennbrown.nginx"]
+	path = roles/glennbrown.nginx
+	url = git@github.com:glennbrown/ansible-role-nginx.git
