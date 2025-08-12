@@ -10,19 +10,9 @@ package_list_host:
   - name: acl
   - name: goaccess
 
-# Bash Aliases
-bash_docker: true
-bash_apt: true
-bash_systemctl: true
 
-# geerlingguy.ntp
-ntp_daemon: ntp
-ntp_package: ntp
+# NTP
 ntp_timezone: "America/New_York"
-
-#Tailscale
-tailscale_args: "--accept-routes"
-tailscale_authkey: "{{ tailscale_oci_authkey }}"
 
 # geerlingguy.security
 security_ssh_permit_root_login: "no"
