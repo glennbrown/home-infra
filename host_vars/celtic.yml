@@ -10,7 +10,6 @@ package_list_host:
   - name: acl
   - name: goaccess
 
-
 # NTP
 ntp_timezone: "America/New_York"
 
