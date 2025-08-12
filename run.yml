@@ -84,7 +84,9 @@
     - role: glennbrown.oracle-cloud-agent
     - role: glennbrown.firewall
     - role: ironicbadger.figurine
-    - role: nginx
+    - role: glennbrown.certbot
+      tags: certs
+    - role: glennbrown.nginx
       tags: web
     - role: ironicbadger.docker-compose-generator
       tags: compose
