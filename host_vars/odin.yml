@@ -28,6 +28,7 @@ homebrew_installed_packages:
   - name: gnu-sed
   - name: gnu-tar
   - name: go
+  - name: grep
   - name: htop
   - name: imagemagick
   - name: inxi
@@ -47,6 +48,7 @@ homebrew_installed_packages:
   - name: neofetch
   - name: nmap
   - name: perl
+  - name: php
   - name: pipx
   - name: pv
   - name: qemu
@@ -118,9 +120,7 @@ homebrew_cask_apps:
 
 homebrew_taps:
   - glennbrown/tap
-  - homebrew/cask-fonts
   - homebrew/command-not-found
-  - homebrew/services
   - oven-sh/bun
   - teamookla/speedtest
   - valkyrie00/bbrew
