@@ -1,0 +1,106 @@
+---
+# Paths
+appdata_path: '/srv/appdata'
+media_path: '/mnt/storage/Media'
+scratch_path: '/mnt/scratch'
+
+# Bash Aliases
+bash_docker: true
+bash_apt: true
+bash_systemctl: true
+
+package_list_host:
+  - name: intel-gpu-tools
+  - name: nvtop
+  - name: ffmpeg
+  - name: cifs-utils 
+  - name: fio
+
+# samba_users:
+#   - username: "{{ main_username }}"
+#     password: "{{ secret_samba_gbrown }}"
+#   - username: kbrown
+#     password: "{{ secret_samba_kbrown }}"
+
+network_mountpoints:
+  - path: /mnt/media
+    id: '//yggdrasil/Media'
+    fs: cifs
+    state: mounted
+    opts: 'user={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666,_netdev'
+
+# extra_mountpoints:
+#   - path: /srv/appdata
+#     id: '/dev/disk/by-id/usb-Sabrent_Sabrent_123400000012-0:0-part1'
+#     fs: ext4
+#     state: mounted
+#     opts: 'defaults,discard'
+#   - path: /srv/scratch
+#     id: '/dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1'
+#     fs: ext4
+#     state: mounted
+#     opts: defaults
+
+# snapraid_runner: true
+# snapraid_install: true
+# snapraid_install_mode: package_manager
+# snapraid_bin_path: /usr/bin/snapraid
+# snapraid_parity_disks:
+#   - path: /mnt/parity1
+#     id: '/dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGZA3D-part1'
+#     fs: xfs
+#     opts: defaults
+#     content: false 
+# 
+# snapraid_data_disks:
+#   - path: /mnt/disk1
+#     id: '/dev/disk/by-id/ata-WDC_WD120EDAZ-11F3RA0_5PJGRG9D-part1'
+#     fs: xfs
+#     opts: defaults
+#     content: true
+#   - path: /mnt/disk2
+#     id: '/dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEJUB8YZ-part1'
+#     fs: xfs
+#     opts: defaults
+#     content: false
+#   - path: /mnt/disk3
+#     id: '/dev/disk/by-id/ata-WDC_WD100EMAZ-00WJTA0_JEK67U5N-part1' 
+#     fs: xfs
+#     opts: defaults
+#     content: false
+
+# snapraid_config_excludes:
+#   - "*.unrecoverable"
+#   - "/tmp/"
+#   - "/lost+found/"
+#   - "downloads/"
+#   - "appdata/"
+#   - "*.!sync"
+#   - ".AppleDouble"
+#   - "._AppleDouble"
+#   - ".DS_Store"
+#   - "._.DS_Store"
+#   - ".Thumbs.db"
+#   - ".fseventsd"
+#   - ".Spotlight-V100"
+#   - ".TemporaryItems"
+#   - ".Trashes"
+#   - ".AppleDB"
+#   - ".nfo"
+
+# tigattack.mergerfs
+# mergerfs_install_mode: github_releases
+# mergerfs_version: 2.40.2
+# mergerfs_mounts:
+#   - path: /mnt/storage
+#     branches: 
+#       - /mnt/disk*
+#       - /mnt/nvme1tb
+#     options: "defaults,nonempty,allow_other,use_ino,moveonenospc=true,category.create=epmfs,dropcacheonclose=true,minfreespace=250G,fsname=mergerfs"
+#   - path: /mnt/jbod
+#     branches:
+#       - /mnt/disk*
+#     options: "defaults,nonempty,allow_other,use_ino,moveonenospc=true,category.create=epmfs,dropcacheonclose=true,minfreespace=250G,fsname=jbod"
+
+# geerlingguy.nfs
+# nfs_exports: [ "/mnt/storage    *(rw,sync,no_root_squash,fsid=25)" ]

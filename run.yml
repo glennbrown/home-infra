@@ -18,67 +18,38 @@
         - 91-contract-ua-esm-status
       when: ansible_distribution == 'Ubuntu'
 
-# Proxmox
-#- hosts: pve-01
-#  become: true
-#  pre_tasks:
-#    - name: Disable proxmox enterprise repo
-#      replace:
-#        path: /etc/apt/sources.list.d/pve-enterprise.list
-#        regexp: '^deb https://enterprise\.proxmox\.com/debian/pve bookworm pve-enterprise'
-#        replace: '#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
-#      notify: Update apt cache
-#    - name: Disable proxmox enterprise ceph repo
-#      replace:
-#        path: /etc/apt/sources.list.d/ceph.list
-#        regexp: '^deb https://enterprise\.proxmox\.com/debian/ceph-quincy bookworm enterprise'
-#        replace: '#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise'
-#      notify: Update apt cache
-#    - name: Switch to proxmox community repo
-#      apt_repository:
-#        filename: /etc/apt/sources.list.d/pve-no-subscription
-#        repo: 'deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription'
-#        state: present
-#      notify: Update apt cache
-#    - name: Force apt cache update
-#      meta: flush_handlers
-#  roles:
-#    - role: apt-mirror
-#    - role: base
-#    - role: proxmox_nag_removal
-#    - role: grog.package
-#    - role: geerlingguy.ntp
-#    - role: bash_aliases
-#    - role: ironicbadger.figurine
-#    - role: pve
-#      tags: provision
-#  handlers:
-#    - name: Update apt cache
-#      apt:
-#        update_cache: yes
-
-### LXC/VMs/VPS
-- hosts: odin
-  become: true
+# Mac Mini Server
+- name: Configure Mac Mini Server
+  hosts: odin
   roles:
-    - role: grog.package
-    - role: geerlingguy.docker
-    - role: bash_aliases
-    - role: odin
+    - role: grog.authorized-key
+    - role: elliotweiser.osx-command-line-tools
+    - role: geerlingguy.mac.homebrew
+      tags: ['homebrew']
+    - role: geerlingguy.dotfiles
+      when: configure_dotfiles
+      tags: ['dotfiles']
+    - role: geerlingguy.mac.mas
+      when: mas_installed_apps or mas_installed_app_ids
+      tags: ['mas']
+    - role: geerlingguy.mac.dock
+      when: configure_dock
+      tags: ['dock']
     - role: ctop
-    - role: ironicbadger.figurine
-    - role: glennbrown.traefik
-      tags: web
     - role: ironicbadger.docker-compose-generator
-      tags: compose
+      tags: compose 
 
-- hosts: celtic
+# Cloud VPS
+- name: Configure Cloud VPS
+  hosts: celtic
   become: true
   roles:
+    - role: grog.group
+    - role: grog.user
+    - role: grog.authorized-key
     - role: grog.package
     - role: geerlingguy.security
-    - role: tailscale
-    - role: bash_aliases
+    - role: glennbrown.tailscale
     - role: geerlingguy.docker
     - role: ctop
     - role: glennbrown.oracle-cloud-agent

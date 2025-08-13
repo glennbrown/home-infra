@@ -1,0 +1,35 @@
+---
+# Defining user account info
+# grog.group
+group_list:
+  - name: gbrown
+    gid: 1000
+
+# grog.user
+user_list:
+  - name: gbrown
+    uid: 1000
+    group: gbrown
+    groups:
+      - adm
+      - sudo
+      - users
+      - cdrom
+      - dip
+      - plugdev
+      - video
+    password: "{{ secret_gbrown_pass }}"
+    shell: /bin/bash
+    append: yes
+    move_home: yes
+    update_password: on_create
+    comment: "Glenn Brown"
+
+authorized_key_list:
+  - name: gbrown
+    authorized_keys:
+      - key: "{{ secret_gbrown_sshkey }}"
+  - name: root
+    authorized_keys:
+      - key: "{{ secret_root_sshkey }}"
+

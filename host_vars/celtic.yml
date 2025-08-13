@@ -2,9 +2,12 @@
 
 # Default ssh port to use
 ansible_ssh_port: "{{ cloud_ssh_port }}"
-    
-# apt-mirror
-apt_source_mode: modern
+
+# User information
+me:
+  username: gbrown
+  uid: 1000
+  home: /home/gbrown
 
 package_list_host:
   - name: acl

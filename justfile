@@ -55,12 +55,8 @@ add-submodule URL *NAME:
     fi
 
 # Ansible Vault Decrypt
-decrypt:
-    ansible-vault decrypt group_vars/all/vault.yml
-
-# Ansible Vault Encrypt
-encrypt:
-    ansible-vault encrypt group_vars/all/vault.yml
+ansible-vault ACTION *ARGS:
+    ansible-vault {{ ACTION }} group_vars/all/vault.yml
 
 # Bootstrap/Setup
 bootstrap_lxc +HOST:

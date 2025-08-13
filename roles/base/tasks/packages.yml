@@ -1,8 +1,0 @@
----
-
-- name: Install Base Packages
-  apt:
-    name: "{{ item }}"
-    update_cache: true
-    state: present
-  loop: "{{ debian_package_list }}"
