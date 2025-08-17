@@ -19,6 +19,3 @@
 [submodule "roles/glennbrown.tailscale"]
 	path = roles/glennbrown.tailscale
 	url = git@github.com:glennbrown/ansible-role-tailscale.git
-[submodule "roles/ansible-role-macos"]
-	path = roles/ansible-role-macos
-	url = git@github.com:glennbrown/ansible-role-macos.git

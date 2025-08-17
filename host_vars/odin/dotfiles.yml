@@ -1,0 +1,19 @@
+---
+# Dotfiles
+configure_dotfiles: true
+dotfiles_repo: git@github.com:glennbrown/dotfiles.git
+dotfiles_repo_version: main
+dotfiles_repo_accept_hostkey: true
+dotfiles_repo_local_destination: ~/.dotfiles
+dotfiles_files:
+  - .aliases
+  - .bashrc
+  - .bash_profile
+  - .config/starship.toml
+  - .config/ghostty
+  - .inputrc
+  - .macos_defaults
+  - .vimrc
+  - .zshrc
+  - .zshenv
+  - .zprofile

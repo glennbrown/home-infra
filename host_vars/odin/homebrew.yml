@@ -1,6 +1,5 @@
 ---
-
-homebrew_user: gbrown
+homebrew_user: "{{ ansible_user_id }}"
 homebrew_group: admin
 
 homebrew_installed_packages:
@@ -96,6 +95,8 @@ homebrew_installed_packages:
   - name: zoxide # Modern cd replacment
 
 homebrew_cask_apps:
+  - name: 1password
+  - name: 1password-cli
   - name: bbedit
   - name: docker-desktop
   - name: font-jetbrains-mono
@@ -124,50 +125,3 @@ homebrew_taps:
   - oven-sh/bun
   - teamookla/speedtest
   - valkyrie00/bbrew
-
-# Dotfiles
-configure_dotfiles: true
-dotfiles_repo: git@github.com:glennbrown/dotfiles.git
-dotfiles_repo_version: main
-dotfiles_repo_accept_hostkey: true
-dotfiles_repo_local_destination: ~/.dotfiles
-dotfiles_files:
-  - .aliases
-  - .bashrc
-  - .bash_profile
-  - .config/starship.toml
-  - .config/ghostty
-  - .inputrc
-  - .macos_defaults
-  - .vimrc
-  - .zshrc
-  - .zshenv
-  - .zprofile
-
-configure_dock: true
-
-dockitems_remove:
-  - TV
-  - 'App Store'
-  - 'System Settings'
-  - Freeform
-  - News
-  - Maps
-  - Facetime
-  - Calendar
-  - Contacts
-
-dockitems_persist:
-
-mas_installed_apps:
-  # Safari Extensions
-  - { id: 1569813296, name: "1Password for Safari" }
-  - { id: 1662217862, name: "Wipr" }
-  # Media
-  - { id: 510620098, name: "MediaInfo" }
-  # Development
-  - { id: 497799835, name: "Xcode" }
-  # Tools
-  - { id: 1168254295, name: "AmorphousDiskMark" }
-  - { id: 1474276998, name: "HP Smart" }
-  - { id: 1492174677, name: "Text Case" }
