@@ -21,21 +21,15 @@ ansible-galaxy-install:
     ansible-galaxy install -r galaxy-requirements.yml --force
 
 # Run/Builds
-build_pve:
-	ansible-playbook -u root run.yml --limit pve --ask-pass
-
 build HOST *TAGS:
 	ansible-playbook run.yml --limit {{HOST}} {{TAGS}}
 
-# Updates
-docker:
+# Docker Container updates
+docker-update:
     ansible-playbook docker.yml 
 
 update:
     ansible-playbook update.yml --limit odin,thor,wayland,heimdall
-
-update_pve:
-    ansible-playbook update.yml --limit pve
 
 # git submodule - repo URL + optional local folder name
 add-submodule URL *NAME:
@@ -58,10 +52,6 @@ add-submodule URL *NAME:
 ansible-vault ACTION *ARGS:
     ansible-vault {{ ACTION }} group_vars/all/vault.yml
 
-# Bootstrap/Setup
-bootstrap_lxc +HOST:
-	ansible-playbook -u root bootstrap.yml --limit {{HOST}}
-
+# Bootstrap a new host
 bootstrap +HOST:
-	ansible-playbook bootstrap.yml --limit {{HOST}}
-
+	ansible-playbook run.yml --tags bootstrap --limit {{HOST}}
