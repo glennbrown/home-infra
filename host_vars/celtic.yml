@@ -9,6 +9,11 @@ me:
   uid: 1000
   home: /home/gbrown
 
+authorized_key_list_host:
+  - name: root
+    authorized_keys:
+      - key: "{{ secret_root_sshkey }}"
+
 package_list_host:
   - name: acl
   - name: goaccess

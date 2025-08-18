@@ -29,7 +29,3 @@ authorized_key_list:
   - name: gbrown
     authorized_keys:
       - key: "{{ secret_gbrown_sshkey }}"
-  - name: root
-    authorized_keys:
-      - key: "{{ secret_root_sshkey }}"
-

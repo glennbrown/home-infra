@@ -47,7 +47,6 @@ package_list_group:
   - name: zip
   - name: zsh
   - name: zsh-autosuggestions
-
   # Rust Tools
   - name: duf
   - name: entr

@@ -1,0 +1,4 @@
+# ironicbadger.docker-compose-generator
+docker_compose_generator_uid: "{{ ansible_user_id }}"
+docker_compose_generator_gid: "{{ ansible_user_gid }}"
+docker_compose_generator_output_path: "{{ ansible_user_dir }}"

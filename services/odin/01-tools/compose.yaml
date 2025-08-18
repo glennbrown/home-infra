@@ -1,0 +1,26 @@
+services:
+  
+  kms:
+    image: ghcr.io/py-kms-organization/py-kms
+    container_name: kms
+    hostname: kms
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - ~/.config/py-kms/db:/home/py-kms/db
+    ports:
+      - 1688:1688
+    restart: always
+  
+  librespeed:
+    image: lscr.io/linuxserver/librespeed
+    container_name: librespeed
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ ansible_user_uid }}
+      - PGID={{ ansible_user_gid}}
+    volumes:
+      - ~/.config/librespeed:/config
+    ports:
+      - 8288:80
+    restart: always  

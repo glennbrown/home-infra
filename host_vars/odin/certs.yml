@@ -1,0 +1,8 @@
+---
+# Certbot Configuration
+certbot_install_method: pip
+certbot_hsts: true
+certbot_certs:
+  - domains:
+      - "{{ local_domain }}"
+      - "*.{{ local_domain }}"
