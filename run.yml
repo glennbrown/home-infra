@@ -18,13 +18,25 @@
         - 88-esm-announce
         - 91-contract-ua-esm-status
       when: ansible_distribution == 'Ubuntu'
+  roles:
+    - role: grog.group
+      tags: ['bootstrap']
+      when: ansible_system == 'Linux'
+    - role: grog.user
+      tags: ['bootstrap']
+      when: ansible_system == 'Linux'
+    - role: grog.authorized-key
+      tags: ['bootstrap']
+    - role: grog.package
+      when: ansible_system == 'Linux'
+  
 
 # Mac Mini Server
 - name: Configure Mac Mini Server
   hosts: odin
   roles:
-    - role: grog.authorized-key
     - role: elliotweiser.osx-command-line-tools
+      tags: ['homebrew']
     - role: geerlingguy.mac.homebrew
       tags: ['homebrew']
     - role: geerlingguy.dotfiles
@@ -34,9 +46,20 @@
       when: mas_installed_apps or mas_installed_app_ids
       tags: ['mas']
     - role: geerlingguy.mac.dock
+      vars:
+        homebrew_path: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
+      environment:
+        PATH: "{{ homebrew_path }}:{{ ansible_env.PATH }}"
       when: configure_dock
       tags: ['dock']
+    - role: glennbrown.macos
+      when: macos_default_settings
+      tags: ['defaults']
     - role: glennbrown.certbot
+      vars:
+        homebrew_path: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
+      environment:
+        PATH: "{{ homebrew_path }}:{{ ansible_env.PATH }}"
       tags: ['certs']
     - role: glennbrown.nginx
       tags: ['web']
@@ -48,12 +71,6 @@
   become: true
   hosts: celtic
   roles:
-    - role: grog.group
-      tags: ['bootstrap']
-    - role: grog.user
-      tags: ['bootstrap']    
-    - role: grog.authorized-key
-    - role: grog.package
     - role: geerlingguy.security
     - role: glennbrown.tailscale
     - role: geerlingguy.docker
