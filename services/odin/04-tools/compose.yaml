@@ -32,7 +32,7 @@ services:
     restart: always
   
   librespeed:
-    image: lscr.io/linuxserver/librespeed:5.4.1
+    image: lscr.io/linuxserver/librespeed:5.4.20240804
     container_name: librespeed
     environment:
       - TZ={{ ntp_timezone }}
