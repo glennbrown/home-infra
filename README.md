@@ -15,7 +15,7 @@ Most of my servers are named after norse mythology characters or from the mnemon
 
 | Name     | Type     | OS            | Description       |
 | -------- | -------- | ------------- | ----------------- |
-| odin     | Physical | macOS         | Mac Mini M4       |
+| odin     | Physical | Ubuntu 24.04  | Custom Server     |
 | celtic   | VM       | Debian 12     | Cloud VPS         |
 
 ## just usage
