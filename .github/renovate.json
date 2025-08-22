@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": [
+    "docker-compose",
+    "ansible-galaxy",
+    "pip_requirements",
+    "git-submodules"
+  ],
+  "dependencyDashboard": true,
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "baseBranches": ["main"],
+  "enabled": true,
+  "extends": [
+    "config:recommended"
+  ]
+}
