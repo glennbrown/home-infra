@@ -1,0 +1,49 @@
+services:
+  
+  tautulli:
+    image: tautulli/tautulli:v2.15.3
+    container_name: tautulli
+    hostname: tautulli
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID={{ me.uid }}
+    volumes:
+      - {{ appdata_path }}/tautulli:/config
+    depends_on:
+      - plex
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.{{ local_domain }}`)"
+      - "traefik.http.routers.tautulli.tls=true"
+      - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
+
+  kms:
+    image: ghcr.io/py-kms-organization/py-kms
+    container_name: kms
+    hostname: kms
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - {{ appdata_path }}/py-kms/db:/home/py-kms/db
+    ports:
+      - 1688:1688
+    restart: always
+  
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:5.4.1
+    container_name: librespeed
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID={{ me.uid }}
+    volumes:
+      - {{ appdata_path }}/librespeed:/config
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.librespeed.rule=Host(`librespeed.{{ local_domain }}`)"
+      - "traefik.http.routers.librespeed.tls=true"
+      - "traefik.http.routers.librespeed.tls.certresolver=cloudflare"
+      

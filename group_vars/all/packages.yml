@@ -1,16 +1,18 @@
 ---
-package_list_group:
+package_list:
   - name: apt-file
   - name: aptitude
   - name: bash-completion
   - name: bc
-  - name: debian-goodies
   - name: bind9-dnsutils
   - name: btop
   - name: command-not-found
+  - name: cpufetch
   - name: curl
   - name: dialog
   - name: diceware
+  - name: diffutils
+  - name: findutils
   - name: htop
   - name: gawk
   - name: git
@@ -20,9 +22,9 @@ package_list_group:
   - name: iftop
   - name: inxi
   - name: jq
+  - name: lz4
   - name: mc
   - name: nano
-  - name: needrestart
   - name: net-tools
   - name: nmap
   - name: openssh-server
@@ -48,8 +50,13 @@ package_list_group:
   - name: zsh
   - name: zsh-autosuggestions
   # Rust Tools
+  - name: diffr
   - name: duf
   - name: entr
+  - name: eza
   - name: fd-find
+  - name: fzf
+  - name: just
   - name: ripgrep
   - name: tealdeer
+  - name: zoxide

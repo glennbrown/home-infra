@@ -1,0 +1,70 @@
+---
+jellyfin:
+    image: jellyfin/jellyfin:10.10.7
+    container_name: jellyfin
+    user: "{{ me.uid }}:{{ me.uid }}"
+    hostname: {{ ansible_hostname }}
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - {{ appdata_path }}/jellyfin/config:/config
+      - {{ appdata_path }}/jellyfin/cache:/cache
+      - media:{{ media_path }}:ro
+    environment:
+      - TZ={{ ntp_timezone }}
+      - JELLYFIN_PublishedServerUrl=jf.{{ public_domain_1 }}
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jf.{{ public_domain_1 }}`)"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.http.routers.jellyfin.tls=true"
+      - "traefik.http.routers.jellyfin.tls.certresolver=cloudflare"
+      
+jellystat-db:
+    image: postgres:15.14-alpine
+    container_name: jellystat-db
+    environment:
+      - TZ={{ ntp_timezone }}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD={{ jellystat_postgres_pass }}
+      - POSTGRES_DB=jfstat
+    volumes:
+      - {{ appdata_path }}/jellystat/postgres-data:/var/lib/postgresql/data
+    restart: always
+
+jellystat:
+  image: cyfershepard/jellystat:1.1.6
+  container_name: jellystat
+  environment:
+    - TZ={{ ntp_timezone }}
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD={{ jellystat_postgres_pass }}
+    - POSTGRES_IP=jellystat-db
+    - POSTGRES_PORT=5432
+    - POSTGRES_DB=jfstat
+    - JWT_SECRET={{ jellystat_jwt_secret }}
+  volumes:
+    - {{ appdata_path }}/jellystat/backup-data:/app/backend/backup-data
+  depends_on:
+    - jellystat-db
+  restart: always
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.jellystat.rule=Host(`jellystat.o.{{ local_domain }}`)"
+    - "traefik.http.routers.jellystat.tls=true"
+    - "traefik.http.routers.jellystat.tls.certresolver=cloudflare"
+
+jellyplex-watched:
+  image: ghcr.io/luigi311/jellyplex-watched:8.2.0-alpine
+  container_name: jellyplex-watched
+  hostname: jellyplex-watched
+  environment:
+    - TZ={{ ntp_timezone }}
+  volumes:
+    - {{ appdata_path }}/jellyplex-watched/env:/app/.env
+  depends_on:
+    - plex
+    - jellyfin
+  restart: always

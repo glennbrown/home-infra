@@ -1,0 +1,21 @@
+services:
+    
+  plex:
+    image: plexinc/pms-docker:1.42.1.10060-4e8b05daf
+    container_name: plex
+    hostname: {{ ansible_hostname }}
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - {{ appdata_path }}/plexmediaserver:/config
+      - media:{{ media_path }}:ro
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PLEX_CLAIM={{ plex_claim_token }}
+      - PLEX_UID={{ me.uid }}
+      - PLEX_GID={{ me.uid }}
+    tmpfs:
+      - /transcode:mode=0777
+    restart: always
+  

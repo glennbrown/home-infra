@@ -1,19 +1,19 @@
 services:
   smokeping:
-    image: lscr.io/linuxserver/smokeping
+    image: lscr.io/linuxserver/smokeping:2.9.0
     container_name: smokeping
     hostname: odin
     environment:
       - TZ={{ ntp_timezone }}
       - PUID={{ me.uid }}
-      - PGID=100
+      - PGID={{ me.uid }}
     volumes:
       - {{ appdata_path }}/smokeping/config:/config
       - {{ appdata_path }}/smokeping/data:/data
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.smokeping.rule=Host(`smokeping.o.{{ local_domain }}`)"
+      - "traefik.http.routers.smokeping.rule=Host(`smokeping.{{ local_domain }}`)"
       - "traefik.http.routers.smokeping.tls=true"
       - "traefik.http.routers.smokeping.tls.certresolver=cloudflare"
     

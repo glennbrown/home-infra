@@ -1,22 +1,20 @@
 services:
   traefik:
-    image: traefik
+    image: traefik:3.5.0
     container_name: traefik
     environment:
       - TZ={{ ntp_timezone }}
       - CF_DNS_API_TOKEN={{ cloudflare_traefik_api_token }}
     volumes:
-      - {{ appdata_path }}/traefik/config:/config
-      - {{ appdata_path }}/traefik/letsencrypt:/letsencrypt
-      - {{ appdata_path }}/traefik/log:/log
-      - {{ appdata_path }}/traefik/.htpasswd:/.htpasswd
+      - /etc/traefik/config:/config
+      - /etc/traefik/letsencrypt:/letsencrypt
+      - /etc/traefik/.htpasswd:/.htpasswd
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
       - 443:443
     command:
       - --log.level=info
-      - --api.insecure=false
       - --api.dashboard=true
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
@@ -39,17 +37,20 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.o.{{ local_domain }}`)"
+      - "traefik.http.routers.traefik.rule=Host(`{{ ansible_hostname }}.{{ local_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       - "traefik.http.routers.traefik.entrypoints=web"
       - "traefik.http.middlewares.traefik-auth.basicauth.usersfile=/.htpasswd"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.add-slash.redirectregex.regex=^(https?://[^/]+/dashboard)$"
+      - "traefik.http.middlewares.add-slash.redirectregex.replacement=$${1}/"
+      - "traefik.http.middlewares.add-slash.redirectregex.permanent=true"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=websecure"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.o.{{ local_domain }}`)"
-      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.rule=Host(`{{ ansible_hostname }}.{{ local_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth,add-slash"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=o.{{ local_domain }}"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.o.{{ local_domain }}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=*.{{ local_domain }}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ local_domain }}"
       - "traefik.http.routers.traefik-secure.service=api@internal"

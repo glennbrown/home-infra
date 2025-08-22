@@ -1,0 +1,8 @@
+---
+# User info
+me:
+  username: gbrown
+  uid: 1000
+  home: /home/gbrown
+  name: 'Glenn Brown'
+  key: "{{ secret_gbrown_sshkey }}"

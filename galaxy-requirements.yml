@@ -14,6 +14,9 @@ roles:
 - src: https://github.com/ironicbadger/ansible-role-docker-compose-generator.git
   name: ironicbadger.docker-compose-generator
   scm: git
+- src: https://github.com/ironicbadger/ansible-role-drivemounts.git
+  name: ironicbadger.mounts
+  scm: git
 # Grog roles
 - src: grog.package
   version: v1.4.1
@@ -23,10 +26,3 @@ roles:
   version: v1.1.2
 - src: grog.authorized-key
   version: v1.1.5
-# MacOS CLI Tools
-- src: elliotweiser.osx-command-line-tools
-  version: 2.3.0
-
-collections:
-- name: geerlingguy.mac
-  version: 4.1.0

@@ -5,7 +5,6 @@
     - name: Set timezone
       timezone: 
         name: "{{ ntp_timezone }}"
-      when: ansible_system == 'Linux'
     - name: Remove Ubuntu motd spam
       file:
         path: "/etc/update-motd.d/{{ item }}"
@@ -21,48 +20,31 @@
   roles:
     - role: grog.group
       tags: ['bootstrap']
-      when: ansible_system == 'Linux'
     - role: grog.user
       tags: ['bootstrap']
-      when: ansible_system == 'Linux'
     - role: grog.authorized-key
       tags: ['bootstrap']
     - role: grog.package
-      when: ansible_system == 'Linux'
-  
+      tags: ['packages']
 
-# Mac Mini Server
-- name: Configure Mac Mini Server
+# Home Server
+- name: Configure Home Server
+  become: true
   hosts: odin
+  pre_tasks:
+    - name: Load Kernel modules
+      modprobe:
+        name: '{{ item }}'
+        state: present
+        persistent: present
+      loop:
+        - nct6775
+        - drivetemp
   roles:
-    - role: elliotweiser.osx-command-line-tools
-      tags: ['homebrew']
-    - role: geerlingguy.mac.homebrew
-      tags: ['homebrew']
-    - role: geerlingguy.dotfiles
-      when: configure_dotfiles
-      tags: ['dotfiles']
-    - role: geerlingguy.mac.mas
-      when: mas_installed_apps or mas_installed_app_ids
-      tags: ['mas']
-    - role: geerlingguy.mac.dock
-      vars:
-        homebrew_path: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
-      environment:
-        PATH: "{{ homebrew_path }}:{{ ansible_env.PATH }}"
-      when: configure_dock
-      tags: ['dock']
-    - role: glennbrown.macos
-      when: macos_default_settings
-      tags: ['defaults']
-    - role: glennbrown.certbot
-      vars:
-        homebrew_path: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
-      environment:
-        PATH: "{{ homebrew_path }}:{{ ansible_env.PATH }}"
-      tags: ['certs']
-    - role: glennbrown.nginx
-      tags: ['web']
+    - role: ironicbadger.mounts
+    - role: geerlingguy.docker
+    - role: ironicbadger.figurine
+    - role: glennbrown.tailscale
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
 
@@ -78,7 +60,6 @@
     - role: glennbrown.oracle-cloud-agent
     - role: glennbrown.firewall
     - role: ironicbadger.figurine
-      tags: ['bootstrap']
     - role: glennbrown.certbot
       tags: ['certs']
     - role: glennbrown.nginx

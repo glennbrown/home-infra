@@ -1,0 +1,52 @@
+---
+# Paths
+appdata_path: '/mnt/nvme1/appdata'
+media_path: '/mnt/media'
+scratch_path: '/mnt/scratch'
+
+# grog.package
+package_list_host:
+  - name: cifs-utils
+  - name: ffmpeg
+  - name: fio
+  - name: flac
+  - name: fwupd
+  - name: golang
+  - name: handbrake-cli
+  - name: imagemagick
+  - name: intel-gpu-tools
+  - name: intel-microcode
+  - name: iperf3
+  - name: lame
+  - name: lm-sensors
+  - name: mediainfo
+  - name: nvme-cli
+  - name: nvtop
+  - name: smartmontools
+  - name: snapper
+  - name: socat
+  - name: webp
+  - name: x264
+  - name: x265
+  - name: yt-dlp
+  - name: zfsutils-linux
+
+# Drive mounts
+automount_drives: true
+drive_mounts:
+  - mountpoint: /mnt/nvme1
+    device: "/dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1"
+    fstype: btrfs
+  - mountpoint: /mnt/scratch
+    device: "/dev/disk/by-id/scsi-SATA_WDC_WD10EZEX-08W_WD-WCC6Y3RK0N3F-part1"
+    fstype: ext4
+  - mountpoint: /mnt/media
+    device: "//yggdrasil/Media"
+    fstype: cifs
+    options:
+      - 'user={{ me.username }}'
+      - 'password={{ secret_synology_gbrown }}'
+      - 'uid=0'
+      - 'gid=100'
+      - 'dir_mode=0777'
+      - 'file_mode=0666'

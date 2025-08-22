@@ -1,5 +1,5 @@
 ---
-# geerlingguy.ntp
+# Timezone
 ntp_timezone: America/New_York
 
 # grog.package
