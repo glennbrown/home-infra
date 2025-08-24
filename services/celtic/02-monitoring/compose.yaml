@@ -1,6 +1,6 @@
 services:
   ntfy:
-    image: binwiederhier/ntfy
+    image: binwiederhier/ntfy:v2.14.0
     container_name: ntfy
     volumes:
       - ~/.config/ntfy:/var/lib/ntfy
