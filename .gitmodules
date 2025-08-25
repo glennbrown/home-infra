@@ -22,6 +22,3 @@
 [submodule "roles/glennbrown.macos"]
 	path = roles/glennbrown.macos
 	url = git@github.com:glennbrown/ansible-role-macos.git
-[submodule "roles/glennbrown.incus"]
-	path = roles/glennbrown.incus
-	url = git@github.com:glennbrown/ansible-role-incus.git
