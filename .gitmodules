@@ -4,9 +4,6 @@
 [submodule "roles/glennbrown.firewall"]
 	path = roles/glennbrown.firewall
 	url = git@github.com:glennbrown/ansible-role-firewall.git
-[submodule "roles/glennbrown.proxmox-nag-removal"]
-	path = roles/glennbrown.proxmox-nag-removal
-	url = git@github.com:glennbrown/ansible-role-proxmox-nag-removal.git
 [submodule "roles/glennbrown.oracle-cloud-agent"]
 	path = roles/glennbrown.oracle-cloud-agent
 	url = git@github.com:glennbrown/ansible-role-oracle-cloud-agent.git
