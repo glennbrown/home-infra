@@ -58,5 +58,6 @@ package_list:
   - name: fzf
   - name: just
   - name: ripgrep
+  - name: starship
   - name: tealdeer
   - name: zoxide

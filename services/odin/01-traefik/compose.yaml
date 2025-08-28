@@ -51,6 +51,4 @@ services:
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth,add-slash"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=*.{{ local_domain }}"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ local_domain }}"
       - "traefik.http.routers.traefik-secure.service=api@internal"

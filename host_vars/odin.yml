@@ -29,7 +29,6 @@ package_list_host:
   - name: x264
   - name: x265
   - name: yt-dlp
-  - name: zfsutils-linux
 
 # Drive mounts
 automount_drives: true
@@ -38,10 +37,20 @@ drive_mounts:
     device: "/dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1"
     fstype: btrfs
   - mountpoint: /mnt/scratch
-    device: "/dev/disk/by-id/scsi-SATA_WDC_WD10EZEX-08W_WD-WCC6Y3RK0N3F-part1"
+    device: "/dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y3RK0N3F-part1"
     fstype: ext4
   - mountpoint: /mnt/media
     device: "//yggdrasil/Media"
+    fstype: cifs
+    options:
+      - 'user={{ me.username }}'
+      - 'password={{ secret_synology_gbrown }}'
+      - 'uid=0'
+      - 'gid=100'
+      - 'dir_mode=0777'
+      - 'file_mode=0666'
+  - mountpoint: /mnt/software
+    device: "//yggdrasil/Software"
     fstype: cifs
     options:
       - 'user={{ me.username }}'

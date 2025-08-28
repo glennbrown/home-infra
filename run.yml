@@ -24,8 +24,6 @@
       tags: ['bootstrap']
     - role: grog.authorized-key
       tags: ['bootstrap']
-    - role: grog.package
-      tags: ['packages']
 
 # Home Server
 - name: Configure Home Server
@@ -40,11 +38,30 @@
       loop:
         - nct6775
         - drivetemp
+        - br_netfilter
+    - name: Define some sysctl kernel parameters
+      sysctl:
+        name: '{{ item.name }}'
+        value: '{{ item.value }}'
+        sysctl_file: '{{ item.file }}'
+        state: present
+        reload: true
+      loop:
+        - name: net.bridge.bridge-nf-call-ip6tables
+          value: 0
+          file: /etc/sysctl.d/99-netfilter-bridge.conf
+        - name: net.bridge.bridge-nf-call-iptables
+          value: 0
+          file: /etc/sysctl.d/99-netfilter-bridge.conf
+        - name: net.bridge.bridge-nf-call-arptables
+          value: 0
+          file: /etc/sysctl.d/99-netfilter-bridge.conf
   roles:
-    - role: ironicbadger.mounts
+    - role: grog.package
+      tags: ['packages']
+    - role: glennbrown.mounts
     - role: geerlingguy.docker
-    - role: ironicbadger.figurine
-    - role: glennbrown.tailscale
+    - role: ironicbadger.figurine 
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
 
@@ -53,6 +70,8 @@
   become: true
   hosts: celtic
   roles:
+    - role: grog.package
+      tags: ['packages']
     - role: geerlingguy.security
     - role: glennbrown.tailscale
     - role: geerlingguy.docker
