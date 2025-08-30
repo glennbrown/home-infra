@@ -1,0 +1,21 @@
+---
+- name: Update sources.list for Ubuntu Mantic and older
+  copy:
+    content: "{{ legacy_apt_sources }}"
+    dest: /etc/apt/sources.list
+  notify: update_apt_cache
+  when: ansible_facts['distribution_major_version'] <= "23"
+
+- name: Replace sources.list for Ubuntu Noble and newer
+  copy: 
+    content: '# Ubuntu sources have moved to /etc/apt/sources.list.d/ubuntu.sources'
+    dest: /etc/apt/sources.list
+  notify: update_apt_cache
+  when: ansible_facts['distribution_major_version'] >= "24"
+
+- name: Update ubuntu.sources for Ubuntu Noble and newer
+  copy:
+    content: "{{ deb822_apt_sources }}"
+    dest: /etc/apt/sources.list.d/ubuntu.sources
+  notify: update_apt_cache
+  when: ansible_facts['distribution_major_version'] >= "24"

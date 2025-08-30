@@ -18,4 +18,13 @@ services:
     tmpfs:
       - /transcode:mode=0777
     restart: always
-  
+
+volumes:
+  media:
+    name: media
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media
+      

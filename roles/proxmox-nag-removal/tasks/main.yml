@@ -1,13 +1,11 @@
 ---
-- name: Check whether package is installed
-  shell: "dpkg-query -W 'pve-fake-subscription'"
-  ignore_errors: true
-  register: is_installed
-  changed_when: "is_installed.rc != 0"
-
+- name: Gather installed package facts
+  package_facts:
+    manager: apt
+  
 - name: Install package?
   set_fact:
-    force_install: "{{ nag_force_install == true or is_installed.failed == true }}"
+    force_install: "{{ nag_force_install | bool or ('pve-fake-subscription' not in ansible_facts.packages) }}"
 
 - name: Get latest release
   uri:

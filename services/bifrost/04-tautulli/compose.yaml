@@ -1,0 +1,23 @@
+services:
+  tautulli:
+    image: tautulli/tautulli:v2.15.3
+    container_name: tautulli
+    hostname: tautulli
+    environment:
+      - TZ={{ ntp_timezone }}
+      - PUID={{ me.uid }}
+      - PGID={{ me.uid }}
+    volumes:
+      - {{ appdata_path }}/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: always
+
+volumes:
+  media:
+    name: media
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media

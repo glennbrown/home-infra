@@ -1,0 +1,35 @@
+---
+- name: Disable default site
+  file:
+    path: "{{ nginx_default_vhost_path }}"
+    state: absent
+  when: nginx_remove_default_vhost | bool
+  notify: reload nginx
+
+- name: Install HTTPS Redirect
+  copy:
+    src: "{{ nginx_hsts_file }}"
+    dest: "{{ nginx_vhost_path }}/nginx-https-redirect.conf"
+    mode: 0644
+    group: "{{ __nginx_group }}"
+  when: nginx_hsts_redirect | bool
+  notify: reload nginx
+
+- name: Add managed vhost config files.
+  template:
+    src: "{{ item.template|default(nginx_vhost_template) }}"
+    dest: "{{ nginx_vhost_path }}/{{ item.filename|default(item.server_name.split(' ')[0] ~ '.conf') }}"
+    force: true
+    group: "{{ __nginx_group }}"
+    mode: 0644
+  when: item.state|default('present') != 'absent'
+  with_items: "{{ nginx_vhosts }}"
+  notify: reload nginx
+
+- name: Remove managed vhost config files.
+  file:
+    path: "{{ nginx_vhost_path }}/{{ item.filename|default(item.server_name.split(' ')[0] ~ '.conf') }}"
+    state: absent
+  when: item.state|default('present') == 'absent'
+  with_items: "{{ nginx_vhosts }}"
+  notify: reload nginx

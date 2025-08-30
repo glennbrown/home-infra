@@ -1,0 +1,60 @@
+---
+- name: Load os-specific vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include_tasks: setup-{{ ansible_os_family }}.yml
+
+# Vhost configuration
+- import_tasks: vhosts.yml
+
+# Nginx setup
+- name: Download Diffie-Hellman Parameters
+  get_url:
+    url: "{{ dhparams_pem_download }}"
+    dest: "{{ nginx_dhparams_file_path }}"
+    mode: 0440
+    group: "{{ __nginx_group }}"
+
+- name: Ensure config path exists
+  file:
+    path: "{{ nginx_conf_path }}"
+    state: directory
+    mode: 0755
+    group: "{{ __nginx_group }}"
+
+- name: Copy nginx configuration in place
+  template:
+    src: "{{ nginx_conf_template }}"
+    dest: "{{ nginx_conf_file_path }}"
+    mode: 0644
+    group: "{{ __nginx_group }}"
+  notify: reload nginx
+
+- name: Copy proxy configuration
+  template:
+    src: "{{ nginx_proxy_template }}"
+    dest: "{{ nginx_proxy_params_file_path }}"
+    mode: 0644
+    group: "{{ __nginx_group }}"
+  notify: reload nginx
+
+- name: Copy ssl configuration
+  template:
+    src: "{{ nginx_ssl_template }}"
+    dest: "{{ nginx_conf_path }}/ssl.conf"
+    mode: 0644
+    group: "{{ __nginx_group }}"
+  notify: reload nginx
+
+- name: Linux - Ensure nginx service is running as configured
+  service: 
+    name: nginx
+    state: "{{ nginx_service_state }}"
+    enabled: "{{ nginx_service_enabled }}"
+  when: ansible_system == 'Linux'
+
+- name: MacOS - Ensure nginx service is running as configured
+  community.general.homebrew_services:
+    name: nginx
+    state: "{{ nginx_service_state }}"
+  when: ansible_system == 'Darwin'

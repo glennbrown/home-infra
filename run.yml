@@ -25,46 +25,73 @@
     - role: grog.authorized-key
       tags: ['bootstrap']
 
-# Home Server
-- name: Configure Home Server
+# Proxmox setup
+- name: Configure a proxmox host
+  become: true
+  hosts: pve
+  roles:
+    - role: proxmox
+    - role: proxmox-nag-removal
+    - role: ironicbadger.figurine
+      
+# LXC for Media Servers that need iGPU access
+- name: Configure Media Server
   become: true
   hosts: odin
   pre_tasks:
-    - name: Load Kernel modules
-      modprobe:
-        name: '{{ item }}'
-        state: present
-        persistent: present
-      loop:
-        - nct6775
-        - drivetemp
-        - br_netfilter
-    - name: Define some sysctl kernel parameters
-      sysctl:
-        name: '{{ item.name }}'
-        value: '{{ item.value }}'
-        sysctl_file: '{{ item.file }}'
-        state: present
-        reload: true
-      loop:
-        - name: net.bridge.bridge-nf-call-ip6tables
-          value: 0
-          file: /etc/sysctl.d/99-netfilter-bridge.conf
-        - name: net.bridge.bridge-nf-call-iptables
-          value: 0
-          file: /etc/sysctl.d/99-netfilter-bridge.conf
-        - name: net.bridge.bridge-nf-call-arptables
-          value: 0
-          file: /etc/sysctl.d/99-netfilter-bridge.conf
+    - name: Make sure appdata permissions are correct
+      file:
+        path: "{{ appdata_path }}"
+        state: directory
+        mode: 0775
+        group: users
   roles:
     - role: grog.package
       tags: ['packages']
-    - role: glennbrown.mounts
+    - role: drivemounts
     - role: geerlingguy.docker
     - role: ironicbadger.figurine 
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
 
+# Media distribution/collection 
+- name: Configure bifrost
+  become: true
+  hosts: bifrost
+  pre_tasks:
+    - name: Make sure appdata/scratch permissions are correct
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0775
+        group: users
+      loop:
+        - "{{ appdata_path }}"
+        - "{{ scratch_path }}"
+  roles:
+    - role: apt-mirror
+    - role: grog.package
+      tags: ['packages']
+    - role: drivemounts
+    - role: geerlingguy.docker
+    - role: ironicbadger.figurine 
+    - role: ironicbadger.docker-compose-generator
+      tags: ['compose']
+
+# Nginx Reverse Proxy
+- name: Configure thor
+  become: true
+  hosts: thor
+  roles:
+    - role: apt-mirror
+    - role: grog.package
+      tags: ['packages']
+    - role: ironicbadger.figurine
+    - role: certbot
+      tags: ['certs']
+    - role: nginx
+      tags: ['web']
+  
 # Cloud VPS
 - name: Configure Cloud VPS
   become: true
@@ -79,9 +106,9 @@
     - role: glennbrown.oracle-cloud-agent
     - role: glennbrown.firewall
     - role: ironicbadger.figurine
-    - role: glennbrown.certbot
+    - role: certbot
       tags: ['certs']
-    - role: glennbrown.nginx
+    - role: nginx
       tags: ['web']
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']

@@ -1,0 +1,11 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+{% for item in certbot_create_stop_services %}
+echo "stopping service {{ item }}"
+{% if ansible_service_mgr == 'systemd' %}
+systemctl stop {{ item }}
+{% else %}
+service {{ item }} stop
+{% endif %}
+{% endfor %}

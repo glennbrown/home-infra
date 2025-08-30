@@ -13,23 +13,36 @@ log := "warn"
 export JUST_LOG := log
 
 # pre-commit install
-install:
+install-commit-hook:
     pre-commit install
 
 # Ansible Galaxy Roles/Collections
 ansible-galaxy-install:
     ansible-galaxy install -r galaxy-requirements.yml --force
 
+# Bootstrap a new host
+bootstrap +HOST:
+	ansible-playbook run.yml --tags bootstrap --limit {{HOST}}
+
 # Run/Builds
 build HOST *TAGS:
 	ansible-playbook run.yml --limit {{HOST}} {{TAGS}}
+
+# Update Docker Compose on a host
+compose +HOST:
+    ansible-playbook run.yml --tags compose --limit {{HOST}}
 
 # Docker Container updates
 docker-update:
     ansible-playbook docker.yml 
 
-update:
-    ansible-playbook update.yml --limit odin,thor,wayland,heimdall
+package-update HOST="":
+    #!/usr/bin/env sh
+    if [ -n "{{HOST}}" ]; then \
+        ansible-playbook update.yml --limit "{{HOST}}"; \
+    else \
+        ansible-playbook update.yml; \
+    fi
 
 # git submodule - repo URL + optional local folder name
 add-submodule URL *NAME:
@@ -51,7 +64,3 @@ add-submodule URL *NAME:
 # Ansible Vault Decrypt
 ansible-vault ACTION *ARGS:
     ansible-vault {{ ACTION }} group_vars/all/vault.yml
-
-# Bootstrap a new host
-bootstrap +HOST:
-	ansible-playbook run.yml --tags bootstrap --limit {{HOST}}

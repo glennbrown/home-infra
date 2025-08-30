@@ -1,0 +1,6 @@
+---
+- name: Ensure nginx is installed
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ nginx_packages }}"

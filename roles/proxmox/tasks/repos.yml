@@ -1,0 +1,39 @@
+---
+- name: Disable Proxmox enterprise repo
+  ansible.builtin.deb822_repository:
+    enabled: false
+    name: pve-enterprise
+    types: deb
+    uris: 'https://enterprise.proxmox.com/debian/pve'
+    suites: "{{ ansible_distribution_release }}"
+    components:
+      - pve-enterprise
+    signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+  notify: update_apt_cache
+
+- name: Enable Proxmox no-subscription repo
+  ansible.builtin.deb822_repository:
+    enabled: true
+    name: proxmox
+    types: deb
+    uris: 'http://download.proxmox.com/debian/pve'
+    suites: "{{ ansible_distribution_release }}"
+    components:
+      - pve-no-subscription
+    signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+  notify: update_apt_cache
+
+- name: Switch ceph to no-subscription repo
+  ansible.builtin.deb822_repository:
+    enabled: true
+    name: ceph
+    types: deb
+    uris: 'http://download.proxmox.com/debian/ceph-squid'
+    suites: "{{ ansible_distribution_release }}"
+    components:
+      - no-subscription
+    signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+  notify: update_apt_cache
+
+- name: Force update apt cache
+  meta: flush_handlers

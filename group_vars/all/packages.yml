@@ -12,6 +12,7 @@ package_list:
   - name: dialog
   - name: diceware
   - name: diffutils
+  - name: fastfetch
   - name: findutils
   - name: htop
   - name: gawk

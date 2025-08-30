@@ -1,0 +1,27 @@
+---
+
+legacy_apt_sources: |
+  deb http://us.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main restricted universe multiverse
+  deb-src http://us.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main restricted universe multiverse
+
+  deb http://us.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates main restricted universe multiverse
+  deb-src {{ ubuntu_apt_mirror }}/ubuntu {{ ansible_distribution_release }}-updates main restricted universe multiverse
+
+  deb http://us.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-backports main restricted universe multiverse
+  deb-src http://us.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-backports main restricted universe multiverse
+
+  deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main restricted universe multiverse
+  deb-src http://security.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-security main restricted universe multiverse
+
+deb822_apt_sources: |
+  Types: deb deb-src
+  URIs: http://us.archive.ubuntu.com/ubuntu/
+  Suites: {{ ansible_distribution_release }} {{ ansible_distribution_release }}-updates {{ ansible_distribution_release }}-backports
+  Components: main restricted universe multiverse
+  Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+  
+  Types: deb deb-src
+  URIs: http://security.ubuntu.com/ubuntu/
+  Suites: {{ ansible_distribution_release }}-security
+  Components: main restricted universe multiverse
+  Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg

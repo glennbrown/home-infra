@@ -1,0 +1,27 @@
+---
+
+legacy_apt_sources: |
+  deb http://deb.debian.org/debian/ {{ ansible_distribution_release }} {{ debian_components }}
+  deb-src http://deb.debian.org/debian {{ ansible_distribution_release }} {{ debian_components }}
+
+  deb http://deb.debian.org/debian {{ ansible_distribution_release }}-updates {{ debian_components }}
+  deb-src http://deb.debian.org/debian {{ ansible_distribution_release }}-updates {{ debian_components }}
+
+  deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports {{ debian_components }}
+  deb-src http://deb.debian.org/debian {{ ansible_distribution_release }}-backports {{ debian_components }}
+
+  deb http://security.debian.org {{ ansible_distribution_release }}-security {{ debian_components }}
+  deb-src http://security.debian.org {{ ansible_distribution_release }}-security {{ delian_components }}
+
+deb822_apt_sources: |
+  Types: deb deb-src
+  URIs: http://deb.debian.org/debian/
+  Suites: trixie trixie-updates trixie-backports
+  Components: main contrib non-free-firmware non-free
+  Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+  Types: deb deb-src
+  URIs: http://security.debian.org/debian-security/
+  Suites: trixie-security
+  Components: main contrib non-free-firmware non-free
+  Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

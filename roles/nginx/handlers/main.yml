@@ -1,0 +1,14 @@
+---
+- name: Reload Nginx (Linux)
+  listen: reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  when: ansible_system == 'Linux'
+
+- name: Restart Nginx (MacOS)
+  listen: reload nginx
+  community.general.homebrew_services:
+    name: nginx
+    state: restarted
+  when: ansible_system == 'Darwin'

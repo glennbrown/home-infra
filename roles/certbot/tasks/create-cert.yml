@@ -1,0 +1,40 @@
+---
+- name: Check if certificate already exists.
+  stat:
+    path: "{{ certbot_config_dir }}/live/{{ cert_item.domains | first | replace('*.', '') }}/cert.pem"
+  register: letsencrypt_cert
+
+- name: Ensure pre and post hook folders exist.
+  file:
+    path: "{{ certbot_config_dir }}/renewal-hooks/{{ item }}"
+    state: directory
+    group: "{{ certbot_group }}"
+    mode: 0755
+  loop:
+    - pre
+    - post
+
+- name: Create pre hook to stop services.
+  template:
+    src: stop_services.j2
+    dest: "{{ certbot_config_dir }}/renewal-hooks/pre/stop_services"
+    group: "{{ certbot_group }}"
+    mode: 0755
+  when:
+    - certbot_create_stop_services is defined
+    - certbot_create_stop_services
+
+- name: Create post hook to start services.
+  template:
+    src: start_services.j2
+    dest: "{{ certbot_config_dir }}/renewal-hooks/post/start_services"
+    mode: 0755
+    group: "{{ certbot_group }}"
+  when:
+    - certbot_create_stop_services is defined
+    - certbot_create_stop_services
+
+- name: Generate new certificate if one doesn't exist.
+  command:
+    argv: "{{ certbot_create_command | reject('equalto', omit) | list }}"
+  when: not letsencrypt_cert.stat.exists

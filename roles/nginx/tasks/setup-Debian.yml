@@ -1,0 +1,7 @@
+---
+- name: Ensure nginx is installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ nginx_packages }}"
+  

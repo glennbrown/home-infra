@@ -1,0 +1,6 @@
+---
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ proxmox_packages }}"

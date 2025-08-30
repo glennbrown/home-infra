@@ -1,0 +1,66 @@
+---
+- name: Load os-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install certbot
+  import_tasks: "install-with-{{ certbot_install_method }}.yml"
+
+- name: Create certbot folders
+  file:
+    path: "{{ certbot_config_dir }}/{{ item }}"
+    state: directory
+    group: "{{ certbot_group }}"
+    mode: 0755
+  loop:
+  - live
+  - archive
+
+- name: Ensure acl package is installed
+  package:
+    name: acl
+    state: present
+
+- block:
+  - name: Set default ACL for live and archive folders
+    acl:
+      path: "{{ certbot_config_dir }}/{{ item }}"
+      entity: users
+      etype: group
+      permissions: rwx
+      default: yes
+      state: present
+    loop:
+    - live
+    - archive
+  - name: Set ACL for existing content
+    acl:
+      path: "{{ certbot_config_dir }}/{{ item }}"
+      entity: users
+      etype: group
+      permissions: rwx
+      recursive: yes
+      state: present
+    loop:
+    - live
+    - archive
+
+- name: Copy certbot cloudflare credential config
+  template:
+    src: cloudflare.ini.j2
+    dest: "{{ certbot_config_dir }}/cloudflare.ini"
+    group: "{{ certbot_group }}"
+    mode: 0600
+
+- include_tasks: create-cert.yml
+  loop: "{{ certbot_certs }}"
+  when:
+  - certbot_create_if_missing
+  loop_control:
+    loop_var: cert_item
+
+# Snap package uses sytemd timers by default for renewal.
+# TODO: switch to systemd timers for pip installs
+- import_tasks: renew-cron.yml
+  when:
+  - certbot_auto_renew
+  - certbot_install_method == 'pip'

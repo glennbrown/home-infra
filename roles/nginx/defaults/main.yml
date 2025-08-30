@@ -1,0 +1,44 @@
+---
+nginx_conf_template: "nginx.conf.j2"
+nginx_vhost_template: "vhost.j2"
+nginx_proxy_template: "proxy_params.j2"
+nginx_ssl_template: "ssl.conf.j2"
+nginx_hsts_file: "nginx-https-redirect.conf"
+
+dhparams_pem_download: 'https://ssl-config.mozilla.org/ffdhe2048.txt'
+
+nginx_worker_processes: >-
+  "{{ ansible_processor_vcpus | default(ansible_processor_count) }}"
+nginx_worker_connections: "1024"
+nginx_multi_accept: "off"
+
+nginx_pcre_jit: "on"
+
+nginx_types_hash_max_size: "2048"
+nginx_types_hash_bucket_size: "128"
+
+nginx_client_max_body_size: "64m"
+
+nginx_sendfile: "on"
+nginx_tcp_nopush: "on"
+nginx_tcp_nodelay: "on"
+
+nginx_keepalive_timeout: "75"
+nginx_keepalive_requests: "600"
+
+nginx_server_tokens: "on"
+
+nginx_remove_default_vhost: false
+
+nginx_hsts_redirect: false
+
+nginx_extra_conf_options: ""
+
+nginx_more_headers: ""
+
+nginx_real_ip: ""
+
+nginx_log_format: |-
+  '$remote_addr - $remote_user [$time_local] "$request" '
+  '$status $body_bytes_sent "$http_referer" '
+  '"$http_user_agent" "$http_x_forwarded_for"'

@@ -1,0 +1,140 @@
+---
+# Certbot Configuration
+certbot_hsts: true
+certbot_certs:
+  - domains:
+      - "{{ local_domain }}"
+      - "*.{{ local_domain }}"
+
+#Nginx Configuration
+nginx_hsts_redirect: true
+nginx_remove_default_vhost: true
+
+# Nginx Virtual Hosts
+nginx_vhosts:
+- server_name: "sonarr.{{ local_domain }}"
+  error_log: "/var/log/nginx/sonarr.error.log"
+  access_log: "/var/log/nginx/sonarr.access.log main"
+  state: present
+  filename: sonarr.conf
+  extra_parameters: |
+    set $upstream http://192.168.10.12:8989;
+    location / {
+      proxy_pass $upstream;
+    }
+    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+- server_name: "radarr.{{ local_domain }}"
+  error_log: "/var/log/nginx/radarr.error.log"
+  access_log: "/var/log/nginx/radarr.access.log main"
+  state: present
+  filename: radarr.conf
+  extra_parameters: |
+    set $upstream http://192.168.10.12:7878;
+    location / {
+      proxy_pass $upstream;
+    }
+    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+- server_name: "prowlarr.{{ local_domain }}"
+  error_log: "/var/log/nginx/prowlarr.error.log"
+  access_log: "/var/log/nginx/prowlarr.access.log main"
+  state: present
+  filename: prowlarr.conf
+  extra_parameters: |
+    set $upstream http://192.168.10.12:9696;
+    location / {
+      proxy_pass $upstream;
+    }
+    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+- server_name: "sabnzb.{{ local_domain }}"
+  error_log: "/var/log/nginx/sabnzb.error.log"
+  access_log: "/var/log/nginx/sabnzb.access.log main"
+  state: present
+  filename: sabnzb.conf
+  extra_parameters: |
+    set $upstream http://192.168.10.12:8080;
+    location / {
+      proxy_pass $upstream;
+    }
+    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+- server_name: "qbittorrent.{{ local_domain }}"
+  error_log: "/var/log/nginx/qbittorrent.error.log"
+  access_log: "/var/log/nginx/qbittorrent.access.log main"
+  state: present
+  filename: qbittorrent.conf
+  extra_parameters: |
+    set $upstream http://192.168.10.12:8088;
+    location / {
+      proxy_pass $upstream;
+    }
+    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+- server_name: "tautulli.{{ local_domain }}"
+  error_log: "/var/log/nginx/tautulli.error.log"
+  access_log: "/var/log/nginx/tautulli.access.log main"
+  state: present
+  filename: tautulli.conf
+  extra_parameters: |
+    set $upstream http://192.168.10.12:8181;
+    location / {
+      proxy_pass $upstream;
+    }
+    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+#- server_name: "librespeed.{{ local_domain }}"
+#  error_log: "/var/log/nginx/librespeed.error.log"
+#  access_log: "/var/log/nginx/librespeed.access.log main"
+#  state: present
+#  filename: librespeed.conf
+#  extra_parameters: |
+#    set $upstream http://127.0.0.1:8288;
+#    location / {
+#      proxy_pass $upstream;
+#    }
+#    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+#    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+#    add_header Strict-Transport-Security "max-age=63072000" always;
+#- server_name: "smokeping.{{ local_domain }}"
+#  error_log: "/var/log/nginx/smokeping.error.log"
+#  access_log: "/var/log/nginx/smokeping.access.log main"
+#  state: present
+#  filename: smokeping.conf
+#  extra_parameters: |
+#    set $upstream http://127.0.0.1:8289;
+#    location / {
+#      proxy_pass $upstream;
+#    }
+#    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+#    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+#    add_header Strict-Transport-Security "max-age=63072000" always;
+#- server_name: "changedetection.{{ local_domain }}"
+#  error_log: "/var/log/nginx/changedetection.error.log"
+#  access_log: "/var/log/nginx/changedetection.access.log main"
+#  state: present
+#  filename: changedetection.conf
+#  extra_parameters: |
+#    set $upstream http://127.0.0.1:5001;
+#    location / {
+#      proxy_pass $upstream;
+#    }
+#    ssl_certificate /etc/letsencrypt/live/home.ikgb.me/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/home.ikgb.me/privkey.pem;
+#    ssl_trusted_certificate /etc/letsencrypt/live/home.ikgb.me/chain.pem;
+#    add_header Strict-Transport-Security "max-age=63072000" always;

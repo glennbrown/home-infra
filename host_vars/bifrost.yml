@@ -2,30 +2,21 @@
 # Paths
 appdata_path: '/mnt/appdata'
 media_path: '/mnt/media'
+scratch_path: '/mnt/scratch'
 
 # grog.package
 package_list_host:
-  - name: ffmpeg
   - name: fio
-  - name: flac
-  - name: golang
-  - name: handbrake-cli
-  - name: imagemagick
-  - name: intel-gpu-tools
-  - name: iperf3
-  - name: lame
   - name: mediainfo
-  - name: nvtop
-  - name: snapper
-  - name: socat
-  - name: webp
-  - name: x264
-  - name: x265
-  - name: yt-dlp
 
 # Drive mounts
 automount_drives: true
 drive_mounts:
+  - mountpoint: '/mnt/scratch'
+    device: '/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1-part1'
+    fstype: ext4
+    options:
+      - defaults
   - mountpoint: /mnt/media
     device: "//yggdrasil/Media"
     fstype: cifs

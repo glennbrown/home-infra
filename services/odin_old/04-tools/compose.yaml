@@ -1,24 +1,5 @@
 services:
   
-  tautulli:
-    image: tautulli/tautulli:v2.15.3
-    container_name: tautulli
-    hostname: tautulli
-    environment:
-      - TZ={{ ntp_timezone }}
-      - PUID={{ me.uid }}
-      - PGID={{ me.uid }}
-    volumes:
-      - {{ appdata_path }}/tautulli:/config
-    depends_on:
-      - plex
-    restart: always
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.{{ local_domain }}`)"
-      - "traefik.http.routers.tautulli.tls=true"
-      - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
-
   kms:
     image: ghcr.io/py-kms-organization/py-kms
     container_name: kms
