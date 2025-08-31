@@ -26,18 +26,16 @@
       tags: ['bootstrap']
 
 # Proxmox setup
-- name: Configure a proxmox host
+- hosts: pve
   become: true
-  hosts: pve
   roles:
     - role: proxmox
     - role: proxmox-nag-removal
     - role: ironicbadger.figurine
       
 # LXC for Media Servers that need iGPU access
-- name: Configure Media Server
+- hosts: odin
   become: true
-  hosts: odin
   pre_tasks:
     - name: Make sure appdata permissions are correct
       file:
@@ -55,9 +53,8 @@
       tags: ['compose']
 
 # Media distribution/collection 
-- name: Configure bifrost
+- hosts: bifrost
   become: true
-  hosts: bifrost
   pre_tasks:
     - name: Make sure appdata/scratch permissions are correct
       file:
@@ -74,14 +71,14 @@
       tags: ['packages']
     - role: drivemounts
     - role: geerlingguy.docker
+    - role: ctop
     - role: ironicbadger.figurine 
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
 
 # Nginx Reverse Proxy
-- name: Configure thor
+- hosts: thor
   become: true
-  hosts: thor
   roles:
     - role: apt-mirror
     - role: grog.package
@@ -91,11 +88,30 @@
       tags: ['certs']
     - role: nginx
       tags: ['web']
+
+# Tools Server
+- hosts: wayland
+  become: true
+  pre_tasks:
+    - name: Make sure appdata/scratch permissions are correct
+      file:
+        path: "{{ appdata_path }}"
+        state: directory
+        mode: 0775
+        group: users
+  roles:
+    - role: apt-mirror
+    - role: grog.package
+      tags: ['packages']
+    - role: geerlingguy.docker
+    - role: ctop
+    - role: ironicbadger.figurine
+    - role: ironicbadger.docker-compose-generator
+      tags: ['compose']
   
 # Cloud VPS
-- name: Configure Cloud VPS
+- hosts: celtic
   become: true
-  hosts: celtic
   roles:
     - role: grog.package
       tags: ['packages']

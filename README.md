@@ -13,13 +13,14 @@ This repo contains the code I use for deploying and managing my home servers and
 
 Most of my servers are named after norse mythology characters or from the [mnemonic wordlist][1).
 
-| Name      | Type     | OS          | Description                   |
-| --------- | -------- | ----------- | ----------------------------- |
-| pve-01    | Physical | Proxmox     | Custom Server                 |
-| odin      | LXC      | Debian      | Media Servers (Plex, etc)     |
-| bifrost   | VM       | Debian      | Media distribution/collection |
-| thor      | VM       | Debian      | Nginx Reverse Proxy           | 
-| celtic    | VM       | Debian      | Cloud VPS                     |
+| Name      | Type     | OS          | Description                       |
+| --------- | -------- | ----------- | -----------------------------     |
+| pve-01    | Physical | Proxmox     | Custom Server                     |
+| odin      | LXC      | Debian      | Media Servers (Plex, etc)         |
+| bifrost   | VM       | Debian      | Media distribution/collection     |
+| thor      | VM       | Debian      | Nginx Reverse Proxy               |
+| wayland   | VM       | Debian      | Tools (Changedetection, KMS, etc) |
+| celtic    | VM       | Debian      | Cloud VPS                         |
 
 ## just usage
 
@@ -30,6 +31,7 @@ Most of my servers are named after norse mythology characters or from the [mnemo
 - `just bootstrap` - Does the base setup of a VM/LXC (User, Group, SSH keys, etc).
 - `just build` - Sets up a host, you can tags or skip-tags
 - `just compose` - Updates Docker Compose file on a host
+- `just nginx-update HOST` - Updates Nginx vhosts
 - `just add-submodule REPO NAME` - Installs a git repo as a submodule in roles folder with the name specified, if you do not specify it will extract the damn from the url.
 
 > [!TIP]

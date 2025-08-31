@@ -1,7 +1,6 @@
 services:
-
   changedetection:
-    image: ghcr.io/dgtlmoon/changedetection.io:0.50.10
+    image: ghcr.io/dgtlmoon/changedetection.io:0.50.11
     container_name: changedetection
     environment:
       - TZ={{ ntp_timezone }}
@@ -9,14 +8,11 @@ services:
       - BASE_URL=https://changedetection.{{ local_domain }}
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
+    ports:
+      - 5000:5000
     depends_on:
       - browserless-chrome
     restart: always
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.changedetection.rule=Host(`changedetection.{{ local_domain }}`)"
-      - "traefik.http.routers.changedetection.tls=true"
-      - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
 
   browserless-chrome:
     image: ghcr.io/browserless/chrome:v2.34.1
@@ -30,12 +26,3 @@ services:
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
     restart: always
-
-volumes:
-  media:
-    name: media
-    driver: local
-    driver_opts:
-      type: cifs
-      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666
-      device: //yggdrasil/Media

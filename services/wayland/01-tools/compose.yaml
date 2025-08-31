@@ -1,0 +1,26 @@
+services:
+  kms:
+    image: ghcr.io/py-kms-organization/py-kms
+    container_name: kms
+    hostname: kms
+    environment:
+      - TZ={{ ntp_timezone }}
+    volumes:
+      - {{ appdata_path }}/kms/db:/home/py-kms/db
+    ports:
+      - 1688:1688
+    restart: always
+  
+  speedtest:
+    image: ghcr.io/librespeed/speedtest:5.4.1
+    container_name: speedtest
+    environment:
+      - TZ={{ ntp_timezone }}
+      - MODE=standalone
+      - WEBPORT=8080
+    volumes:
+      - {{ appdata_path }}/speedtest/db:/database
+    ports:
+      - 8080:8080
+    restart: always
+      

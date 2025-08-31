@@ -32,6 +32,10 @@ build HOST *TAGS:
 compose +HOST:
     ansible-playbook run.yml --tags compose --limit {{HOST}}
 
+# Update Nginx vhosts
+nginx-update +HOST:
+    ansible-playbook run.yml --tags web,vhosts --limit {{HOST}}
+
 # Docker Container updates
 docker-update:
     ansible-playbook docker.yml 
