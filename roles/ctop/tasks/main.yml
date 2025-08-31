@@ -1,13 +1,62 @@
 ---
+- name: Check if ctop is already installed
+  ansible.builtin.stat:
+    path: "{{ ctop_install_path }}"
+  register: is_installed
 
-- name: Install ctop via apt package manager
-  include_tasks: install-debian.yml
-  when: ansible_os_family == 'Debian' and ctop_install_method == 'package_manager'
+- name: Set ctop installation fact
+  ansible.builtin.set_fact:
+    ctop_is_installed: "{{ is_installed.exists }}"
 
-# - name: Install ctop via pacman package manager
-#   include_tasks: install-pacman.yml
-#   when: ansible_pkg_mgr == 'pacman' and ctop_install_method == 'package_manager'
-# 
-# - name: Install ctop from github releases
-#   include_tasks: install-github.yml
-#   when: ctop_install_method == 'github_releases'
+- name: Check currently installed ctop version
+  ansible.builtin.shell: "{{ ctop_install_path }} -v | awk '{print $3}' | cut -f1 -d,"
+  changed_when: false
+  register: installed_version
+  when: ctop_is_installed == true
+
+- name: Get latest release
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/bcicen/ctop/releases/latest
+    url_username: "{{ github_api_user | default (omit) }}"
+    url_password: "{{ github_api_pass | default (omit) }}"
+    return_content: true
+    force_basic_auth: "{{ github_api_auth | default (omit) }}"
+  register: release_version
+  when: ctop_download_latest == true
+
+- name: Set ctop version (latest)
+  ansible.builtin.set_fact:
+    ctop_version: "{{ release_version.json.tag_name|regex_replace('v') }}"
+  when: ctop_download_latest == true
+
+- name: Set ctop version (pinned)
+  ansible.builtin.set_fact:
+    ctop_version: "{{ ctop_pinned_version }}"
+  when: ctop_download_latest == false
+
+- name: Set update fact
+  ansible.builtin.set_fact:
+    ctop_should_update: >-
+      {{ (not ctop_is_installed)
+         or (ctop_is_installed and ctop_download_latest and installed_version.stdout != ctop_version)
+         or (ctop_is_installed and not ctop_download_latest and installed_version.stdout != ctop_pinned_version) }}
+
+- block:
+    - name: Set Arch
+      vars:
+        arch_lut:
+          aarch64: arm64
+          armv6l: arm
+          armv7l: arm
+          x86_64: amd64
+      ansible.builtin.set_fact:
+        arch: "{{ arch_lut[ansible_architecture] | default(ansible_architecture) }}"
+
+    - name: Download ctop
+      ansible.builtin.get_url:
+        src: "{{ ctop_gh_url }}/v{{ ctop_version }}/ctop-{{ ctop_version }}-linux-{{ arch }}"
+        dest: "{{ ctop_install_path }}"
+        owner: root
+        group: root
+        mode: '0755'
+  when: ctop_should_update

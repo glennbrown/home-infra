@@ -1,12 +1,6 @@
 ---
-
-ctop_install_method: package_manager
-
-#Debian Details
-azlux_apt_keyurl: https://azlux.fr/repo.gpg.key
-azlux_apt_repo: http://packages.azlux.fr/debian
-azlux_apt_component: main
-debian_package_name: docker-ctop
-
-#Pacman
-pacman_package_name: ctop
+ctop_install_directory: /usr/local/bin
+ctop_install_path: "{{ ctop_install_directory }}/ctop"
+ctop_download_latest: true  # Change to 'false' to pin to a specific version
+ctop_pinned_version: 0.7.7  # Overriden by 'ctop_download_latest' variable
+ctop_gh_url: https://github.com/bcicen/ctop/releases/download
