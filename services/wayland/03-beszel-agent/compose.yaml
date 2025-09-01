@@ -6,7 +6,7 @@ services:
       TZ: {{ ntp_timezone }}
       LISTEN: 45876
       KEY: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPHT51LuNYK8Vl5cOTIxYSzNEmglPhrTWM+ThUy6sfDD'
-      TOKEN: 952759e5-897f-43fe-95c6-a53719de7cf5
+      TOKEN: {{ wayland_agent_token }}
       HUB_URL: https://beszel.home.ikgb.me
     network_mode: host
     volumes:
