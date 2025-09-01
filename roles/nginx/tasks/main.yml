@@ -6,7 +6,6 @@
 
 # Vhost configuration
 - import_tasks: vhosts.yml
-  tags: ['vhosts']
 
 # Nginx setup
 - name: Download Diffie-Hellman Parameters

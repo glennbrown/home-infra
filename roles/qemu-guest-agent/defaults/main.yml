@@ -1,0 +1,3 @@
+---
+ga_package_name: qemu-guest-agent
+ga_service_name: qemu-guest-agent.service

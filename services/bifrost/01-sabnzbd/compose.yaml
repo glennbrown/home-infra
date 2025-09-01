@@ -3,9 +3,9 @@ services:
     image: lscr.io/linuxserver/sabnzbd:4.5.2
     container_name: sabnzbd
     environment:
-      - TZ={{ ntp_timezone }}
-      - PUID={{ me.uid }}
-      - PGID={{ me.uid }}
+      TZ: {{ ntp_timezone }}
+      PUID: {{ me.uid }}
+      PGID: {{ me.uid }}
     volumes:
       - {{ appdata_path }}/sabnzbd:/config
       - {{ scratch_path }}/downloads:/downloads

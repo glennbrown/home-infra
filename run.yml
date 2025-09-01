@@ -69,6 +69,7 @@
     - role: apt-mirror
     - role: grog.package
       tags: ['packages']
+    - role: qemu-guest-agent
     - role: drivemounts
     - role: geerlingguy.docker
     - role: ctop
@@ -83,6 +84,7 @@
     - role: apt-mirror
     - role: grog.package
       tags: ['packages']
+    - role: qemu-guest-agent
     - role: ironicbadger.figurine
     - role: certbot
       tags: ['certs']
@@ -103,6 +105,28 @@
     - role: apt-mirror
     - role: grog.package
       tags: ['packages']
+    - role: qemu-guest-agent
+    - role: geerlingguy.docker
+    - role: ctop
+    - role: ironicbadger.figurine
+    - role: ironicbadger.docker-compose-generator
+      tags: ['compose']
+
+# Monitoring Server
+- hosts: heimdall
+  become: true
+  pre_tasks:
+    - name: Make sure appdata/scratch permissions are correct
+      file:
+        path: "{{ appdata_path }}"
+        state: directory
+        mode: 0775
+        group: users
+  roles:
+    - role: apt-mirror
+    - role: grog.package
+      tags: ['packages']
+    - role: qemu-guest-agent
     - role: geerlingguy.docker
     - role: ctop
     - role: ironicbadger.figurine
