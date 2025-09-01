@@ -14,4 +14,7 @@
   "extends": [
     "config:recommended"
   ]
+  "ansible-galaxy": {
+    "fileMatch": ["^galaxy-requirements\\.yml$"]
+  }
 }
