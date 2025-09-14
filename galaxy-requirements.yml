@@ -2,7 +2,7 @@
 roles:
 # Jeff Geerling's roles
 - src: geerlingguy.docker
-  version: 7.5.1
+  version: 7.5.4
 - src: geerlingguy.security
   version: 3.0.0
 - src: geerlingguy.dotfiles
