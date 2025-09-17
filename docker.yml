@@ -1,10 +1,10 @@
 ---
 
-- hosts: "{{ host }}"
+- hosts: "{{ host | split(',') }}"
   gather_facts: true
   vars_prompt:
     - name: host
-      prompt: "Host to update containers on?"
+      prompt: "Host to update containers on? (comma seperated)"
       private: no
     - name: containers_to_update
       prompt: "Containers to update? (comma seperated)"
