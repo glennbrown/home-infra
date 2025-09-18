@@ -16,3 +16,6 @@
 [submodule "roles/glennbrown.certbot"]
 	path = roles/glennbrown.certbot
 	url = git@github.com:glennbrown/ansible-role-certbot.git
+[submodule "roles/glennbrown.proxmox"]
+	path = roles/glennbrown.proxmox
+	url = git@github.com:glennbrown/ansible-role-proxmox.git
