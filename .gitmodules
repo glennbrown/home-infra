@@ -25,3 +25,6 @@
 [submodule "roles/glennbrown.mounts"]
 	path = roles/glennbrown.mounts
 	url = git@github.com:glennbrown/ansible-role-drivemounts.git
+[submodule "roles/glennbrown.nginx"]
+	path = roles/glennbrown.nginx
+	url = git@github.com:glennbrown/ansible-role-nginx.git
