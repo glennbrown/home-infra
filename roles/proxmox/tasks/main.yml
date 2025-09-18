@@ -1,9 +1,0 @@
----
-- ansible.builtin.import_tasks:
-    file: repos.yml
-
-- ansible.builtin.import_tasks:
-    file: packages.yml
-
-- ansible.builtin.import_tasks:
-    file: modules.yml
