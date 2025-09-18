@@ -22,3 +22,6 @@
 [submodule "roles/glennbrown.proxmox-nag-removal"]
 	path = roles/glennbrown.proxmox-nag-removal
 	url = git@github.com:glennbrown/ansible-role-proxmox-nag-removal.git
+[submodule "roles/glennbrown.mounts"]
+	path = roles/glennbrown.mounts
+	url = git@github.com:glennbrown/ansible-role-drivemounts.git
