@@ -10,12 +10,17 @@ homebrew_installed_packages:
 - name: btop
 - name: bun
 - name: cdrtools
+- name: colima
 - name: coreutils
 - name: cpio
 - name: cpufetch
 - name: ctop
 - name: diceware
 - name: diffutils
+- name: docker
+- name: docker-buildx
+- name: docker-compose
+- name: docker-completion
 - name: fastfetch
 - name: figurine
 - name: findutils
@@ -37,6 +42,7 @@ homebrew_installed_packages:
 - name: just
 - name: lame
 - name: lesspipe
+- name: lima-additional-guestagents
 - name: lz4
 - name: lzo
 - name: macmon
@@ -100,7 +106,6 @@ homebrew_cask_apps:
 - name: arc
 - name: automounterhelper
 - name: bbedit
-- name: docker-desktop
 - name: font-jetbrains-mono
 - name: font-jetbrains-mono-nerd-font
 - name: font-meslo-lg-nerd-font
