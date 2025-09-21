@@ -56,9 +56,6 @@ Walk through initial first boot questions, **do not sign into iCloud!**
   - Turn on application updates from the App Store
   - Turn Install security response and system files
 
-> [!TIP]
-> You can turn on Screen Sharing only if you don't intend to use Edovia Screens
-
 > [!TODO]
 > Look into Content Caching setup and moving Music Library to server
 
@@ -97,10 +94,10 @@ Ensure machine is updated to the latest patch release of MacOS
   - Setup qBittorrent
   - Setup colima and set brew service to started
   
-```console
-colima start --cpus 4 -d 100 -m 8 -z --mount-type virtiofs --vm-type vz --vz-rosetta --save-config
-colima stop
-brew services start colima
-```
+  ```console
+  colima start --cpus 4 -d 100 -m 8 -z --mount-type virtiofs --vm-type vz --vz-rosetta  --save-config
+  colima stop
+  brew services start colima
+  ```
 
 - Run playbook with tags for certs, web and compose `just build odin --tags certs,web,compose`
