@@ -5,7 +5,7 @@ services:
     environment:
       TZ: {{ ntp_timezone }}
       PUID: {{ me.uid }}
-      PGID: {{ me.uid }}
+      PGID: {{ me.gid }}
     volumes:
       - {{ appdata_path }}/prowlarr:/config
     ports:
@@ -18,16 +18,14 @@ services:
     environment:
       TZ: {{ ntp_timezone }}
       PUID: {{ me.uid }}
-      PGID: {{ me.uid }}
+      PGID: {{ me.gid }}
     volumes:
       - {{ appdata_path }}/sonarr:/config
-      - {{ scratch_path }}/downloads:/downloads
+      - {{ downloads_path }}:/downloads
       - media:{{ media_path }}
     ports:
       - 8989:8989
     depends_on:
-      - sabnzbd
-      - qbittorrent
       - prowlarr
     restart: always
       
@@ -37,15 +35,13 @@ services:
     environment:
       TZ: {{ ntp_timezone }}
       PUID: {{ me.uid }}
-      PGID: {{ me.uid }}
+      PGID: {{ me.gid }}
     volumes:
       - {{ appdata_path }}/radarr:/config
-      - {{ scratch_path }}/downloads:/downloads
+      - {{ downloads_path }}:/downloads
       - media:{{ media_path }}
     ports:
       - 7878:7878
     depends_on:
-      - sabnzbd
       - prowlarr
-      - qbittorrent
     restart: always

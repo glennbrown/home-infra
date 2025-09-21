@@ -15,11 +15,7 @@ Most of my servers are named after norse mythology characters or from the [mnemo
 
 | Name      | Type     | OS          | Description                       |
 | --------- | -------- | ----------- | -----------------------------     |
-| pve-01    | Physical | Proxmox     | Custom Server                     |
-| odin      | LXC      | Debian      | Media Servers (Plex, etc)         |
-| bifrost   | VM       | Debian      | Media distribution/collection     |
-| thor      | VM       | Debian      | Nginx Reverse Proxy               |
-| wayland   | VM       | Debian      | Tools (Changedetection, KMS, etc) |
+| odin      | LXC      | MacOS       | Mac Mini M4 Server                |
 | celtic    | VM       | Debian      | Cloud VPS                         |
 
 ## just usage

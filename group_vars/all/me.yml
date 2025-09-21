@@ -1,8 +1,9 @@
 ---
-# User info
+# User info (linux only, override in host_vars for a Mac)
 me:
   username: gbrown
   uid: 1000
+  gid: 1000
   home: /home/gbrown
   name: 'Glenn Brown'
   key: "{{ secret_gbrown_sshkey }}"

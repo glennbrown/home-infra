@@ -1,4 +1,0 @@
----
-proxmox_kernel_modules:
-  - name: nct6775 #Extra Sensors from Asus Motherboard
-  - name: drivetemp #Drive temperature sensors
