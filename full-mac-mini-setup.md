@@ -56,7 +56,7 @@ Walk through initial first boot questions, **do not sign into iCloud!**
   - Turn on application updates from the App Store
   - Turn Install security response and system files
 
-> [!TODO]
+> [!NOTE]
 > Look into Content Caching setup and moving Music Library to server
 
 ## Updates
