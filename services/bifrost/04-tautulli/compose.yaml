@@ -6,7 +6,7 @@ services:
     environment:
       TZ: {{ ntp_timezone }}
       PUID: {{ me.uid }}
-      PGID: {{ me.gid }}
+      PGID: {{ me.uid }}
     volumes:
       - {{ appdata_path }}/tautulli:/config
     ports:

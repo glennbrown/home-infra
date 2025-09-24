@@ -1,6 +1,5 @@
-ansible
-ansible-lint
-argcomplete
+ansible == 11.10.0
+argcomplete 
 yamllint
 jmespath
 wheel

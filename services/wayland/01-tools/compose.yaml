@@ -17,10 +17,10 @@ services:
     environment:
       TZ: {{ ntp_timezone }}
       MODE: standalone
-      WEBPORT: 8288
+      WEBPORT: 8080
     volumes:
       - {{ appdata_path }}/speedtest/db:/database
     ports:
-      - 8288:8288
+      - 8080:8080
     restart: always
-      
+    

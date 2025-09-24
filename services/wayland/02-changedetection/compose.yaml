@@ -4,19 +4,19 @@ services:
     container_name: changedetection
     environment:
       TZ: {{ ntp_timezone }}
-      PLAYWRIGHT_DRIVER_URL: ws://browserless-chromium:3000/chromium?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      PLAYWRIGHT_DRIVER_URL: ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
       BASE_URL: https://changedetection.{{ local_domain }}
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
     ports:
       - 5000:5000
     depends_on:
-      - browserless-chromium
+      - browserless-chrome
     restart: always
 
-  browserless-chromium:
-    image: ghcr.io/browserless/chromium:v2.35.0
-    container_name: browserless-chromium
+  browserless-chrome:
+    image: ghcr.io/browserless/chrome:v2.36.0
+    container_name: browserless-chrome
     environment:
       TZ: {{ ntp_timezone }}
       ENABLE_DEBUGGER: false
