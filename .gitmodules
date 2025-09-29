@@ -28,3 +28,6 @@
 [submodule "roles/glennbrown.nginx"]
 	path = roles/glennbrown.nginx
 	url = git@github.com:glennbrown/ansible-role-nginx.git
+[submodule "roles/glennbrown.beszel-agent"]
+	path = roles/glennbrown.beszel-agent
+	url = git@github.com:glennbrown/ansible-role-beszel-agent.git
