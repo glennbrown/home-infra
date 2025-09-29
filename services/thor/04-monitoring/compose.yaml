@@ -1,0 +1,43 @@
+services:
+  smokeping:
+    image: lscr.io/linuxserver/smokeping:2.9.0
+    container_name: smokeping
+    hostname: heimdall
+    environment:
+      TZ: {{ ntp_timezone }}
+      PUID: {{ me.uid }}
+      PGID: {{ me.gid }}
+    volumes:
+      - {{ appdata_path }}/smokeping/config:/config
+      - {{ appdata_path }}/smokeping/data:/data
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.smokeping.rule=Host(`smokeping.{{ local_domain }}`)"
+      - "traefik.http.routers.smokeping.tls=true"
+      - "traefik.http.routers.smokeping.tls.certresolver=cloudflare"
+
+  beszel:
+    image: henrygd/beszel:0.12.12
+    container_name: beszel
+    hostname: beszel
+    environment:
+      TZ: {{ ntp_timezone }}
+    volumes:
+      - {{ appdata_path }}/beszel/beszel_data:/beszel_data
+      - {{ appdata_path }}/beszel/beszel_socket:/beszel_socket
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.beszel.rule=Host(`beszel.{{ local_domain }}`)"
+      - "traefik.http.routers.beszel.tls=true"
+      - "traefik.http.routers.beszel.tls.certresolver=cloudflare"
+
+volumes:
+  media:
+    name: media
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media  

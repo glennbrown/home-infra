@@ -1,0 +1,77 @@
+services:
+  tautulli:
+    image: tautulli/tautulli:v2.16.0
+    container_name: tautulli
+    hostname: tautulli
+    environment:
+      TZ: {{ ntp_timezone }}
+      PUID: {{ me.uid }}
+      PGID: {{ me.gid }}
+    volumes:
+      - {{ appdata_path }}/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.{{ local_domain }}`)"
+      - "traefik.http.routers.tautulli.tls=true"
+      - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
+
+  kms:
+    image: ghcr.io/py-kms-organization/py-kms
+    container_name: kms
+    hostname: kms
+    environment:
+      TZ: {{ ntp_timezone }}
+    volumes:
+      - {{ appdata_path }}/kms/db:/home/py-kms/db
+    ports:
+      - 1688:1688
+    restart: unless-stopped
+  
+  speedtest:
+    image: ghcr.io/librespeed/speedtest:5.4.1
+    container_name: speedtest
+    environment:
+      TZ: {{ ntp_timezone }}
+      MODE: standalone
+    volumes:
+      - {{ appdata_path }}/speedtest/db:/database
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speedtest.rule=Host(`speedtest.{{ local_domain }}`)"
+      - "traefik.http.routers.speedtest.tls=true"
+      - "traefik.http.routers.speedtest.tls.certresolver=cloudflare"
+
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io:0.50.14
+    container_name: changedetection
+    environment:
+      TZ: {{ ntp_timezone }}
+      PLAYWRIGHT_DRIVER_URL: ws://browserless-chromium:3000/chromium?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      BASE_URL: https://changedetection.{{ local_domain }}
+    volumes:
+      - {{ appdata_path }}/changedetection:/datastore
+    depends_on:
+      - browserless-chromium
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.changedetection.rule=Host(`changedetection.{{ local_domain }}`)"
+      - "traefik.http.routers.changedetection.tls=true"
+      - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
+    
+  browserless-chromium:
+    image: ghcr.io/browserless/chromium:v2.36.0
+    container_name: browserless-chromium
+    environment:
+      TZ: {{ ntp_timezone }}
+      ENABLE_DEBUGGER: false
+      TIMEOUT: 300000
+      MAX_CONCURRENT_SESSIONS: 10
+      CHROME_REFRESH_TIME: 600000
+    volumes:
+      - {{ appdata_path }}/changedetection:/datastore
+    restart: unless-stopped

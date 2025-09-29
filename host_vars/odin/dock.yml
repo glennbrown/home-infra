@@ -1,0 +1,46 @@
+---
+dockitems_remove:
+- Mail
+- Messages
+- Maps
+- Photos
+- FaceTime
+- Calendar
+- Contacts
+- Reminders
+- Freeform
+- TV
+- Music
+- News
+- Notes
+- 'Keynote'
+- 'Numbers'
+- 'Pages'
+- 'App Store'
+- 'iPhone Mirroring'
+
+dockitems_persist:
+- name: Launchpad
+  path: "/System/Applications/Launchpad.app/"
+  pos: 1
+- name: "Arc"
+  path: "/Applications/Arc.app/"
+  pos: 2
+- name: "Zen"
+  path: "/Applications/Zen.app/"
+  pos: 3
+- name: Safari
+  path: "/Applications/Safari.app/"
+  pos: 4
+- name: 1Password
+  path: "/Applications/1Password.app/"
+  pos: 5
+- name: Ghostty
+  path: "/Applications/Ghostty.app/"
+  pos: 6
+- name: "Visual Studio Code"
+  path: "/Applications/Visual Studio Code.app/"
+  pos: 7
+- name: UTM
+  path: "/Applications/UTM.app"
+  pos: 8
