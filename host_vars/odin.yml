@@ -2,6 +2,10 @@
 # Paths
 appdata_path: '/mnt/appdata'
 media_path: '/mnt/media'
+scratch_path: '/mnt/scratch'
+
+# Traefik
+traefik_data_path: '/etc/traefik'
 
 # grog.package
 package_list_host:
@@ -36,3 +40,4 @@ drive_mounts:
       - 'gid=100'
       - 'dir_mode=0777'
       - 'file_mode=0666'
+      - '_netdev'

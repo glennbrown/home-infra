@@ -1,0 +1,16 @@
+---
+proxmox_kernel_modules:
+  - name: nct6775 #Asus Motherboard Sensors
+  - name: drivetemp #Drive temperature monitoring
+
+# Drive mounts
+automount_drives: true
+drive_mounts:
+  - mountpoint: /mnt/scratch
+    device: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1
+    fstype: btrfs
+    options:
+      - discard
+      - subvol=scratch
+      - compress=zstd:3
+      - defaults

@@ -1,0 +1,39 @@
+services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    environment:
+      TZ: {{ ntp_timezone }}
+      PLEX_CLAIM: {{ plex_claim_token }}
+      PLEX_UID: {{ me.uid }}
+      PLEX_GID: {{ me.uid }}
+    hostname: {{ ansible_hostname }}
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - {{ appdata_path }}/plexmediaserver:/config
+      - media:{{ media_path }}:ro
+    tmpfs:
+      - /transcode:mode=0777
+    restart: unless-stopped
+
+  tautulli:
+    image: tautulli/tautulli:v2.16.0
+    container_name: tautulli
+    hostname: tautulli
+    environment:
+      TZ: {{ ntp_timezone }}
+      PUID: {{ me.uid }}
+      PGID: {{ me.gid }}
+    volumes:
+      - {{ appdata_path }}/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.{{ local_domain }}`)"
+      - "traefik.http.routers.tautulli.tls=true"
+      - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
+      

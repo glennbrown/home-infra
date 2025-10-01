@@ -1,32 +1,10 @@
 ---
 # Paths
 appdata_path: '/mnt/appdata'
-media_path: '/mnt/media'
-scratch_path: '/mnt/scratch'
 
 # Traefik
 traefik_data_path: '/etc/traefik'
 
 # grog.package
 package_list_host:
-  - name: fio
-  - name: imagemagick
   - name: iperf3
-  - name: lame
-  - name: mediainfo
-  - name: socat
-
-# Drive mounts
-automount_drives: true
-drive_mounts:
-  - mountpoint: "{{ media_path }}"
-    device: "//yggdrasil/Media"
-    fstype: cifs
-    options:
-      - 'user={{ me.username }}'
-      - 'password={{ secret_synology_gbrown }}'
-      - 'uid=0'
-      - 'gid=100'
-      - 'dir_mode=0777'
-      - 'file_mode=0666'
-      - '_netdev'

@@ -57,6 +57,7 @@ package_list:
   - name: eza
   - name: fd-find
   - name: fzf
+  - name: lsd
   - name: just
   - name: ripgrep
   - name: starship

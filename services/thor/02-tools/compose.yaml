@@ -1,23 +1,4 @@
 services:
-  tautulli:
-    image: tautulli/tautulli:v2.16.0
-    container_name: tautulli
-    hostname: tautulli
-    environment:
-      TZ: {{ ntp_timezone }}
-      PUID: {{ me.uid }}
-      PGID: {{ me.gid }}
-    volumes:
-      - {{ appdata_path }}/tautulli:/config
-    ports:
-      - 8181:8181
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.{{ local_domain }}`)"
-      - "traefik.http.routers.tautulli.tls=true"
-      - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
-
   kms:
     image: ghcr.io/py-kms-organization/py-kms
     container_name: kms
@@ -36,6 +17,7 @@ services:
     environment:
       TZ: {{ ntp_timezone }}
       MODE: standalone
+      TELEMETRY: true
     volumes:
       - {{ appdata_path }}/speedtest/db:/database
     restart: unless-stopped
@@ -50,12 +32,14 @@ services:
     container_name: changedetection
     environment:
       TZ: {{ ntp_timezone }}
-      PLAYWRIGHT_DRIVER_URL: ws://browserless-chromium:3000/chromium?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      WEBDRIVER_URL: http://selenium:4444
+      #PLAYWRIGHT_DRIVER_URL: ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
       BASE_URL: https://changedetection.{{ local_domain }}
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
     depends_on:
-      - browserless-chromium
+      - browserless-chrome
+      - selenium
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -63,9 +47,9 @@ services:
       - "traefik.http.routers.changedetection.tls=true"
       - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
     
-  browserless-chromium:
-    image: ghcr.io/browserless/chromium:v2.36.0
-    container_name: browserless-chromium
+  browserless-chrome:
+    image: ghcr.io/browserless/chrome:v2.36.0
+    container_name: browserless-chrome
     environment:
       TZ: {{ ntp_timezone }}
       ENABLE_DEBUGGER: false
@@ -75,3 +59,18 @@ services:
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
     restart: unless-stopped
+
+  selenium:
+    image: selenium/standalone-chrome:138.0
+    container_name: selenium
+    environment:
+      TZ: {{ ntp_timezone }}
+      SE_NODE_MAX_SESSIONS: 4
+    shm_size: 2g
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.selenium.rule=Host(`selenium.{{ local_domain }}`)"
+      - "traefik.http.services.selenium.loadbalancer.server.port=7900"
+      - "traefik.http.routers.selenium.tls=true"
+      - "traefik.http.routers.selenium.tls.certresolver=cloudflare"

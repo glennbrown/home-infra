@@ -21,38 +21,47 @@
   roles:
     - role: grog.group
       tags: ['bootstrap']
-      when: ansible_os_family != 'Darwin'
     - role: grog.user
       tags: ['bootstrap']
-      when: ansible_os_family != 'Darwin'
     - role: grog.authorized-key
       tags: ['bootstrap']
 
-# Mac Mini Server
-- hosts: odin
+# Proxmox Server
+- hosts: pve
+  become: true
   roles:
-    - role: elliotweiser.osx-command-line-tools
-    - role: geerlingguy.mac.homebrew
-      tags: ['packages']
-    - role: geerlingguy.dotfiles
-    - role: geerlingguy.mac.mas
-      tags: ['mas']
-    - role: geerlingguy.mac.dock
-      vars:
-        homebrew_path: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
-      environment:
-        PATH: "{{ homebrew_path }}:{{ ansible_env.PATH }}"
-      tags: ['dock']
-    - role: glennbrown.macos
-      tags: ['defaults']
-    - role: glennbrown.certbot
-      tags: ['certs']
+    - role: glennbrown.mounts
+    - role: glennbrown.proxmox
+    - role: glennbrown.proxmox-nag-removal
+    - role: ironicbadger.figurine
 
-# Docker VM Host running on the Mac Mini
+# Media Collection and Distribution Server (Debian LXC)
+- hosts: odin
+  become: true
+  pre_tasks:
+    - name: Ensure appdata exists
+      file:
+        path: "{{ appdata_path }}"
+        state: directory
+        mode: 0775
+        group: users
+  roles:
+    - role: apt-mirror
+    - role: grog.package
+      tags: ['packages']
+    - role: glennbrown.mounts
+    - role: geerlingguy.docker
+    - role: ctop
+    - role: ironicbadger.figurine 
+    - role: glennbrown.traefik
+    - role: ironicbadger.docker-compose-generator
+      tags: ['compose']
+
+# Apps and Tools Server (Debian VM)
 - hosts: thor
   become: true
   pre_tasks:
-    - name: Make sure appdata/scratch permissions are correct
+    - name: Make sure appdata permissions are correct
       file:
         path: "{{ item }}"
         state: directory
@@ -60,18 +69,15 @@
         group: users
       loop:
         - "{{ appdata_path }}"
-        - "{{ scratch_path }}"
   roles:
     - role: apt-mirror
     - role: grog.package
       tags: ['packages']
     - role: qemu-guest-agent
-    - role: glennbrown.mounts
     - role: geerlingguy.docker
     - role: ctop
     - role: ironicbadger.figurine 
     - role: glennbrown.traefik
-      tags: ['proxy']
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
 
@@ -79,6 +85,7 @@
 - hosts: celtic
   become: true
   roles:
+    - role: apt-mirror
     - role: grog.package
       tags: ['packages']
     - role: geerlingguy.security

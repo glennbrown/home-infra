@@ -24,6 +24,10 @@ dotfiles_files:
   - .zshenv
   - .zprofile
 
+# Beszel Agent
+beszel_agent_sshkey: "{{ odin_agent_key }}"
+beszel_agent_token: "{{ odin_agent_token }}"
+
 # Certbot Configuration
 certbot_install_method: 'package'
 certbot_hsts: true
