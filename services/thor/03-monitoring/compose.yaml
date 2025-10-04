@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.smokeping.tls.certresolver=cloudflare"
 
   beszel:
-    image: henrygd/beszel:0.12.12
+    image: henrygd/beszel:0.13.0
     container_name: beszel
     hostname: beszel
     environment:
