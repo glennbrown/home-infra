@@ -53,6 +53,7 @@
     - role: geerlingguy.docker
     - role: ctop
     - role: ironicbadger.figurine 
+    - role: glennbrown.tailscale
     - role: glennbrown.traefik
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
