@@ -81,7 +81,7 @@
     - role: glennbrown.traefik
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
-
+      
 # Cloud VPS
 - hosts: celtic
   become: true
