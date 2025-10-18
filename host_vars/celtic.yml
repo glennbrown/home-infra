@@ -55,8 +55,6 @@ certbot_install_method: snap
 certbot_create_stop_services:
   - name: nginx
     service: systemd
-  - name: znc
-    service: docker
 certbot_certs:
 - domains:
   - "{{ public_domain_1 }}"
@@ -153,17 +151,4 @@ nginx_vhosts:
     ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_1 }}/privkey.pem;
     ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/chain.pem;
     add_header Strict-Transport-Security "max-age=63072000" always;
-- server_name: "znc.{{ public_domain_1 }}"
-  error_log: "/var/log/nginx/znc.error.log"
-  access_log: "/var/log/nginx/znc.access.log main"
-  state: present
-  filename: znc.conf
-  extra_parameters: |
-    set $upstream http://127.0.0.1:9080;
-    location / {
-      proxy_pass $upstream;
-    }
-    ssl_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ public_domain_1 }}/privkey.pem;
-    ssl_trusted_certificate /etc/letsencrypt/live/{{ public_domain_1 }}/chain.pem;
-    add_header Strict-Transport-Security "max-age=63072000" always;
+    
