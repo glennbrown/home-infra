@@ -1,19 +1,5 @@
 services:
 
-  znc:
-    image: znc:1.10.1
-    container_name: znc
-    user: 1000:1000
-    environment:
-      TZ: {{ ntp_timezone }}
-    volumes:
-      - ~/.znc:/znc-data
-      - /etc/letsencrypt:/letsencrypt:ro
-    ports:
-      - 9080:9080
-      - 46697:46697
-    restart: unless-stopped
-
   freshrss:
     image: freshrss/freshrss:1.27.1
     container_name: freshrss
