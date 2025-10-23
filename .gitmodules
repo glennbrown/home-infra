@@ -31,3 +31,6 @@
 [submodule "roles/glennbrown.beszel-agent"]
 	path = roles/glennbrown.beszel-agent
 	url = git@github.com:glennbrown/ansible-role-beszel-agent.git
+[submodule "roles/glennbrown.snapraid"]
+	path = roles/glennbrown.snapraid
+	url = git@github.com:glennbrown/ansible-role-snapraid.git
