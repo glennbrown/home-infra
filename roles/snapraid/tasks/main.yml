@@ -1,0 +1,24 @@
+---
+- name: Ensure supported OS version (Ubuntu >= 22.04 or Debian >= 11)
+  ansible.builtin.fail:
+    msg: "This role requires Ubuntu 22.04+ or Debian 11+."
+  when: >
+    (ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_version'] is version('22.04', '<')) or
+    (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_version'] is version('11', '<'))
+
+- name: Install SnapRAID
+  ansible.builtin.include_tasks: 
+    file: install-snapraid.yml
+
+- name: Configure SnapRAID
+  ansible.builtin.include_tasks: 
+    file: configure-snapraid.yml
+
+- name: snapraid-btrfs install
+  ansible.builtin.include_tasks: 
+    file: install-snapraid-btrfs.yml
+
+- name: Snapper configuration
+  ansible.builtin.include_tasks: 
+    file: snapper-config.yml
+

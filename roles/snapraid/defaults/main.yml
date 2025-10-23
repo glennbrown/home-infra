@@ -1,0 +1,56 @@
+---
+
+snapraid_packages: 
+  - name: snapraid
+  - name: snapper
+  
+snapraid_excludes_extras: []
+snapraid_data_disks: []
+snapraid_parity_disks: []
+snapraid_content_files: []
+
+#Healthcheck.io settings
+snapraid_runner_healthcheck_io_uuid: ""
+snapraid_healthcheck_io_host: https://hc-ping.com
+
+# SnapRAID configuration path
+snapraid_config_path: /etc/snapraid.conf
+
+# Paths to executables
+snapraid_btrfs_path: '/usr/local/bin/snapraid-btrfs'
+snapper_bin_path: '/usr/bin/snapper'
+snapraid_bin_path: '/usr/bin/snapraid'
+
+# snapraid-btrfs-runner settings
+snapraid_runner_path: '/opt/snapraid-btrfs-runner'
+snapraid_runner_conf: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.conf.conf"
+snapraid_runner_bin: "{{ snapraid_runner_path }}/snapraid-btrfs-runner.py"
+snapraid_runner_command: "{{ ansible_python.executable }} {{ snapraid_runner_bin }} -c {{ snapraid_runner_conf }}"
+snapraid_btrfs_pool: false
+snapraid_btrfs_cleanup: true
+snapraid_runner_delete_threshold: 250
+snapraid_runner_touch: true
+
+# Logging
+#snapraid_logging_file: /var/log/snapraid.log
+#snapraid_logging_maxsize: 5000
+
+# Scrub settings
+snapraid_runner_scrub: true
+snapraid_scrub_percent: 22
+snapraid_scrub_age: 8
+
+#Mail Settings
+snapraid_runner_email_sendon: "error"
+snapraid_runner_email_address: ""
+snapraid_runner_email_password: ""
+snapraid_runner_email_from: "{{ snapraid_runner_email_address }}"
+snapraid_running_email_to: "{{ snapraid_runner_email_address }}"
+
+# SMTP Settings
+snapraid_runner_smtp_host: smtp.gmail.com
+snapraid_runner_smtp_port: 587
+snapraid_runner_use_ssl: false
+snapraid_runner_use_tls: true
+snapraid_runner_smtp_user: "{{ snapraid_runner_email_address }}"
+snapraid_runner_smtp_password: "{{ snapraid_runner_email_password }}"

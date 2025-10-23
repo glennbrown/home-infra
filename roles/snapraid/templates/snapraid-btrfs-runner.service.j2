@@ -1,0 +1,8 @@
+[Unit]
+Description=Execute snapraid-btrfs-runner
+
+[Service]
+Type=oneshot
+{% if snapraid_runner_healthcheck_io_uuid %}ExecStartPre=/usr/bin/curl -sS -m 10 --retry 5 -o /dev/null {{ snapraid_healthcheck_io_host }}/{{ snapraid_runner_healthcheck_io_uuid }}/start{% endif %}
+ExecStart={{ snapraid_runner_command }}
+{% if snapraid_runner_healthcheck_io_uuid %}ExecStopPost=/usr/bin/curl -sS -m 10 --retry 5 -o /dev/null {{ snapraid_healthcheck_io_host }}/{{ snapraid_runner_healthcheck_io_uuid }}/$EXIT_STATUS{% endif %}

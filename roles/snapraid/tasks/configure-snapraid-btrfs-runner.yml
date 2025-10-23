@@ -1,0 +1,47 @@
+---
+- name: Clone snapraid-btrfs-runner repository
+  ansible.builtin.git:
+    repo: https://github.com/fmoledina/snapraid-btrfs-runner.git
+    dest: "{{ snapraid_runner_path }}"
+    update: true
+    force: true
+
+- name: Copy and configure snapraid-btrfs-runner.conf
+  ansible.builtin.template:
+    src: snapraid-btrfs-runner.j2
+    dest: "{{ snapraid_runner_conf }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create snapraid-btrfs-runner systemd service
+  ansible.builtin.template:
+    src: snapraid-btrfs-runner.service.j2
+    dest: /etc/systemd/system/snapraid-btrfs-runner.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create snapraid-btrfs-runner timer
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/snapraid-btrfs-runner.timer
+    content: |
+      [Unit]
+      Description=Run snapraid-btrfs-runner every day at 02:00
+
+      [Timer]
+      OnCalendar=*-*-* 02:00:00
+      RandomizedDelaySec=30m
+
+      [Install]
+      WantedBy=timers.target
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start snapraid-btrfs-runner timer
+  ansible.builtin.systemd_service:
+    name: snapraid-btrfs-runner.timer
+    enabled: true
+    state: started
+    daemon_reload: true

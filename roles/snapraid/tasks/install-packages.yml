@@ -1,0 +1,7 @@
+---
+- name: Install SnapRAID
+  apt:
+    name: "{{ item.name }}"
+    state: present
+    update_cache: yes
+  loop: "{{ snapraid_packages }}"

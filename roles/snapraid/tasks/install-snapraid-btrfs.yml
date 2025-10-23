@@ -1,0 +1,13 @@
+---
+- name: Clone or update snapraid-btrfs repository
+  ansible.builtin.git:
+    repo: https://github.com/automorphism88/snapraid-btrfs.git
+    dest: /usr/local/src/snapraid-btrfs
+    update: true
+
+- name: Copy snapraid-btrfs script to /usr/local/bin
+  ansible.builtin.copy:
+    src: /usr/local/src/snapraid-btrfs/snapraid-btrfs
+    dest: "{{ snapraid_btrfs_executable}}"
+    mode: "0755"
+    remote_src: true
