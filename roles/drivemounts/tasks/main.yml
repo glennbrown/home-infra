@@ -1,0 +1,53 @@
+---
+# tasks file for ansible-role-drivemounts
+- name: Ensure helper packages for various filesytems is installed
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - btrfs-progs
+    - xfsprogs
+    - e2fsprogs
+    - jfsutils
+    - cifs-utils
+    - nfs-common
+
+- name: Install mergerfs if needed
+  ansible.builtin.package:
+    name: mergerfs
+    state: present
+  when: drive_mounts | selectattr('fstype', 'eq', 'mergerfs') | list | count > 0
+
+- name: Check if mount directories exist
+  ansible.builtin.stat:
+    path: "{{ item.mountpoint }}"
+  register: directory_check
+  loop: "{{ drive_mounts }}"
+  loop_control:
+    label: "{{ item.mountpoint }}"
+    index_var: idx
+  when: drive_mounts is defined
+
+- name: Create mount directories if they don't exist
+  ansible.builtin.file:
+    path: "{{ item.mountpoint }}"
+    state: directory
+  loop: "{{ drive_mounts }}"
+  loop_control:
+    label: "{{ item.mountpoint }}"
+    index_var: idx
+  when: 
+    - drive_mounts is defined
+    - not directory_check.results[idx].stat.exists
+
+- name: Configure drives in fstab
+  ansible.posix.mount:
+    path: "{{ item.mountpoint }}"
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.options | default(['defaults']) | join(',') }}"
+    state: "{{ item.state | default('mounted') }}"
+  loop: "{{ drive_mounts }}"
+  loop_control:
+    label: "{{ item.mountpoint }}"
+  when: drive_mounts is defined
