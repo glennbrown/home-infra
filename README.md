@@ -15,8 +15,7 @@ Most of my servers are named after norse mythology characters or from the [mnemo
 
 | Name      | Type     | OS          | Description                       |
 | --------- | -------- | ----------- | -----------------------------     |
-| odin      | Physial  | MacOS       | Mac Mini M4 Server                |
-| thor      | VM       | Debian      | Docker VM Host                    |
+| odin      | Physical  | Debian     |                 |
 | celtic    | VM       | Debian      | Cloud VPS                         |
 
 ## just usage

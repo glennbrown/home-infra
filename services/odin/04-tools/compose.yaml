@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
   
   speedtest:
-    image: ghcr.io/librespeed/speedtest:5.4.1
+    image: ghcr.io/librespeed/speedtest:latest
     container_name: speedtest
     environment:
       TZ: {{ ntp_timezone }}
@@ -24,22 +24,22 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.speedtest.rule=Host(`speedtest.{{ local_domain }}`)"
+      - "traefik.http.services.speedtest.loadbalancer.server.port=8080"
       - "traefik.http.routers.speedtest.tls=true"
       - "traefik.http.routers.speedtest.tls.certresolver=cloudflare"
 
   changedetection:
-    image: ghcr.io/dgtlmoon/changedetection.io:0.50.23
+    image: ghcr.io/dgtlmoon/changedetection.io:latest
     container_name: changedetection
     environment:
       TZ: {{ ntp_timezone }}
-      WEBDRIVER_URL: http://selenium:4444
-      #PLAYWRIGHT_DRIVER_URL: ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      #WEBDRIVER_URL: http://selenium:4444
+      PLAYWRIGHT_DRIVER_URL: ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
       BASE_URL: https://changedetection.{{ local_domain }}
     volumes:
       - {{ appdata_path }}/changedetection:/datastore
     depends_on:
       - browserless-chrome
-      - selenium
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -48,7 +48,7 @@ services:
       - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
     
   browserless-chrome:
-    image: ghcr.io/browserless/chrome:v2.37.1
+    image: ghcr.io/browserless/chrome:latest
     container_name: browserless-chrome
     environment:
       TZ: {{ ntp_timezone }}
@@ -61,7 +61,7 @@ services:
     restart: unless-stopped
 
   selenium:
-    image: selenium/standalone-chrome:141.0
+    image: selenium/standalone-chrome:latest
     container_name: selenium
     environment:
       TZ: {{ ntp_timezone }}

@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:3.5.3
+    image: traefik:latest
     container_name: traefik
     environment:
       TZ: {{ ntp_timezone }}
@@ -39,7 +39,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik-secure.entrypoints=websecure"
-      - "traefik.http.routers.traefik-secure.rule=Host(`odin.{{ local_domain }}`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`{{ ansible_hostname }}.{{ local_domain }}`)"
       - "traefik.http.routers.traefik-secure.service=api@internal"
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.tls=true"

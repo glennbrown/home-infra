@@ -2,7 +2,7 @@
 # Paths
 appdata_path: '/mnt/appdata'
 media_path: '/mnt/media'
-scratch_path: '/mnt/scratch'
+scratch_path: '/mnt/nvme1/scratch'
 
 # Traefik
 traefik_data_path: '/etc/traefik'
@@ -30,6 +30,13 @@ package_list_host:
 # Drive mounts
 automount_drives: true
 drive_mounts:
+  - mountpoint: /mnt/nvme1
+    device: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1
+    fstype: btrfs
+    options:
+      - 'discard'
+      - 'compress=zstd:3'
+      - 'defaults'
   - mountpoint: /mnt/media
     device: "//yggdrasil/Media"
     fstype: cifs

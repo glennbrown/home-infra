@@ -1,7 +1,7 @@
 services:
 
   freshrss:
-    image: freshrss/freshrss:1.27.1
+    image: freshrss/freshrss:latest
     container_name: freshrss
     environment:
       TZ: {{ ntp_timezone }}
@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
   
   gokapi:
-    image: f0rc3/gokapi:v2.1.0
+    image: f0rc3/gokapi:latest
     container_name: gokapi
     environment:
       TZ: {{ ntp_timezone }}
@@ -24,4 +24,3 @@ services:
     ports:
       - 53842:53842
     restart: unless-stopped
-    

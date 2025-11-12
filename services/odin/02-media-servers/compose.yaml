@@ -1,13 +1,12 @@
 services:
   plex:
-    image: plexinc/pms-docker
+    image: plexinc/pms-docker:latest
     container_name: plex
     environment:
       TZ: {{ ntp_timezone }}
       PLEX_CLAIM: {{ plex_claim_token }}
       PLEX_UID: {{ me.uid }}
       PLEX_GID: {{ me.uid }}
-    hostname: {{ ansible_hostname }}
     network_mode: host
     devices:
       - /dev/dri:/dev/dri
@@ -19,7 +18,7 @@ services:
     restart: unless-stopped
 
   tautulli:
-    image: tautulli/tautulli:v2.16.0
+    image: tautulli/tautulli:latest
     container_name: tautulli
     hostname: tautulli
     environment:

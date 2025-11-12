@@ -1,6 +1,7 @@
 services:
+
   smokeping:
-    image: lscr.io/linuxserver/smokeping:2.9.0
+    image: lscr.io/linuxserver/smokeping:latest
     container_name: smokeping
     hostname: heimdall
     environment:
@@ -18,7 +19,7 @@ services:
       - "traefik.http.routers.smokeping.tls.certresolver=cloudflare"
 
   beszel:
-    image: henrygd/beszel:0.13.2
+    image: henrygd/beszel:latest
     container_name: beszel
     hostname: beszel
     environment:
@@ -32,18 +33,28 @@ services:
       - "traefik.http.routers.beszel.rule=Host(`beszel.{{ local_domain }}`)"
       - "traefik.http.routers.beszel.tls=true"
       - "traefik.http.routers.beszel.tls.certresolver=cloudflare"
-
+      
   beszel-agent:
-    image: henrygd/beszel-agent:0.13.2
+    image: henrygd/beszel-agent:latest
     container_name: beszel-agent
     environment:
+      TZ: {{ ntp_timezone }}
       LISTEN: 45876
-      KEY: {{ thor_agent_key }}
-      TOKEN: {{ thor_agent_token }}
+      KEY: {{ odin_agent_key }}
+      TOKEN: {{ odin_agent_token }}
       HUB_URL: https://beszel.home.ikgb.me
     network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - {{ appdata_path }}/beszel/beszel_agent_data:/var/lib/beszel-agent
+      - /mnt/nvme1:/extra-filesystems/nvme1:ro
     restart: unless-stopped
-    
+
+volumes:
+  media:
+    name: media
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username={{ me.username }},password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666
+      device: //yggdrasil/Media

@@ -26,16 +26,7 @@
     - role: grog.authorized-key
       tags: ['bootstrap']
 
-# Proxmox Server
-- hosts: pve
-  become: true
-  roles:
-    - role: glennbrown.mounts
-    - role: glennbrown.proxmox
-    - role: glennbrown.proxmox-nag-removal
-    - role: ironicbadger.figurine
-
-# Media Collection and Distribution Server (Debian LXC)
+# Media Collection and Distribution Server (Debian)
 - hosts: odin
   become: true
   pre_tasks:
@@ -57,34 +48,17 @@
     - role: glennbrown.traefik
     - role: ironicbadger.docker-compose-generator
       tags: ['compose']
-
-# Apps and Tools Server (Debian VM)
-- hosts: thor
-  become: true
-  pre_tasks:
-    - name: Make sure appdata permissions are correct
-      file:
-        path: "{{ item }}"
-        state: directory
-        mode: 0775
-        group: users
-      loop:
-        - "{{ appdata_path }}"
-  roles:
-    - role: apt-mirror
-    - role: grog.package
-      tags: ['packages']
-    - role: qemu-guest-agent
-    - role: geerlingguy.docker
-    - role: ctop
-    - role: ironicbadger.figurine 
-    - role: glennbrown.traefik
-    - role: ironicbadger.docker-compose-generator
-      tags: ['compose']
       
 # Cloud VPS
 - hosts: celtic
   become: true
+  pre_tasks:
+    - name: Ensure appdata exists
+      file:
+        path: "{{ appdata_path }}"
+        state: directory
+        mode: 0775
+        group: users
   roles:
     - role: apt-mirror
     - role: grog.package
