@@ -2,7 +2,7 @@
 roles:
 # Jeff Geerling's roles
 - src: geerlingguy.docker
-  version: 7.6.0
+  version: 7.9.0
 - src: geerlingguy.security
   version: 3.0.0
 # Alex Kretzschmar's roles
