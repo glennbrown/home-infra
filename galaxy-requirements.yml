@@ -2,9 +2,11 @@
 roles:
 # Jeff Geerling's roles
 - src: geerlingguy.docker
-  version: 7.6.0
+  version: 7.9.0
 - src: geerlingguy.security
   version: 3.0.0
+- src: geerlingguy.dotfiles
+  version: 1.3.2
 # Alex Kretzschmar's roles
 - src: https://github.com/ironicbadger/ansible-role-figurine.git
   name: ironicbadger.figurine
@@ -21,3 +23,9 @@ roles:
   version: v1.1.2
 - src: grog.authorized-key
   version: v1.1.5
+
+collections:
+- name: geerlingguy.mac
+  source: https://github.com/glennbrown/ansible-collection-mac
+  type: git
+  version: mas_fix

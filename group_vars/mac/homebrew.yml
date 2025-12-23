@@ -1,0 +1,2 @@
+homebrew_user: "{{ me.username }}"
+homebrew_group: admin

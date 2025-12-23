@@ -1,0 +1,14 @@
+services:
+  tautulli:
+    image: tautulli/tautulli:v2.16.0
+    container_name: tautulli
+    hostname: tautulli
+    environment:
+      TZ: {{ ntp_timezone }}
+      PUID: {{ me.uid }}
+      PGID: {{ me.gid }}
+    volumes:
+      - {{ appdata_path }}/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped

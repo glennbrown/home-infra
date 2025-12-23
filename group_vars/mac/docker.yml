@@ -1,0 +1,9 @@
+---
+# Paths
+appdata_path: "{{ me.home }}/docker"
+downloads_path: "/Volumes/WarpCore/scratch/downloads"
+media_path: "/Volumes/Media"
+
+docker_compose_generator_uid: "{{ me.uid }}"
+docker_compose_generator_gid: "{{ me.gid }}"
+docker_compose_generator_output_path: "{{ me.home }}"

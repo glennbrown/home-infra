@@ -1,0 +1,44 @@
+services:
+
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io:0.51.4
+    container_name: changedetection
+    environment:
+      TZ: {{ ntp_timezone }}
+      #WEBDRIVER_URL: http://selenium:4444
+      PLAYWRIGHT_DRIVER_URL: ws://browserless-chromium:3000/chromium?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      BASE_URL: https://changedetection.{{ local_domain }}
+    volumes:
+      - {{ appdata_path }}/changedetection:/datastore
+    ports:
+      - 5000:5000
+    depends_on:
+      - browserless-chromium
+    restart: unless-stopped
+    
+  browserless-chromium:
+    image: ghcr.io/browserless/chromium:v2.38.2
+    container_name: browserless-chromium
+    environment:
+      TZ: {{ ntp_timezone }}
+      ENABLE_DEBUGGER: false
+      TIMEOUT: 300000
+      MAX_CONCURRENT_SESSIONS: 10
+      CHROME_REFRESH_TIME: 600000
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+
+  selenium:
+    image: selenium/standalone-chrome:142.0
+    container_name: selenium
+    environment:
+      TZ: {{ ntp_timezone }}
+      SE_NODE_MAX_SESSIONS: 4
+    platform: linux/amd64
+    shm_size: 2g
+    ports:
+      - 7900:7900
+      - 4444:4444
+    restart: unless-stopped
+    

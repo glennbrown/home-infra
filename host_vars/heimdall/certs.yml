@@ -1,0 +1,11 @@
+---
+# Certbot Configuration
+certbot_install_method: 'package'
+certbot_create_stop_services:
+  - name: nginx
+    service: brew
+certbot_hsts: true
+certbot_certs:
+  - domains:
+      - "{{ local_domain }}"
+      - "*.{{ local_domain }}"

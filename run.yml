@@ -1,4 +1,6 @@
 ---
+
+# Configuration for all servers
 - hosts: all
   become: true
   tasks:
@@ -17,14 +19,50 @@
         - 10-help-text
         - 88-esm-announce
         - 91-contract-ua-esm-status
-      when: ansible_distribution == 'Ubuntu'
+      when: ansible_facts.distribution == 'Ubuntu'
   roles:
     - role: grog.group
       tags: ['bootstrap']
+      when: ansible_facts.os_family == 'Linux'
     - role: grog.user
       tags: ['bootstrap']
+      when: ansible_facts.os_family == 'Linux'
     - role: grog.authorized-key
       tags: ['bootstrap']
+
+# Proxmox Configuration
+- hosts: proxmox
+  become: true
+  roles:
+    - role: glennbrown.mounts
+    - role: glennbrown.proxmox
+    - role: glennbrown.proxmox-nag-removal
+
+# M4 Mac Mini Server
+- hosts: heimdall
+  roles:
+    - role: geerlingguy.mac.homebrew
+      tags: ['packages']
+    - role: geerlingguy.mac.mas
+      tags: ['packages']
+    - role: geerlingguy.mac.dock
+      vars:
+        homebrew_path: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
+      environment:
+        PATH: "{{ homebrew_path }}:{{ ansible_facts.env.PATH }}"
+      tags: ['dock'] 
+    - role: glennbrown.macos
+      when: macos_default_settings is defined and macos_default_settings | length > 0
+      tags: ['defaults']
+    - role: geerlingguy.dotfiles
+    - role: glennbrown.colima
+      tags: ['colima']
+    - role: glennbrown.certbot
+      tags: ['certs']
+    - role: glennbrown.nginx
+      tags: ['web'] 
+    - role: ironicbadger.docker-compose-generator
+      tags: ['compose']
 
 # Media Collection and Distribution Server (Debian)
 - hosts: odin

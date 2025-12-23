@@ -1,0 +1,4 @@
+authorized_key_list_group:
+- name: root
+  authorized_keys:
+  - key: "{{ secret_root_sshkey }}"

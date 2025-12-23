@@ -5,5 +5,5 @@ docker_users:
 
 # ironicbadger.docker-compose-generator
 docker_compose_generator_uid: "{{ me.uid }}"
-docker_compose_generator_gid: "{{ me.uid }}"
+docker_compose_generator_gid: "{{ me.gid }}"
 docker_compose_generator_output_path: "{{ me.home }}"

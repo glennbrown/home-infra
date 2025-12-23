@@ -1,0 +1,14 @@
+services:
+
+  speedtest:
+    image: ghcr.io/librespeed/speedtest:newdesign-alpine
+    container_name: speedtest
+    environment:
+      TZ: {{ ntp_timezone }}
+      MODE: standalone
+      WEBPORT: 8288
+    volumes:
+      - {{ appdata_path }}/speedtest/db:/database
+    ports:
+      - 8288:8288
+    restart: unless-stopped

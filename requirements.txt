@@ -1,4 +1,5 @@
-ansible ==11.11.0
+ansible
+ansible-lint
 argcomplete 
 yamllint
 jmespath
