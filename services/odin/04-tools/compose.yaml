@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
   
   speedtest:
-    image: ghcr.io/librespeed/speedtest:latest
+    image: ghcr.io/librespeed/speedtest:newdesign-alpine
     container_name: speedtest
     environment:
       TZ: {{ ntp_timezone }}
@@ -29,7 +29,7 @@ services:
       - "traefik.http.routers.speedtest.tls.certresolver=cloudflare"
 
   changedetection:
-    image: ghcr.io/dgtlmoon/changedetection.io:latest
+    image: ghcr.io/dgtlmoon/changedetection.io:0.51.4
     container_name: changedetection
     environment:
       TZ: {{ ntp_timezone }}
@@ -48,7 +48,7 @@ services:
       - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
     
   browserless-chrome:
-    image: ghcr.io/browserless/chrome:latest
+    image: ghcr.io/browserless/chrome:v2.38.2
     container_name: browserless-chrome
     environment:
       TZ: {{ ntp_timezone }}
@@ -56,18 +56,21 @@ services:
       TIMEOUT: 300000
       MAX_CONCURRENT_SESSIONS: 10
       CHROME_REFRESH_TIME: 600000
-    volumes:
-      - {{ appdata_path }}/changedetection:/datastore
+    ports:
+      - 3000:3000
     restart: unless-stopped
 
   selenium:
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome:143.0
     container_name: selenium
     environment:
       TZ: {{ ntp_timezone }}
       SE_NODE_MAX_SESSIONS: 4
     shm_size: 2g
     restart: unless-stopped
+    ports:
+      - 7900:7900
+      - 4444:4444
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.selenium.rule=Host(`selenium.{{ local_domain }}`)"
