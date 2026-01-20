@@ -29,7 +29,7 @@ services:
       - "traefik.http.routers.speedtest.tls.certresolver=cloudflare"
 
   changedetection:
-    image: ghcr.io/dgtlmoon/changedetection.io:0.51.4
+    image: ghcr.io/dgtlmoon/changedetection.io:0.52.8
     container_name: changedetection
     environment:
       TZ: {{ ntp_timezone }}
