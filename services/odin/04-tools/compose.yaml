@@ -61,7 +61,7 @@ services:
     restart: unless-stopped
 
   selenium:
-    image: selenium/standalone-chrome:143.0
+    image: selenium/standalone-chrome:144.0
     container_name: selenium
     environment:
       TZ: {{ ntp_timezone }}
