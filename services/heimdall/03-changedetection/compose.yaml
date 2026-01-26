@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
     
   browserless-chromium:
-    image: ghcr.io/browserless/chromium:v2.38.2
+    image: ghcr.io/browserless/chromium:v2.38.4
     container_name: browserless-chromium
     environment:
       TZ: {{ ntp_timezone }}
