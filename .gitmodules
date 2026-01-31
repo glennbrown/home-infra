@@ -34,3 +34,6 @@
 [submodule "roles/glennbrown.colima"]
 	path = roles/glennbrown.colima
 	url = git@github.com:glennbrown/ansible-role-colima.git
+[submodule "roles/glennbrown.dotfiles"]
+	path = roles/glennbrown.dotfiles
+	url = git@github.com:glennbrown/ansible-role-dotfiles.git
