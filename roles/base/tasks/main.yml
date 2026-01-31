@@ -1,0 +1,6 @@
+---
+- name: User Account Setup
+  include_tasks: user.yml
+
+- name: SSH Setup
+  include_tasks: ssh.yml

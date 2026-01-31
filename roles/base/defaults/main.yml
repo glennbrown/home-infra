@@ -1,0 +1,8 @@
+---
+sudo_group: >-
+  {% if ansible_facts.os_family == 'Darwin' %}admin
+  {% elif ansible_facts.os_family == 'Debian' %}sudo
+  {% else %}wheel
+  {% endif %}
+
+openssh_package: "{{ 'openssh-server' if ansible_facts.os_family in ['Debian', 'RedHat'] else 'openssh' }}"

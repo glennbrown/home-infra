@@ -1,0 +1,25 @@
+---
+# MacOS ships with OpenSSH
+- name: Install OpenSSH server
+  ansible.builtin.package:
+    name: "{{ openssh_package }}"
+    state: present
+  when: ansible_facts.system == 'Linux'
+
+- name: Setup personal ssh public key
+  ansible.posix.authorized_key:
+    user: "{{ me.username }}"
+    state: present
+    key: "{{ me.key }}"
+
+- name: Setup root ssh public_key
+  ansible.posix.authorized_key:
+    user: root
+    state: present
+    key: "{{ ssh_publickey_root }}"
+
+- name: Enable SSH
+  ansible.builtin.systemd_service:
+    name: sshd
+    state: started
+    enabled: yes

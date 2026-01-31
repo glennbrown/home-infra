@@ -1,9 +1,19 @@
 ---
 # User info (linux only, override in host_vars for a Mac)
 me:
+  name: "Glenn Brown"
   username: gbrown
   uid: 1000
   gid: 1000
+  extra_groups:
+    - adm
+    - users
+    - cdrom
+    - dip
+    - plugdev
+    - video
+    - renderer
+  password: "{{ secret_gbrown_pass }}"
+  shell: /bin/bash
   home: /home/gbrown
-  name: 'Glenn Brown'
-  key: "{{ secret_gbrown_sshkey }}"
+  key: "{{ ssh_publickey_gbrown }}"

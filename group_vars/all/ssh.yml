@@ -1,0 +1,6 @@
+---
+# SSH Public Keys
+ssh_publickey_gbrown: |
+  ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJOIn65QKnSHSrYCfRf93IXv0q8ncEITSNHUm1ICzWiZ
+ssh_publickey_root: |
+  ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM83KiUXeYTAIaGxPl6yv/t/R01rRLlhIHO4zuI0zHTb

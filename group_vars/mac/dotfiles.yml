@@ -1,0 +1,24 @@
+---
+# Dotfiles
+dotfiles_repo: "https://github.com/glennbrown/dotfiles.git"
+dotfiles_files:
+  - src: mac/zprofile
+    dest: .zprofile
+  - src: mac/zshrc
+    dest: .zshrc
+  - src: mac/aliases
+    dest: .aliases
+  - src: dircolors
+    dest: .dircolors
+  - src: inputrc
+    dest: .inputrc
+  - src: mac/profile
+    dest: .profile
+  - src: mac/bashrc
+    dest: .bashrc
+  - src: mac/nanorc
+    dest: .nanorc
+  - src: mac/ghostty
+    dest: .config/ghostty
+  - src: starship/starship.toml
+    dest: .config/starship.toml

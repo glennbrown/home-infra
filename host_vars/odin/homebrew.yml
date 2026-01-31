@@ -1,0 +1,124 @@
+---
+homebrew_taps:
+  - glennbrown/tap
+  - oven-sh/bun
+  - teamookla/speedtest
+  - valkyrie00/bbrew
+
+homebrew_installed_packages:
+  - name: bash
+  - name: bash-completion@2
+  - name: bbrew
+  - name: btop
+  - name: bun
+  - name: cdrtools
+  - name: coreutils
+  - name: cpio
+  - name: ctop
+  - name: diceware
+  - name: diffutils
+  - name: fastfetch
+  - name: findutils
+  - name: fio
+  - name: ffmpeg
+  - name: flac
+  - name: gawk
+  - name: gcc
+  - name: gh
+  - name: gnu-sed
+  - name: gnu-tar
+  - name: go
+  - name: grep
+  - name: htop
+  - name: imagemagick
+  - name: inxi
+  - name: iperf3
+  - name: jq
+  - name: lame
+  - name: lesspipe
+  - name: lz4
+  - name: lzo
+  - name: macmon
+  - name: mactop
+  - name: media-info
+  - name: nano
+  - name: nanorc
+  - name: ncurses
+  - name: nmap
+  - name: perl
+  - name: php
+  - name: pipx
+  - name: pv
+  - name: python@3.12
+  - name: python@3.13
+  - name: python@3.14
+  - name: qemu
+  - name: ruby
+  - name: screenresolution
+  - name: smartmontools
+  - name: snappy
+  - name: socat
+  - name: sqlite
+  - name: sshpass
+  - name: svt-av1
+  - name: teamookla/speedtest/speedtest
+  - name: tmux
+  - name: usbutils
+  - name: webp
+  - name: wget
+  - name: when
+  - name: x264
+  - name: x265
+  - name: xvid
+  - name: xz
+  - name: yt-dlp
+  - name: zsh-autosuggestions
+  - name: zsh-completions # Install upsteam head version
+    state: head
+  - name: zsh-history-substring-search
+  - name: zstd
+  # Rust Tools
+  - name: diffr # Modern Unix `diff`
+  - name: difftastic # Modern Unix `diff`
+  - name: dua-cli # Modern Unix `du`
+  - name: duf # Modern Unix `df`
+  - name: dust # Modern du
+  - name: eza # Modern `ls` replacement
+  - name: fd # Find replacement
+  - name: fzf # Fuzzy finder
+  - name: lsd # Modern `ls` replacement
+  - name: just # Command runner
+  - name: procs # Modern replacement for ps
+  - name: ripgrep # Modern grep replacement
+  - name: starship # Prompt bling
+  - name: tealdeer # Rust re-write of tldr which are community based manpages
+  - name: uutils-diffutils # Rust rewrite of diffutils
+  - name: uutils-findutils #Rust rewrite of findutils
+  - name: uv # Pip/virtualenv replacement
+  - name: zoxide # Modern cd replacment
+
+homebrew_cask_apps:
+  - name: 1password
+  - name: 1password-cli
+  - name: automounterhelper
+  - name: bbedit
+  - name: chatgpt
+  - name: claude
+  - name: claude-code
+  - name: font-fira-code-nerd-font
+  - name: font-fira-mono-nerd-font
+  - name: font-im-writing-nerd-font
+  - name: font-jetbrains-mono
+  - name: font-jetbrains-mono-nerd-font
+  - name: font-meslo-lg-nerd-font
+  - name: font-sf-mono-nerd-font-ligaturized
+  - name: ghostty
+  - name: google-chrome
+  - name: grandperspective
+  - name: hazel
+  - name: keka
+  - name: kekaexternalhelper
+  - name: plex-media-server
+  - name: timemachineeditor
+  - name: utm
+  - name: zed

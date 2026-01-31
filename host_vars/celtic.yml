@@ -6,12 +6,6 @@ ansible_ssh_port: "{{ cloud_ssh_port }}"
 # Docker AppData
 appdata_path: /mnt/appdata
 
-# User information
-me:
-  username: gbrown
-  uid: 1000
-  home: /home/gbrown
-
 package_list_host:
 - name: acl
 - name: goaccess

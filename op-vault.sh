@@ -4,7 +4,7 @@
 set -e
 
 # Load 1Password Service Account Token
-source ~/.op-service-account
+source ~/Documents/Apps/Config/ansible/op-service-account.sh
 
 # Item and Vault names
 OP_VAULT="Ansible Secrets"

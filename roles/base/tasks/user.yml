@@ -1,0 +1,25 @@
+---
+- name: Create user group (linux only)
+  ansible.builtin.group:
+    name: "{{ me.username}}"
+    gid: "{{ me.gid }}"
+  when: ansible_facts.system == 'Linux'
+
+- name: Create user account
+  ansible.builtin.user:
+    name: "{{ me.username }}"
+    comment: "{{ me.name }}"
+    uid: "{{ me.uid }}"
+    group: "{{ 'staff' if ansible_facts.os_family == 'Darwin' else me.username }}"
+    password: "{{ omit if ansible_facts.os_family == 'Darwin' else secret_gbrown_pass }}"
+    groups: "{{ me.extra_groups | default(omit) }}"
+    home: "{{ me.home }}"
+    shell: "{{ me.shell }}"
+    update_password: on_create
+    append: true
+
+- name: Grant sudo access via OS-specific group
+  ansible.builtin.user:
+    name: "{{ me.username }}"
+    groups: "{{ sudo_group }}"
+    append: yes
