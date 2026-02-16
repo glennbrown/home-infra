@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   tautulli:
-    image: tautulli/tautulli:v2.16.0
+    image: tautulli/tautulli:v2.16.1
     container_name: tautulli
     hostname: tautulli
     environment:
