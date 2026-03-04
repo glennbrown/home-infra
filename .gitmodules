@@ -37,3 +37,6 @@
 [submodule "roles/glennbrown.dotfiles"]
 	path = roles/glennbrown.dotfiles
 	url = git@github.com:glennbrown/ansible-role-dotfiles.git
+[submodule "roles/glennbrown.packages"]
+	path = roles/glennbrown.packages
+	url = git@github.com:glennbrown/ansible-role-packages.git
