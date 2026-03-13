@@ -1,15 +1,23 @@
 ---
 # Configuration for all servers
 - hosts: all
+  become: true
   pre_tasks:
     - name: Set Timezone
-      become: true
       community.general.timezone:
         name: "{{ ntp_timezone }}"
       tags: ["bootstrap"]
   roles:
     - role: base
       tags: ["bootstrap"]
+      when: "'proxmox' not in group_names"
+
+# Proxmox Host Configuration
+- hosts: proxmox
+  become: true
+  roles:
+    - role: glennbrown.proxmox
+    - role: glennbrown.proxmox-nag-removal
 
 # Configuration for all linux systems
 - hosts: linux
@@ -29,7 +37,7 @@
       when: ansible_facts.distribution == 'Ubuntu'
   roles:
     - role: apt-mirror
-    - role: grog.package
+    - role: glennbrown.packages
       tags: ["packages"]
 
 # Configuration for all mac's
@@ -38,8 +46,9 @@
     - role: geerlingguy.mac.homebrew
       tags: ["homebrew"]
     - role: glennbrown.dotfiles
+      tags: ["dotfiles"]
     - role: geerlingguy.mac.mas
-      when: mas_installed_apps or mas_installed_app_ids | length > 0
+      when: (mas_installed_apps | length > 0) or (mas_installed_app_ids | length > 0)
       tags: ["mas"]
     - role: geerlingguy.mac.dock
       vars:
@@ -51,18 +60,19 @@
       when: macos_default_settings is defined and macos_default_settings | length > 0
       tags: ["defaults"]
 
-# Proxmox Host Configuration
-- hosts: proxmox
-  become: true
-  roles:
-    - role: glennbrown.mounts
-    - role: glennbrown.proxmox
-    - role: glennbrown.proxmox-nag-removal
-
 # Mac Mini Server
 - hosts: odin
   roles:
-    - glennbrown.colima
+    - role: glennbrown.colima
+      tags: ["colima"]
+
+# Docker VM
+- hosts: skidblad
+  become: true
+  roles:
+    - role: glennbrown.mounts
+    - role: geerlingguy.docker
+    - role: ctop
 
 # Media Collection and Distribution Server (Debian)
 - hosts: thor

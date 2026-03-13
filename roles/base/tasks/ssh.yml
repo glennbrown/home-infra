@@ -6,6 +6,8 @@
     state: present
   when: ansible_facts.system == 'Linux'
 
+# Turning off deprecation warnings for module
+# Fix has been proposed, will monitor https://github.com/ansible-collections/ansible.posix/pull/690
 - name: Setup personal ssh public key
   ansible.posix.authorized_key:
     user: "{{ me.username }}"
@@ -17,9 +19,11 @@
     user: root
     state: present
     key: "{{ ssh_publickey_root }}"
+  when: ansible_facts.system != 'Darwin'
 
 - name: Enable SSH
-  ansible.builtin.systemd_service:
-    name: sshd
+  ansible.builtin.service:
+    name: ssh
     state: started
     enabled: yes
+  when: ansible_facts.system != 'Darwin'

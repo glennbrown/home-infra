@@ -1,13 +1,13 @@
 ---
 - name: Set Debian components for Bullseye and older
   set_fact:
-    debian_components: 'main contrib non-free'
+    debian_components: "main contrib non-free"
   when: ansible_facts['distribution_major_version'] <= "11"
 
-- name: Set Debian components for Bookworm
+- name: Set Debian components for Bookworm or newer
   set_fact:
-    debian_components: 'main contrib non-free-firmware non-free'
-  when: ansible_facts['distribution_major_version'] == "12"
+    debian_components: "main contrib non-free-firmware non-free"
+  when: ansible_facts['distribution_major_version'] <= "12"
 
 - name: Update sources.list for Debian Bookworm and older
   copy:
@@ -17,8 +17,8 @@
   when: ansible_facts['distribution_major_version'] <= "12"
 
 - name: Replace sources.list for Debian Trixie and higher
-  copy: 
-    content: '# Debian sources have moved to /etc/apt/sources.list.d/debian.sources'
+  copy:
+    content: "# Debian sources have moved to /etc/apt/sources.list.d/debian.sources"
     dest: /etc/apt/sources.list
   notify: update_apt_cache
   when: ansible_facts['distribution_major_version'] >= "13"

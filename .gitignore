@@ -26,3 +26,6 @@ __pycache__/
 # Visual Studio Code
 .vscode/settings.json
 .history/
+
+#Zed
+.zed

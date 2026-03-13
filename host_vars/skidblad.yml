@@ -1,0 +1,42 @@
+---
+# Paths
+appdata_path: "/srv/appdata"
+media_path: "/mnt/media"
+download_path: "/srv/downloads"
+
+# Traefik
+traefik_data_path: "/etc/traefik"
+
+# grog.package
+package_list_host:
+  - fastfetch
+  - fio
+  - flac
+  - golang
+  - imagemagick
+  - iperf3
+  - lame
+  - mediainfo
+  - socat
+  - webp
+  - yt-dlp
+
+# Drive mounts
+automount_drives: true
+drive_mounts:
+  - mountpoint: /srv
+    device: "UUID=e9f59e57-c5f2-4b34-9c7a-07ebc132c375"
+    fstype: ext4
+    options:
+      - "defaults"
+  - mountpoint: /mnt/media
+    device: "//yggdrasil/Media"
+    fstype: cifs
+    options:
+      - "user={{ me.username }}"
+      - "password={{ secret_synology_gbrown }}"
+      - "uid=0"
+      - "gid=100"
+      - "dir_mode=0777"
+      - "file_mode=0666"
+      - "_netdev"

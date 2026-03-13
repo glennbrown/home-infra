@@ -12,7 +12,7 @@ me:
     - dip
     - plugdev
     - video
-    - renderer
+    - render
   password: "{{ secret_gbrown_pass }}"
   shell: /bin/bash
   home: /home/gbrown

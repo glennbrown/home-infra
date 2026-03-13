@@ -1,7 +1,7 @@
 services:
 
   smokeping:
-    image: lscr.io/linuxserver/smokeping:2.9.0
+    image: lscr.io/linuxserver/smokeping:latest
     container_name: smokeping
     hostname: heimdall
     environment:

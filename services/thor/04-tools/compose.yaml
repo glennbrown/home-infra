@@ -29,7 +29,7 @@ services:
       - "traefik.http.routers.speedtest.tls.certresolver=cloudflare"
 
   changedetection:
-    image: ghcr.io/dgtlmoon/changedetection.io:0.51.4
+    image: ghcr.io/dgtlmoon/changedetection.io:latest
     container_name: changedetection
     environment:
       TZ: {{ ntp_timezone }}
@@ -48,7 +48,7 @@ services:
       - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
     
   browserless-chrome:
-    image: ghcr.io/browserless/chrome:v2.38.2
+    image: ghcr.io/browserless/chrome:latest
     container_name: browserless-chrome
     environment:
       TZ: {{ ntp_timezone }}

@@ -1,0 +1,13 @@
+---
+# Override role default mounts
+colima_mounts: |
+  - location: /Users
+    writable: true
+  - location: /Volumes
+    writable: true
+  - location: /Volumes/NVME1/docker
+    mountPoint: /srv/docker
+    writable: true
+  - location: /Volumes/NVME1/downloads
+    mountPoint: /mnt/downloads
+    writable: true

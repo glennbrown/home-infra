@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:3.6.5
+    image: traefik:latest
     container_name: traefik
     environment:
       TZ: {{ ntp_timezone }}

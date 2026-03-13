@@ -1,5 +1,5 @@
 ---
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
   listen: update_apt_cache
