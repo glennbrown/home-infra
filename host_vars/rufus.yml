@@ -1,0 +1,4 @@
+---
+
+tailscale_args: '--accept-routes --advertise-routes=192.168.10.0/24 --advertise-exit-node'
+tailscale_authkey: "{{ lookup('community.general.onepassword', 'rufus-ts-authkey', field='credential', vault='Ansible Secrets', service_account_token=ansible_op_token) }}"

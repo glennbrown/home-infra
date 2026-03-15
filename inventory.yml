@@ -1,12 +1,12 @@
 all:
   vars:
-    ansible_user: gbrown
     ansible_python_interpreter: /usr/bin/python3
   children:
     linux:
       hosts:
         thor:
         skidblad:
+        rufus:
         ubuntu-test:
           ansible_host: 192.168.15.122
         celtic:

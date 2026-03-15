@@ -23,3 +23,9 @@
     name: "{{ me.username }}"
     groups: "{{ sudo_group }}"
     append: yes
+
+- name: Add sudo package
+  ansible.builtin.package:
+    name: "{{ sudo_package }}"
+    state: present
+  when: ansible_facts.system == 'Linux'

@@ -1,4 +1,5 @@
 ---
+sudo_package: sudo
 sudo_group: >-
   {% if ansible_facts.os_family == 'Darwin' %}admin
   {% elif ansible_facts.os_family == 'Debian' %}sudo

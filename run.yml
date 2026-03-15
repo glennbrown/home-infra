@@ -60,12 +60,6 @@
       when: macos_default_settings is defined and macos_default_settings | length > 0
       tags: ["defaults"]
 
-# Mac Mini Server
-- hosts: odin
-  roles:
-    - role: glennbrown.colima
-      tags: ["colima"]
-
 # Docker VM
 - hosts: skidblad
   become: true
@@ -73,6 +67,66 @@
     - role: glennbrown.mounts
     - role: geerlingguy.docker
     - role: ctop
+
+# Tailscale LXC
+- hosts: rufus
+  become: true
+  roles:
+    - role: artis3n.tailscale.machine
+  tasks:
+    - name: Ensure IP Forwarding is Enabled
+      ansible.posix.sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: true
+        sysctl_file: /etc/sysctl.d/99-tailscale.conf
+      loop:
+        - { name: net.ipv4.ip_forward, value: '1' }
+        - { name: net.ipv6.conf.all.forwarding, value: '1' }
+    - name: Allow internal traffic to be routed through tailnet
+      ansible.builtin.iptables:
+        chain: FORWARD
+        in_interface: tailscale0
+        out_interface: "{{ ansible_facts.default_ipv4.interface }}"
+        jump: ACCEPT
+        state: present
+    - name: Allow return traffic from tailnet to be routed back
+      ansible.builtin.iptables:
+        chain: FORWARD
+        in_interface: "{{ ansible_facts.default_ipv4.interface }}"
+        out_interface: tailscale0
+        jump: ACCEPT
+        state: present
+    - name: Create tailscale performance tuning script
+      ansible.builtin.copy:
+        dest: /usr/local/bin/tailscale-performance-tuning.sh
+        content: |
+          #!/bin/bash
+          NETDEV=$(ip -o route get 8.8.8.8 | awk '{print $5}')
+          ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
+        mode: '0755'
+    - name: Create systemd unit file for tailscale performance tuning
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/tailscale-performance-tuning.service
+        content: |
+          [Unit]
+          Description=Tailscale Performance Tuning
+          After=network-online.target
+          Wants=network-online.target
+          [Service]
+          Type=oneshot
+          ExecStart=/usr/local/bin/tailscale-performance-tuning.sh
+          RemainAfterExit=yes
+          [Install]
+          WantedBy=multi-user.target
+        mode: '0644'
+    - name: Enable tailscale performance tuning service
+      ansible.builtin.systemd:
+        name: tailscale-performance-tuning.service
+        enabled: true
+        state: started
+        daemon_reload: true
 
 # Media Collection and Distribution Server (Debian)
 - hosts: thor

@@ -13,6 +13,7 @@ apt_base_packages:
   - diceware
   - diffutils
   - findutils
+  - ethtool
   - htop
   - gawk
   - git

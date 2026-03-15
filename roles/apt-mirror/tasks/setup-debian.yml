@@ -7,7 +7,7 @@
 - name: Set Debian components for Bookworm or newer
   set_fact:
     debian_components: "main contrib non-free-firmware non-free"
-  when: ansible_facts['distribution_major_version'] <= "12"
+  when: ansible_facts['distribution_major_version'] >= "12"
 
 - name: Update sources.list for Debian Bookworm and older
   copy:
