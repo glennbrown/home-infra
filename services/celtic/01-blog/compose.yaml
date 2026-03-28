@@ -1,6 +1,6 @@
 services: 
   ghost:
-    image: ghost:5-alpine
+    image: ghost:6-alpine
     container_name: ghost
     environment:
       TZ: {{ ntp_timezone }}
