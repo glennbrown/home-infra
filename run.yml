@@ -60,13 +60,18 @@
       when: macos_default_settings is defined and macos_default_settings | length > 0
       tags: ["defaults"]
 
+# Install Docker on relevant hosts
+- hosts: skidblad,celtic,thor
+  become: true
+  roles:
+    - role: geerlingguy.docker
+    - role: ctop
+
 # Docker VM
 - hosts: skidblad
   become: true
   roles:
     - role: glennbrown.mounts
-    - role: geerlingguy.docker
-    - role: ctop
 
 # Tailscale LXC
 - hosts: rufus
@@ -131,18 +136,10 @@
 # Media Collection and Distribution Server (Debian)
 - hosts: thor
   become: true
-  pre_tasks:
-    - name: Ensure appdata exists
-      file:
-        path: "{{ appdata_path }}"
-        state: directory
-        mode: 0775
-        group: users
   roles:
     - role: glennbrown.mounts
-    - role: geerlingguy.docker
-    - role: ctop
-    - role: glennbrown.tailscale
+    - role: ironicbadger.docker-compose-generator
+      tags: ["compose"]
 
 # Cloud VPS
 - hosts: celtic
@@ -157,8 +154,6 @@
   roles:
     - role: geerlingguy.security
     - role: glennbrown.tailscale
-    - role: geerlingguy.docker
-    - role: ctop
     - role: glennbrown.oracle-cloud-agent
     - role: glennbrown.firewall
     - role: glennbrown.certbot

@@ -1,0 +1,4 @@
+---
+proxmox_kernel_modules:
+  - name: drivetemp
+  - name: nct6775
