@@ -7,9 +7,6 @@
 [submodule "roles/glennbrown.oracle-cloud-agent"]
 	path = roles/glennbrown.oracle-cloud-agent
 	url = git@github.com:glennbrown/ansible-role-oracle-cloud-agent.git
-[submodule "roles/glennbrown.tailscale"]
-	path = roles/glennbrown.tailscale
-	url = git@github.com:glennbrown/ansible-role-tailscale.git
 [submodule "roles/glennbrown.macos"]
 	path = roles/glennbrown.macos
 	url = git@github.com:glennbrown/ansible-role-macos.git
