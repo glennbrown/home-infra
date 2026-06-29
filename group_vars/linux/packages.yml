@@ -1,0 +1,4 @@
+---
+# Rar support
+package_list_group:
+  - p7zip-rar

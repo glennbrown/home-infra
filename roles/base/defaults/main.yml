@@ -7,3 +7,5 @@ sudo_group: >-
   {% endif %}
 
 openssh_package: "{{ 'openssh-server' if ansible_facts.os_family in ['Debian', 'RedHat'] else 'openssh' }}"
+
+kernel_modules: []

@@ -1,6 +1,7 @@
 ---
-# Configuration for all servers
-- hosts: all
+# Configuration for all systems
+- name: Configuration for all systems
+  hosts: all
   become: true
   pre_tasks:
     - name: Set Timezone
@@ -10,38 +11,26 @@
   roles:
     - role: base
       tags: ["bootstrap"]
-      when: "'proxmox' not in group_names"
 
 # Proxmox Host Configuration
 - hosts: proxmox
   become: true
   roles:
     - role: glennbrown.proxmox
-    - role: glennbrown.proxmox-nag-removal
+      tags: ["bootstrap"]
 
 # Configuration for all linux systems
-- hosts: linux
+- name: Linux configuration
+  hosts: linux
   become: true
-  pre_tasks:
-    - name: Remove Ubuntu motd spam
-      file:
-        path: "/etc/update-motd.d/{{ item }}"
-        state: absent
-      loop:
-        - 80-livepatch
-        - 95-hwe-eol
-        - 50-motd-news
-        - 10-help-text
-        - 88-esm-announce
-        - 91-contract-ua-esm-status
-      when: ansible_facts.distribution == 'Ubuntu'
   roles:
     - role: apt-mirror
     - role: glennbrown.packages
       tags: ["packages"]
 
 # Configuration for all mac's
-- hosts: mac
+- name: Mac Configuration
+  hosts: mac
   roles:
     - role: geerlingguy.mac.homebrew
       tags: ["homebrew"]
@@ -87,8 +76,8 @@
         reload: true
         sysctl_file: /etc/sysctl.d/99-tailscale.conf
       loop:
-        - { name: net.ipv4.ip_forward, value: '1' }
-        - { name: net.ipv6.conf.all.forwarding, value: '1' }
+        - { name: net.ipv4.ip_forward, value: "1" }
+        - { name: net.ipv6.conf.all.forwarding, value: "1" }
     - name: Allow internal traffic to be routed through tailnet
       ansible.builtin.iptables:
         chain: FORWARD
@@ -110,7 +99,7 @@
           #!/bin/bash
           NETDEV=$(ip -o route get 8.8.8.8 | awk '{print $5}')
           ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
-        mode: '0755'
+        mode: "0755"
     - name: Create systemd unit file for tailscale performance tuning
       ansible.builtin.copy:
         dest: /etc/systemd/system/tailscale-performance-tuning.service
@@ -125,7 +114,7 @@
           RemainAfterExit=yes
           [Install]
           WantedBy=multi-user.target
-        mode: '0644'
+        mode: "0644"
     - name: Enable tailscale performance tuning service
       ansible.builtin.systemd:
         name: tailscale-performance-tuning.service
@@ -138,8 +127,8 @@
   become: true
   roles:
     - role: glennbrown.mounts
-    - role: ironicbadger.docker-compose-generator
-      tags: ["compose"]
+#    - role: ironicbadger.docker-compose-generator
+#      tags: ["compose"]
 
 # Cloud VPS
 - hosts: celtic
@@ -153,7 +142,6 @@
         group: users
   roles:
     - role: geerlingguy.security
-    - role: glennbrown.tailscale
     - role: glennbrown.oracle-cloud-agent
     - role: glennbrown.firewall
     - role: glennbrown.certbot

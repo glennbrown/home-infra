@@ -1,18 +1,28 @@
+networks:
+  proxy:
+    name: proxy
+
+secrets:
+  cf_api_token:
+    file: ./cf_api_token.txt
+
 services:
   traefik:
     image: traefik:latest
     container_name: traefik
     environment:
-      TZ: {{ ntp_timezone }}
-      CF_DNS_API_TOKEN: {{ cloudflare_traefik_api_token }}
+      TZ: ${TZ}
+      CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
     volumes:
-      - {{ traefik_data_path }}/config:/config
-      - {{ traefik_data_path }}/letsencrypt:/letsencrypt
-      - {{ traefik_data_path }}/.htpasswd:/.htpasswd
+      - ./data/config.d:/config.d
+      - ./data/letsencrypt:/letsencrypt
+      - ./data/.htpasswd:/.htpasswd
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 80:80
       - 443:443
+    networks:
+      - proxy
     command:
       - --log.level=info
       - --api.insecure=false
@@ -25,7 +35,8 @@ services:
       - --serversTransport.insecureSkipVerify=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --providers.file.directory=/config
+      - --providers.docker.network=proxy
+      - --providers.file.directory=/config.d
       - --certificatesresolvers.cloudflare.acme.dnschallenge=true
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
@@ -39,10 +50,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik-secure.entrypoints=websecure"
-      - "traefik.http.routers.traefik-secure.rule=Host(`{{ ansible_hostname }}.{{ local_domain }}`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`{{ ansible_facts.hostname }}.{{ local_domain }}`)"
       - "traefik.http.routers.traefik-secure.service=api@internal"
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.traefik-auth.basicauth.usersfile=/.htpasswd"
-      

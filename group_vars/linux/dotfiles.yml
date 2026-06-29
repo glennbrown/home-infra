@@ -1,0 +1,16 @@
+---
+# Dotfiles
+dotfiles_repo: "https://github.com/glennbrown/dotfiles.git"
+dotfiles_files:
+  - src: linux/profile
+    dest: .profile
+  - src: linux/bashrc
+    dest: .bashrc
+  - src: aliases
+    dest: .bash_aliases
+  - src: dircolors
+    dest: .dircolors
+  - src: inputrc
+    dest: .inputrc
+  - src: linux/nanorc
+    dest: .nanorc

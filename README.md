@@ -13,10 +13,13 @@ This repo contains the code I use for deploying and managing my home servers and
 
 Most of my servers are named after norse mythology characters or from the [mnemonic wordlist][1).
 
-| Name      | Type     | OS          | Description                       |
-| --------- | -------- | ----------- | -----------------------------     |
-| odin      | Physical  | Debian     |                 |
-| celtic    | VM       | Debian      | Cloud VPS                         |
+| Name      | Type      | OS          | Description                     |
+| --------- | --------  | ---------  | -----------------------------    |
+| odin      | Physical  | MacOS      | Mac Mini M4 (Plex)               |
+| pve1      | Physical  | Proxmox    | Custom Proxmox Server            |
+| rufus     | LXC       | Debian     | Tailscale Host                   |
+| thor      | VM        | Debian     | Docker App's Host                |
+| celtic    | VM        | Debian     | Cloud VPS                        |
 
 ## just usage
 

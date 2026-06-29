@@ -1,6 +1,16 @@
 ---
 - name: User Account Setup
-  include_tasks: user.yml
+  ansible.builtin.include_tasks:
+    file: user.yml
 
 - name: SSH Setup
-  include_tasks: ssh.yml
+  ansible.builtin.include_tasks:
+    file: ssh.yml
+
+- name: Kernel Module Setup
+  ansible.builtin.include_tasks:
+    file: modules.yml
+
+- name: Ghostty Terminfo configuration
+  ansible.builtin.include_tasks:
+    file: ghostty.yml

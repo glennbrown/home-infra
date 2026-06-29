@@ -1,0 +1,129 @@
+networks:
+  proxy:
+    external: true
+
+volumes:
+  data:
+    name: data
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username=gbrown,password={{ secret_synology_gbrown }},uid=0,gid=100,dir_mode=0777,file_mode=0666,serverino
+      device: //yggdrasil/mediastack
+
+services:
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - ./config/sabnzbd:/config
+      - data:/data
+    ports:
+      - 8080:8080
+    networks:
+      - proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.{{ local_domain }}`)"
+      - "traefik.http.routers.sabnzbd.tls=true"
+      - "traefik.http.routers.sabnzbd.tls.certresolver=cloudflare"
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      WEBUI_PORT: 8088
+      TORRENTING_PORT: 6881
+    volumes:
+      - ./config/qbittorrent:/config
+      - data:/data
+    ports:
+      - 8088:8088
+      - 6881:6881
+      - 6881:6881/udp
+    networks:
+      - proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.{{ local_domain }}`)"
+      - "traefik.http.routers.qbittorrent.tls=true"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=cloudflare"
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - ./config/prowlarr:/config
+    ports:
+      - 9696:9696
+    networks:
+      - proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ local_domain }}`)"
+      - "traefik.http.routers.prowlarr.tls=true"
+      - "traefik.http.routers.prowlarr.tls.certresolver=cloudflare"
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - ./config/sonarr:/config
+      - data:/data
+    ports:
+      - 8989:8989
+    networks:
+      - proxy
+    depends_on:
+      - prowlarr
+      - sabnzbd
+      - qbittorrent
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.{{ local_domain }}`)"
+      - "traefik.http.routers.sonarr.tls=true"
+      - "traefik.http.routers.sonarr.tls.certresolver=cloudflare"
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - ./config/radarr:/config
+      - data:/data
+    ports:
+      - 7878:7878
+    networks:
+      - proxy
+    depends_on:
+      - prowlarr
+      - sabnzbd
+      - qbittorrent
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.{{ local_domain }}`)"
+      - "traefik.http.routers.radarr.tls=true"
+      - "traefik.http.routers.radarr.tls.certresolver=cloudflare"

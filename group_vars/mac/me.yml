@@ -1,5 +1,5 @@
 ---
-# User info (linux only, override in host_vars for a Mac)
+# User info MacOS
 me:
   name: "Glenn Brown"
   username: gbrown

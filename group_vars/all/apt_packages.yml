@@ -12,8 +12,10 @@ apt_base_packages:
   - dialog
   - diceware
   - diffutils
+  - fastfetch
   - findutils
   - ethtool
+  - fwupd
   - htop
   - gawk
   - git
@@ -28,7 +30,6 @@ apt_base_packages:
   - nano
   - net-tools
   - nmap
-  - openssh-server
   - pipx
   - pv
   - python3
@@ -38,9 +39,7 @@ apt_base_packages:
   - python3-setuptools
   - python3-venv
   - p7zip-full
-  - p7zip-rar
   - screen
-  - sudo
   - tmux
   - tree
   - wget

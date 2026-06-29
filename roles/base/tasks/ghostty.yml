@@ -1,0 +1,31 @@
+- name: Determine if Ansible control node is running inside Ghostty
+  ansible.builtin.set_fact:
+    is_ghostty_terminal: "{{ lookup('env', 'TERM_PROGRAM') == 'ghostty' }}"
+  delegate_to: localhost
+  become: false
+  run_once: true
+
+- name: Check if xterm-ghostty terminfo already exists on remote
+  ansible.builtin.command: infocmp xterm-ghostty
+  register: ghostty_check
+  changed_when: false
+  failed_when: false
+  when: is_ghostty_terminal
+
+- name: Capture xterm-ghostty terminfo source from control node
+  ansible.builtin.command: infocmp -x xterm-ghostty
+  delegate_to: localhost
+  become: false
+  register: ghostty_source
+  changed_when: false
+  when:
+    - is_ghostty_terminal
+    - ghostty_check.rc != 0
+
+- name: Compile and install xterm-ghostty terminfo on remote
+  ansible.builtin.command: tic -x -
+  args:
+    stdin: "{{ ghostty_source.stdout }}"
+  when:
+    - is_ghostty_terminal
+    - ghostty_check.rc != 0

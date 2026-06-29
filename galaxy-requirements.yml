@@ -1,5 +1,12 @@
 ---
 roles:
+  # My personal roles
+  - src: https://github.com/glennbrown/ansible-role-proxmox
+    name: glennbrown.proxmox
+    scm: git
+  - src: https://github.com/glennbrown/ansible-role-packages
+    name: glennbrown.packages
+    scm: git
   # Jeff Geerling's roles
   - src: geerlingguy.docker
     version: 8.0.0

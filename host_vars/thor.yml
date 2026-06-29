@@ -1,28 +1,38 @@
 ---
-# Paths
-appdata_path: '/mnt/appdata'
-media_path: '/mnt/media'
-scratch_path: '/mnt/nvme1/scratch'
+# Load kernel modules
+kernel_modules:
+  - name: drivetemp
+  - name: nct6775
 
-docker_compose_generator_output_mode: 'stack'
-docker_compose_generator_output_path: '/srv/docker'
+# Disable HA (only currently have a single node)
+proxmox_disable_ha_services: true
+
+# Paths
+appdata_path: "/mnt/appdata"
+media_path: "/mnt/media"
+scratch_path: "/mnt/nvme1/scratch"
+
+# docker_compose_generator_output_path: '/srv/docker'
 
 # Traefik
-traefik_data_path: '/etc/traefik'
+traefik_data_path: "/etc/traefik"
 
-# grog.package
+# Packages
 package_list_host:
   - ffmpeg
   - fio
   - flac
+  - intel-gpu-tools
+  - intel-microcode
   - golang
   - handbrake-cli
   - imagemagick
-  - intel-gpu-tools
   - iperf3
   - lame
   - mediainfo
+  - nvme-cli
   - nvtop
+  - smartmontools
   - socat
   - webp
   - x264
@@ -30,23 +40,17 @@ package_list_host:
   - yt-dlp
 
 # Drive mounts
-#automount_drives: true
-#drive_mounts:
-#  - mountpoint: /mnt/nvme1
-#    device: /dev/disk/by-id/nvme-WDBRPG0010BNC-WRSN_21500K802847-part1
-#    fstype: btrfs
-#    options:
-#      - 'discard'
-#      - 'compress=zstd:3'
-#      - 'defaults'
-#  - mountpoint: /mnt/media
-#    device: "//yggdrasil/Media"
-#    fstype: cifs
-#    options:
-#      - 'user={{ me.username }}'
-#      - 'password={{ secret_synology_gbrown }}'
-#      - 'uid=0'
-#      - 'gid=100'
-#      - 'dir_mode=0777'
-#      - 'file_mode=0666'
-#      - '_netdev'
+automount_drives: true
+drive_mounts:
+  - mountpoint: /mnt/data
+    device: "//yggdrasil/mediastack"
+    fstype: cifs
+    options:
+      - "user={{ me.username }}"
+      - "password={{ secret_synology_gbrown }}"
+      - "uid=0"
+      - "gid=100"
+      - "dir_mode=0777"
+      - "file_mode=0666"
+      - "serverino"
+      - "_netdev"

@@ -1,0 +1,37 @@
+networks:
+  proxy:
+    name: proxy
+
+services:
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io:0.55.7
+    container_name: changedetection
+    environment:
+      TZ: { { ntp_timezone } }
+      PLAYWRIGHT_DRIVER_URL: ws://browserless-chrome:3000/chrome?launch={"defaultViewport":{"height":1080,"width":1920},"headless":false,"stealth":true}&blockAds=true
+      BASE_URL: https://changedetection.{{ local_domain }}
+    volumes:
+      - /mnt/appdata/changedetection/data:/datastore
+    networks:
+      - proxy
+    depends_on:
+      - browserless-chrome
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.changedetection.rule=Host(`changedetection.{{ local_domain }}`)"
+      - "traefik.http.routers.changedetection.tls=true"
+      - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
+
+  browserless-chrome:
+    image: ghcr.io/browserless/chrome:v2.51.2
+    container_name: browserless-chrome
+    environment:
+      TZ: { { ntp_timezone } }
+      ENABLE_DEBUGGER: false
+      TIMEOUT: 300000
+      MAX_CONCURRENT_SESSIONS: 10
+      CHROME_REFRESH_TIME: 600000
+    networks:
+      - proxy
+    restart: unless-stopped

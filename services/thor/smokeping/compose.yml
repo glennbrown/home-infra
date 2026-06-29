@@ -1,0 +1,24 @@
+networks:
+  proxy:
+    name: proxy
+
+services:
+  smokeping:
+    image: lscr.io/linuxserver/smokeping:2.9.0
+    container_name: smokeping
+    hostname: thor
+    environment:
+      TZ: { { ntp_timezone } }
+      PUID: { { me.uid } }
+      PGID: { { me.gid } }
+    volumes:
+      - /mnt/appdata/smokeping/config:/config
+      - /mnt/appdata/smokeping/data:/data
+    networks:
+      - proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.smokeping.rule=Host(`smokeping.{{ local_domain }}`)"
+      - "traefik.http.routers.smokeping.tls=true"
+      - "traefik.http.routers.smokeping.tls.certresolver=cloudflare"
