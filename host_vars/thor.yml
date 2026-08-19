@@ -1,12 +1,4 @@
 ---
-# Load kernel modules
-kernel_modules:
-  - name: drivetemp
-  - name: nct6775
-
-# Disable HA (only currently have a single node)
-proxmox_disable_ha_services: true
-
 # Paths
 appdata_path: "/mnt/appdata"
 media_path: "/mnt/media"
@@ -22,17 +14,12 @@ package_list_host:
   - ffmpeg
   - fio
   - flac
-  - intel-gpu-tools
-  - intel-microcode
   - golang
   - handbrake-cli
   - imagemagick
   - iperf3
   - lame
   - mediainfo
-  - nvme-cli
-  - nvtop
-  - smartmontools
   - socat
   - webp
   - x264

@@ -1,0 +1,8 @@
+---
+# Packages
+package_list_group:
+  - intel-gpu-tools
+  - intel-microcode
+  - nvme-cli
+  - nvtop
+  - smartmontools

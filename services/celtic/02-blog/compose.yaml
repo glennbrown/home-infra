@@ -1,0 +1,62 @@
+services:
+  gb-blog:
+    image: ghost:6-alpine
+    container_name: gb-blog
+    environment:
+      TZ: {{ ntp_timezone }}
+      NODE_ENV: production
+      database__client: mysql
+      database__connection__host: ghostdb
+      database__connection__user: {{ gbblog_db_user }}
+      database__connection__password: {{ gbblog_db_pass }}
+      database__connection__database: ghost
+      mail__transport: SMTP
+      mail__from: {{ gb_blog_email.user }}
+      mail__options__host: smtp.gmail.com
+      mail__options__port: 587
+      mail__options__secure: false
+      mail__options__auth__user: {{ gb_blog_email.user }}
+      mail__options__auth__pass: {{ gb_blog_email.pass }}
+      security__staffDeviceVerification: false
+      url: https://www.{{ public_domain_2 }}
+    volumes:
+      - {{ appdata_path }}/gb-blog:/var/lib/ghost/content
+    depends_on:
+      - ghostdb
+    restart: unless-stopped
+
+  kb-blog:
+    image: ghost:6-alpine
+    container_name: kb-blog
+    environment:
+      TZ: {{ ntp_timezone }}
+      NODE_ENV: production
+      database__client: mysql
+      database__connection__host: ghostdb
+      database__connection__user: {{ kbblog_db_user }}
+      database__connection__password: {{ kbblog_db_pass }}
+      database__connection__database: kbblogdb
+      mail__transport: SMTP
+      mail__from: {{ kb_blog_email.support }}
+      mail__options__host: smtp-relay.gmail.com
+      mail__options__port: 587
+      mail__options__secure: false
+      mail__options__auth__user: {{ kb_blog_email.user }}
+      mail__options__auth__pass: {{ kb_blog_email.pass }}
+      security__staffDeviceVerification: false
+      url: https://kristenbrownstudio.com
+    volumes:
+      - {{ appdata_path }}/kb-blog:/var/lib/ghost/content
+    depends_on:
+      - ghostdb
+    restart: unless-stopped
+
+  ghostdb:
+    image: mysql:8.4
+    container_name: ghostdb
+    environment:
+      TZ: {{ ntp_timezone }}
+      MYSQL_ROOT_PASSWORD: {{ mysql_root_pass }}
+    volumes:
+      - {{ appdata_path }}/ghostdb:/var/lib/mysql
+    restart: unless-stopped

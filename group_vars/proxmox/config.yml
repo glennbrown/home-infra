@@ -1,0 +1,6 @@
+# Load kernel modules
+kernel_modules:
+  - name: drivetemp
+
+# Disable HA (only currently have a single node)
+proxmox_disable_ha_services: true

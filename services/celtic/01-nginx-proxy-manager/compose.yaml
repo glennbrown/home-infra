@@ -1,0 +1,16 @@
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    environment:
+      TZ: {{ ntp_timezone }}
+      PUID: {{ me.uid }}
+      PGID: {{ me.gid }}
+    ports:
+     - '80:80' # Public HTTP Port
+     - '443:443' # Public HTTPS Port
+     - '81:81' # Admin Web Port
+    volumes:
+      - {{ appdata_path }}/nginx-proxy-manager/data:/data
+      - {{ appdata_path }}/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+services:
+  watchtower:
+    image: nickfedor/watchtower:latest
+    container_name: watchtower
+    hostname: {{ ansible_facts.hostname }}
+    environment:
+      TZ: {{ ntp_timezone }}
+      WATCHTOWER_SCHEDULE: "0 0 4 * * SUN"
+      WATCHTOWER_UPDATE_ON_START: true
+      WATCHTOWER_CLEANUP: true
+    command:
+      - --notification-url=pushover://shoutrrr:{{ pushover_celtic_watchtower.api_token }}@{{ pushover_celtic_watchtower.user_key }}/
+      - --notification-split-by-container
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
