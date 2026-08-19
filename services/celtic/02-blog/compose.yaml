@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
 
   ghostdb:
-    image: mysql:8.4
+    image: mysql:26.7
     container_name: ghostdb
     environment:
       TZ: {{ ntp_timezone }}
