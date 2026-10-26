@@ -14,7 +14,7 @@ roles:
     version: 3.0.0
   # Alex Kretzschmar's roles
   - src: ironicbadger.docker_compose_generator
-    version: v2.1.1
+    version: v2.1.2
   # Grog roles
   - src: grog.package
     version: v1.4.1
